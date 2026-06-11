@@ -665,23 +665,43 @@ function bindShareButtons() {
         e.preventDefault();
         const card = btn.closest('.shop-card');
         if (!card) return;
-        const name = card.querySelector('.card-name')?.textContent?.trim();
+        const name = card.querySelector('.card-name')?.textContent?.trim() || '';
         const station = card.dataset.station || '';
         const addrEl = card.querySelector('.card-addr');
         const addr = addrEl ? addrEl.textContent.trim() : '';
         const text = `🌙 ${name}\n📍 ${addr}\n🚇 ${station}\n\n高雄宵夜地圖: https://kaohsiung-yeoha.vercel.app`;
+
+        // 三段降級: Web Share API → 剪貼簿 → prompt
         try {
-            if (navigator.share) {
-                await navigator.share({ title: name, text, url: location.href });
-            } else if (navigator.clipboard) {
-                await navigator.clipboard.writeText(text);
-                showToast('已複製到剪貼簿', 'success');
-            } else {
-                // 降級: 用 prompt 顯示
-                window.prompt('複製以下內容:', text);
+            // 檢測 Web Share API 支援 (iOS Safari 才有)
+            if (navigator.share && navigator.canShare) {
+                try {
+                    // 嘗試只傳 text (iOS 最穩)
+                    await navigator.share({ text, title: name });
+                    return;  // 成功就 return
+                } catch (innerErr) {
+                    // 使用者取消不算錯 (AbortError)
+                    if (innerErr.name === 'AbortError') return;
+                    console.warn('[share] Web Share 失敗, 降級:', innerErr.message);
+                    // 繼續降級
+                }
             }
+            // 降級 1: 剪貼簿
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    showToast('已複製到剪貼簿', 'success');
+                    return;
+                } catch (clipErr) {
+                    console.warn('[share] Clipboard 失敗:', clipErr.message);
+                }
+            }
+            // 降級 2: prompt
+            window.prompt('複製以下內容:', text);
         } catch (e) {
-            console.warn('[share] 失敗:', e);
+            console.error('[share] 全部降級失敗:', e);
+            // 最後手段: alert
+            alert(text);
         }
     });
 }
