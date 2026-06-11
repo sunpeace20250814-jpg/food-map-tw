@@ -618,12 +618,82 @@ function applyQuickFilter(quick) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// 縣市切換 (高雄 / 台南)
+function bindCitySwitcher() {
+    const bar = document.getElementById('cityBar');
+    if (!bar) return;
+    bar.addEventListener('click', (e) => {
+        const chip = e.target.closest('.city-chip');
+        if (!chip) return;
+        bar.querySelectorAll('.city-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const city = chip.dataset.city;
+        switchCity(city);
+    });
+}
+
+function switchCity(city) {
+    // 切換顯示店家
+    const cards = document.querySelectorAll('.shop-card');
+    let visible = 0;
+    cards.forEach(c => {
+        const cardCity = c.dataset.city || 'kh';  // 預設高雄
+        if (cardCity === city) {
+            c.style.display = '';
+            visible++;
+        } else {
+            c.style.display = 'none';
+        }
+    });
+    // 同步更新副標題與結果計數
+    const sub = document.getElementById('appSub');
+    if (sub) {
+        const cityName = city === 'kh' ? '高雄' : '台南';
+        sub.textContent = `2026 · ${cityName} ${visible} 家精選`;
+    }
+    const rc = document.getElementById('resultCount');
+    if (rc) rc.textContent = visible;
+    showToast(city === 'kh' ? '已切換到高雄' : '已切換到台南(目前籌備中)', 'info');
+}
+
+// 分享按鈕
+function bindShareButtons() {
+    document.addEventListener('click', async (e) => {
+        const btn = e.target.closest('[data-action="share"]');
+        if (!btn) return;
+        e.stopPropagation();
+        e.preventDefault();
+        const card = btn.closest('.shop-card');
+        if (!card) return;
+        const name = card.querySelector('.card-name')?.textContent?.trim();
+        const station = card.dataset.station || '';
+        const addrEl = card.querySelector('.card-addr');
+        const addr = addrEl ? addrEl.textContent.trim() : '';
+        const text = `🌙 ${name}\n📍 ${addr}\n🚇 ${station}\n\n高雄宵夜地圖: https://kaohsiung-yeoha.vercel.app`;
+        try {
+            if (navigator.share) {
+                await navigator.share({ title: name, text, url: location.href });
+            } else if (navigator.clipboard) {
+                await navigator.clipboard.writeText(text);
+                showToast('已複製到剪貼簿', 'success');
+            } else {
+                // 降級: 用 prompt 顯示
+                window.prompt('複製以下內容:', text);
+            }
+        } catch (e) {
+            console.warn('[share] 失敗:', e);
+        }
+    });
+}
+
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
     bindEvents();
     loadShopData();
     bindScroll();
     bindPullToRefresh();
+    bindCitySwitcher();
+    bindShareButtons();
 });
 
 

@@ -261,13 +261,13 @@
 /* === 卡片動作按鈕 === */
 .card-actions {
     display: grid;
-    grid-template-columns: 90px 1fr;
+    grid-template-columns: 1fr 80px;  /* 地圖(寬) / 分享(窄) */
     gap: 6px;
     margin-top: 0;
 }
 
-.card-actions .btn-detail { min-width: 90px; }
 .card-actions .btn-map { width: 100%; }
+.card-actions .btn-share { width: 100%; }
 
 .btn {
     border: 1px solid var(--border);
@@ -314,6 +314,55 @@
     background: #2a4d7a;
     color: #fff;
     border-color: #3a5f8f;
+}
+
+.btn-share {
+    background: #2a4a3a;
+    color: #7ed4a0;
+    border-color: #3a6a4a;
+    padding: 9px 6px;
+    font-size: 0.78rem;
+}
+
+.btn-share:hover {
+    background: #3a6a4a;
+    color: #fff;
+    border-color: #4a8a5a;
+}
+
+/* 縣市切換 */
+.city-bar {
+    display: flex;
+    gap: 8px;
+    padding: 8px 16px 0;
+    background: var(--bg-2, #1a1a22);
+    border-bottom: 1px solid var(--border, #2a2a35);
+}
+
+.city-chip {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border, #2a2a35);
+    background: var(--bg, #14141a);
+    color: var(--text-2, #aaa);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+}
+
+.city-chip:hover {
+    border-color: var(--text-3, #666);
+    color: var(--text, #fff);
+}
+
+.city-chip.active {
+    background: var(--accent, #f5a623);
+    color: #000;
+    border-color: var(--accent, #f5a623);
+    font-weight: 600;
 }
 
 .btn:disabled {
