@@ -1,0 +1,35 @@
+# 環境變數 (真實 secrets)
+.env
+.env.local
+.env.*.local
+.vercel
+
+# Node
+node_modules/
+*.log
+npm-debug.log*
+
+# 編輯器
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# 測試
+.tmp_*.js
+.tmp_*.py
+test-output/
+coverage/
+
+# 備份
+*.bak
+*.bak.*
+index.html.bak
+original_full.html
+
+# 開發工具狀態
+.opencode/
+.swarm/
+
+# OS
+Thumbs.db

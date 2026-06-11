@@ -1,0 +1,10 @@
+{
+  "name": "kaohsiung-yeoha-functions",
+  "version": "2.0.0",
+  "description": "Netlify Functions for 高雄宵夜地圖 (with Supabase backend)",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  }
+}
