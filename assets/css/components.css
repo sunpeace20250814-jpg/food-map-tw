@@ -261,13 +261,15 @@
 /* === 卡片動作按鈕 === */
 .card-actions {
     display: grid;
-    grid-template-columns: 1fr 80px;  /* 地圖(寬) / 分享(窄) */
+    grid-template-columns: 1fr 1fr 1fr;  /* 三個按鈕等寬單橫列 */
     gap: 6px;
     margin-top: 0;
 }
 
+.card-actions .btn-detail { width: 100%; }
+.card-actions .btn-primary { width: 100%; }
 .card-actions .btn-map { width: 100%; }
-.card-actions .btn-share { width: 100%; }
+.card-actions .btn-share { width: 100%; padding: 9px 4px; }
 
 .btn {
     border: 1px solid var(--border);
