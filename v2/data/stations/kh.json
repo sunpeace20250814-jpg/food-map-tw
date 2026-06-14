@@ -1,0 +1,110 @@
+[
+  {
+    "id": null,
+    "name": "大寮區(無捷運直達)",
+    "line": null,
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "左營區(鄰近榮總)",
+    "line": null,
+    "shop_count": 1
+  },
+  {
+    "id": "C10",
+    "name": "C10 光榮碼頭站",
+    "line": "lrt",
+    "shop_count": 1
+  },
+  {
+    "id": "C12",
+    "name": "C12 駁二大義站",
+    "line": "lrt",
+    "shop_count": 1
+  },
+  {
+    "id": "C14",
+    "name": "C14 哈瑪星站",
+    "line": "lrt",
+    "shop_count": 1
+  },
+  {
+    "id": "C17",
+    "name": "C17 鼓山區公所站",
+    "line": "lrt",
+    "shop_count": 1
+  },
+  {
+    "id": "C24",
+    "name": "C24 美術館站",
+    "line": "lrt",
+    "shop_count": 1
+  },
+  {
+    "id": "C27",
+    "name": "C27 正義車站(輕軌)",
+    "line": "lrt",
+    "shop_count": 1
+  },
+  {
+    "id": "C28",
+    "name": "C28 高雄高工站(輕軌)",
+    "line": "lrt",
+    "shop_count": 1
+  },
+  {
+    "id": "O2",
+    "name": "O2 鹽埕埔站",
+    "line": "orange",
+    "shop_count": 3
+  },
+  {
+    "id": "O5",
+    "name": "O5 美麗島站",
+    "line": "orange",
+    "shop_count": 1
+  },
+  {
+    "id": "O7",
+    "name": "O7 文化中心站",
+    "line": "orange",
+    "shop_count": 2
+  },
+  {
+    "id": "O8",
+    "name": "O8 三多商圈站",
+    "line": "orange",
+    "shop_count": 3
+  },
+  {
+    "id": "R10",
+    "name": "R10/O5 美麗島站",
+    "line": "red",
+    "shop_count": 6
+  },
+  {
+    "id": "R11",
+    "name": "R11 高雄車站",
+    "line": "red",
+    "shop_count": 1
+  },
+  {
+    "id": "R14",
+    "name": "R14 巨蛋站",
+    "line": "red",
+    "shop_count": 9
+  },
+  {
+    "id": "R8",
+    "name": "R8 三多商圈站",
+    "line": "red",
+    "shop_count": 11
+  },
+  {
+    "id": "R9",
+    "name": "R9 中央公園站",
+    "line": "red",
+    "shop_count": 1
+  }
+]

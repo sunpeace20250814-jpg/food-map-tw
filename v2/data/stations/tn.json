@@ -1,0 +1,212 @@
+[
+  {
+    "id": null,
+    "name": "中西區/大勇街",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/大新街",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/大德街",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/中山路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/中正路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/民族路",
+    "line": "tn-area",
+    "shop_count": 4
+  },
+  {
+    "id": null,
+    "name": "中西區/民權路",
+    "line": "tn-area",
+    "shop_count": 2
+  },
+  {
+    "id": null,
+    "name": "中西區/永華路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/永福路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/成功路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/西門路",
+    "line": "tn-area",
+    "shop_count": 2
+  },
+  {
+    "id": null,
+    "name": "中西區/忠義路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/保安路",
+    "line": "tn-area",
+    "shop_count": 3
+  },
+  {
+    "id": null,
+    "name": "中西區/信義街",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/海安路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "中西區/國華街",
+    "line": "tn-area",
+    "shop_count": 5
+  },
+  {
+    "id": null,
+    "name": "中西區/康樂街",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "北門區",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "北區/台南車站",
+    "line": "tn-area",
+    "shop_count": 2
+  },
+  {
+    "id": null,
+    "name": "北區/崇安街",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "北區/開元路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "永康區",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "安平區",
+    "line": "tn-area",
+    "shop_count": 3
+  },
+  {
+    "id": null,
+    "name": "安平區/華平路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "安南區",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "東區/中華東路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "東區/東光路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "東區/東門路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "東區/東豐路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "東區/長榮路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "東區/前鋒路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "東區/南紡",
+    "line": "tn-area",
+    "shop_count": 2
+  },
+  {
+    "id": null,
+    "name": "東區/崇善路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "東區/勝利路",
+    "line": "tn-area",
+    "shop_count": 1
+  },
+  {
+    "id": null,
+    "name": "新化區",
+    "line": "tn-area",
+    "shop_count": 1
+  }
+]

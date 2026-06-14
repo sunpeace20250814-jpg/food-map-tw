@@ -1,0 +1,54 @@
+{
+  "kh": {
+    "code": "kh",
+    "name": "高雄",
+    "full_name": "高雄市",
+    "file": "kh.json",
+    "has_mrt": true,
+    "lines": [
+      {
+        "id": "red",
+        "name": "紅線",
+        "color": "#e74c3c"
+      },
+      {
+        "id": "orange",
+        "name": "橘線",
+        "color": "#f39c12"
+      },
+      {
+        "id": "lrt",
+        "name": "輕軌",
+        "color": "#27ae60"
+      }
+    ]
+  },
+  "tn": {
+    "code": "tn",
+    "name": "台南",
+    "full_name": "台南市",
+    "file": "tn.json",
+    "has_mrt": false,
+    "lines": [
+      {
+        "id": "tn-area",
+        "name": "行政區",
+        "color": "#9b59b6"
+      }
+    ]
+  },
+  "ch": {
+    "code": "ch",
+    "name": "彰化",
+    "full_name": "彰化縣",
+    "file": "ch.json",
+    "has_mrt": false,
+    "lines": [
+      {
+        "id": "ch-district",
+        "name": "鄉鎮",
+        "color": "#16a085"
+      }
+    ]
+  }
+}

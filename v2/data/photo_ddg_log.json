@@ -1,0 +1,22 @@
+{
+  "ch-019": {
+    "urls": [
+      "https://duckduckgo.com/dist/react-assets/96adebdbdbc5d4e75d7f.png",
+      "https://duckduckgo.com/dist/react-assets/1600f109ce3c4b73fd9c.png"
+    ],
+    "source": "ddg",
+    "query": "牟家爌肉飯",
+    "name": "牟家爌肉飯",
+    "city": "ch"
+  },
+  "ch-066": {
+    "urls": [
+      "https://duckduckgo.com/dist/react-assets/96adebdbdbc5d4e75d7f.png",
+      "https://duckduckgo.com/dist/react-assets/1600f109ce3c4b73fd9c.png"
+    ],
+    "source": "ddg",
+    "query": "道香香早餐店",
+    "name": "道香香早餐店",
+    "city": "ch"
+  }
+}

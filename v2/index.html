@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="description" content="高雄+台南+彰化 鄉鎮周邊宵夜地圖, 146 家精選, 7 維互動篩選">
+<title>台灣美食地圖</title>
+<link rel="stylesheet" href="assets/css/main.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/filters.css">
+<link rel="stylesheet" href="assets/css/mobile.css">
+<link rel="stylesheet" href="assets/css/table.css">
+</head>
+<body>
+<!-- ========== Sticky App Header ========== -->
+<header class="app-header" id="appHeader">
+    <div class="app-header-inner">
+        <div class="app-title">
+            <h1 class="app-h1">宵夜地圖</h1>
+            <span class="app-sub" id="appSub">台灣美食地圖</span>
+        </div>
+        <div class="app-actions">
+            <button class="icon-btn" id="searchBtn" aria-label="搜尋">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            </button>
+            <button class="icon-btn" id="favBtn" aria-label="我的最愛">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            </button>
+        </div>
+    </div>
+    <!-- 縣市切換 (JS 從 cities.json 動態渲染) -->
+    <nav class="city-bar" id="cityBar"></nav>
+    <!-- 快速篩選 (JS 從當前城市資料動態渲染) -->
+    <nav class="quick-bar" id="quickBar"></nav>
+</header>
+
+<!-- ========== Hero Stats (摺疊) ========== -->
+<section class="hero-stats" id="heroStats">
+    <div class="stat-cell">
+        <span class="stat-num" id="statTotal">0</span>
+        <span class="stat-label">店家總數</span>
+    </div>
+    <div class="stat-cell stat-ac">
+        <span class="stat-num" id="stat24h">0</span>
+        <span class="stat-label">24hr 不打烊</span>
+    </div>
+    <div class="stat-cell stat-warn">
+        <span class="stat-num" id="statLate">0</span>
+        <span class="stat-label">開到凌晨</span>
+    </div>
+    <div class="stat-cell">
+        <span class="stat-num" id="statStations">0</span>
+        <span class="stat-label">捷運/輕軌站</span>
+    </div>
+</section>
+
+<!-- ========== 進階篩選 (摺疊) ========== -->
+<section class="filter-panel" id="filterPanel">
+    <details class="filter-details">
+        <summary class="filter-summary">
+            <span class="filter-summary-text">進階篩選 <span class="filter-active-count" id="filterActiveCount">0</span></span>
+            <span class="filter-summary-icon">▾</span>
+        </summary>
+        <div class="filter-content">
+            <div class="filter-row">
+                <span class="filter-label">搜尋</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="店名、地址、招牌菜...">
+            </div>
+            <div class="filter-row" id="lineFilterRow" style="display:none;">
+                <span class="filter-label" id="lineFilterLabel">交通</span>
+                <div class="chip-group" id="lineFilterChips"></div>
+            </div>
+            <div class="filter-row">
+                <span class="filter-label">營業時間</span>
+                <div class="chip-group">
+                    <span class="chip active" data-late-filter="all">全部</span>
+                    <span class="chip late-chip" data-late-filter="22+">22:00 後</span>
+                    <span class="chip late-chip" data-late-filter="22start">未打烊中 --</span>
+                    <span class="chip late-chip" data-late-filter="24h">24hr</span>
+                    <span class="chip late-chip" data-late-filter="midnight">凌晨 03:00+</span>
+                </div>
+            </div>
+            <div class="filter-row">
+                <span class="filter-label">價位</span>
+                <div class="chip-group">
+                    <span class="chip active" data-price-filter="all">全部</span>
+                    <span class="chip" data-price-filter="$">$ 平價</span>
+                    <span class="chip" data-price-filter="$$">$$ 中等</span>
+                    <span class="chip" data-price-filter="$$$">$$$ 高價</span><span class="chip" data-price-filter="$-$$">$-$$ 混合</span>
+                </div>
+            </div>
+            <div class="filter-row">
+                <span class="filter-label" id="mcatFilterLabel">類型</span>
+                <div class="chip-group" id="mcatFilterChips"></div>
+            </div>
+            <div class="filter-row" id="envFilterRow">
+                <span class="filter-label">環境</span>
+                <div class="chip-group" id="envFilterChips"></div>
+            </div>
+            <div class="filter-row">
+                <span class="filter-label">捷運站</span>
+                <div class="chip-group" id="stationChips"></div>
+            </div>
+            <div class="filter-row" style="border-top: 1px solid var(--border); display: flex; justify-content: flex-end; padding-top: 14px;">
+                <button class="reset-btn" id="resetBtn">重設全部</button>
+            </div>
+        </div>
+    </details>
+</section>
+
+<!-- ========== 結果計數 + 排序 ========== -->
+<section class="result-bar">
+    <div class="result-info">
+        <span class="result-count" id="resultCount">0</span>
+        <span class="result-text">家符合</span>
+    </div>
+    <div class="result-sort">
+        <label class="sort-label">排序：</label>
+        <select class="sort-select" id="sortSelect">
+            <option value="default">預設</option>
+            <option value="price-asc">價位 低→高</option>
+            <option value="price-desc">價位 高→低</option>
+            <option value="name">店名 A-Z</option>
+        </select>
+    </div>
+</section>
+
+<!-- ========== 店家卡片列表 (主內容) ========== -->
+<main class="shop-list" id="shopList">
+<!-- shop cards injected by cards.js -->
+</main>
+
+<!-- ========== 骨架屏 (載入時顯示) ========== -->
+<div class="skeleton-list" id="skeletonList" style="display:none;">
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+    <div class="skeleton-card"></div>
+</div>
+
+<!-- ========== 空狀態 ========== -->
+<div class="empty-state" id="emptyState" style="display:none;">
+    <div class="empty-emoji">😢</div>
+    <h3 class="empty-title">找不到符合條件的店家</h3>
+    <p class="empty-text">試試調整篩選條件，或重新搜尋</p>
+    <button class="empty-reset-btn" onclick="resetAllFilters()">↺ 重設全部篩選</button>
+</div>
+
+<!-- ========== 店家詳情底部 Sheet ========== -->
+<div class="sheet-backdrop" id="sheetBackdrop"></div>
+<aside class="shop-sheet" id="shopSheet" aria-hidden="true">
+    <div class="sheet-handle-row">
+        <div class="sheet-handle"></div>
+        <button class="sheet-close" type="button" aria-label="關閉" data-action="close-sheet">×</button>
+    </div>
+    <div class="sheet-body" id="sheetContent">
+        <!-- JS 動態填入 -->
+    </div>
+</aside>
+
+<!-- ========== 搜尋 Sheet (頂部抽屜) ========== -->
+<div class="search-sheet" id="searchSheet">
+    <div class="search-sheet-inner">
+        <input type="text" class="search-sheet-input" id="searchSheetInput" placeholder="🔍 搜尋店名、地址、招牌菜...">
+        <button class="search-close" onclick="closeSearchSheet()">取消</button>
+    </div>
+</div>
+
+<!-- ========== 我的最愛 Sheet ========== -->
+<div class="fav-sheet" id="favSheet">
+    <div class="fav-header">
+        <h2 class="fav-title">我的最愛</h2>
+        <div class="fav-header-actions">
+            <button class="fav-share-all" id="favShareAllBtn" onclick="shareAllFavorites()" title="分享全部最愛">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6 12 2 8 6"/><path d="M12 2v13"/></svg>
+                <span>分享全部</span>
+            </button>
+            <button class="fav-close" onclick="closeFavSheet()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+    </div>
+    <div class="fav-list" id="favList">
+        <p class="fav-empty">尚未收藏店家<br>點擊店家卡片右上角的愛心即可收藏</p>
+    </div>
+</div>
+
+<!-- ========== Toast 提示 ========== -->
+<div class="toast" id="toast"></div>
+
+<!-- ========== 浮動按鈕 (返回頂部) ========== -->
+<button class="fab fab-top" id="fabTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="返回頂部">⬆</button>
+
+<!-- ========== 底部 Tab Bar (手機) ========== -->
+<nav class="bottom-tab-bar" id="bottomTabBar">
+    <button class="tab-item active" data-tab="home" onclick="switchTab('home')">
+        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>
+        <span class="tab-label">首頁</span>
+    </button>
+    <button class="tab-item" data-tab="filter" onclick="switchTab('filter')">
+        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        <span class="tab-label">篩選</span>
+    </button>
+    <button class="tab-item" data-tab="fav" onclick="switchTab('fav')">
+        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        <span class="tab-label">最愛</span>
+        <span class="tab-badge" id="favBadge" style="display:none;">0</span>
+    </button>
+    <button class="tab-item" data-tab="info" onclick="switchTab('info')">
+        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        <span class="tab-label">資料</span>
+    </button>
+</nav>
+
+<!-- ========== 資料聲明 Sheet ========== -->
+<div class="info-sheet" id="infoSheet">
+    <div class="info-header">
+        <h2 class="info-title">📚 資料來源與聲明</h2>
+        <button class="info-close" onclick="closeInfoSheet()">✕</button>
+    </div>
+    <div class="info-content">
+        <h3>整合來源</h3>
+        <p>本清單整理自 <strong>Hoolee</strong>、<strong>Cosmopolitan</strong>、<strong>食尚玩家</strong>、<strong>輕旅行 yam travel</strong>、<strong>i17fun</strong>、<strong>Xinmedia</strong>、<strong>愛食記 ifoodie</strong>、<strong>bearlovefood</strong> 等 8 個美食網站 2023-2025 年的公開推薦文。</p>
+        <h3>信心度評分</h3>
+        <ul>
+            <li><strong>🟢 高</strong>：至少 2 個不同來源在 2024-2025 期間有推薦</li>
+            <li><strong>🟡 中</strong>：只有 1 個來源在 2024-2025 期間有推薦</li>
+            <li><strong>🔴 低</strong>：只有 1 個早期來源，或來自範本/推測</li>
+        </ul>
+        <h3>使用提醒</h3>
+        <p>部分店家於 2024-2025 年餐飲業倒閉潮可能歇業，去之前請用 📍 Google Maps 按鈕查詢最新狀態。</p>
+        <h3>連鎖品牌</h3>
+        <p>達勒斯 Dales 牛排、孫東寶 等連鎖品牌資訊穩定，信心度標為「高」。</p>
+    </div>
+</div>
+
+<!-- Scripts (順序重要: utils → data → filters → sheet → favorites → app) -->
+<!-- SHOP_DATA_INITIAL replaced by fetch -->
+<!-- ========== 照片相簿 Modal ========== -->
+<div class="album-modal" id="albumModal">
+    <div class="album-header">
+        <div class="album-title" id="albumTitle">相簿</div>
+        <button class="album-close" onclick="closeAlbum()">✕</button>
+    </div>
+    <div class="album-grid" id="albumGrid"></div>
+</div>
+
+<!-- ========== 單張照片檢視器 ========== -->
+<div class="album-viewer" id="albumViewer">
+    <button class="album-viewer-close" onclick="closeAlbumViewer()">✕</button>
+    <button class="album-viewer-nav prev" onclick="albumPrev()">‹</button>
+    <img id="albumViewerImg" src="" alt="" />
+    <button class="album-viewer-nav next" onclick="albumNext()">›</button>
+    <div class="album-counter" id="albumCounter"></div>
+</div>
+
+<div class="disclaimer"><strong>⚠️ 資料聲明：</strong>本清單整理自 Hoolee、Cosmopolitan、食尚玩家、輕旅行、i17fun、Xinmedia、愛食記、bearlovefood 等 2023-2025 年公開推薦文。營業時間以商家現場公告為準，去之前請用「開啟 Google 地圖」按鈕查詢即時狀態。</div>
+<div class="footer"><p>📁 <a href="README.md" style="color:#ffb74d;">README</a> · <a href="docs/SOURCE.md" style="color:#ffb74d;">資料來源說明</a> · v3.0 (2026-06-13)</p></div>
+
+<!-- ES module entry -->
+<script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

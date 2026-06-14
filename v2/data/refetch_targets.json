@@ -1,0 +1,13 @@
+[
+  { "id": "ch-004", "name": "過溝仔肉圓王", "address": "彰化縣彰化市彰美路一段58-4號", "district": "彰化市" },
+  { "id": "ch-011", "name": "大元餅行", "address": "彰化縣彰化市中正路二段116號", "district": "彰化市" },
+  { "id": "ch-018", "name": "泉焢肉飯", "address": "彰化縣", "district": "彰化市" },
+  { "id": "ch-019", "name": "牟家爌肉飯", "address": "彰化縣", "district": "彰化市" },
+  { "id": "ch-028", "name": "黑公雞風味餐廳", "address": "彰化縣花壇鄉聽竹街50號", "district": "花壇鄉" },
+  { "id": "ch-031", "name": "石頭燒肉（彰化仁愛直營館）", "address": "彰化縣", "district": "彰化市" },
+  { "id": "ch-034", "name": "咖啡烟", "address": "彰化縣", "district": "彰化市" },
+  { "id": "ch-038", "name": "炎生實驗室咖啡", "address": "彰化縣", "district": "彰化市" },
+  { "id": "ch-058", "name": "京巧手工湯包", "address": "彰化縣", "district": "溪湖鎮" },
+  { "id": "ch-066", "name": "道香香早餐店", "address": "彰化縣", "district": "彰化市" },
+  { "id": "ch-068", "name": "彰水路無名早餐店", "address": "彰化縣", "district": "彰化市" }
+]
