@@ -177,6 +177,9 @@
 | 2026-06-13 | T5 | 跑全部 50 店: 49/50 成功, 平均 6.3 張/店, 1 店 (Boo Thai) 0 張 | ✅ |
 | 2026-06-13 | T6+T8 | 寫 `scripts/sync_tn_photos.mjs`, 套用 3 份資料源 (index.html + api/_seed.js + seed-data.sql) | ✅ |
 | 2026-06-13 | T10 | 寫 `scripts/e2e_photo_check.mjs`, Playwright E2E 驗證: **280/280 lh3 URLs 全 200, 0 broken** | ✅ |
+| 2026-06-15 | (post-plan) | 重抓驗證發現 12 家樣本 lh3 全部是 Google Maps placeholder 灰底 (1555 bytes) | ❌ **lh3 = placeholder, 不是真實店家照** |
+| 2026-06-15 | 補 | 試 agent-browser 抓 v2 96 家 332 張 lh3, 100% 1555 bytes placeholder (HTTP 200 但內容 = 灰底) | ❌ **假圖率 = 100%** |
+| 2026-06-15 | 補 | 試 camofox-browser 結果頁搜尋, 命中「O」開頭錯店 (Maps 自動導向 bug) | ❌ Maps API 對中文小店家不可靠 |
 | 2026-06-13 | 9/9 後端測試 | `[seed] 載入 96 家店 + 29 站` 全綠 | ✅ |
 | 2026-06-13 | T11 | 更新 AGENTS.md, 等待用戶指示 commit | ⏸ |
 

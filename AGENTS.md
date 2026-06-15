@@ -46,12 +46,19 @@ assets/
 - **台南店家 50 筆** (`data-shop-idx="46"`~`"95"`): `data-line="tn-area"` (台南無捷運，用區域代號), `data-station` 為「區域/地標」格式 (例: `中西區/國華街`)
 - **照片來源** ⚠️ **已停用** (2026-06-15): 95 張來自 `https://lh3.googleusercontent.com/gps-cs-s/APN...=w###-h###-k-no` (Google Maps Place Photo CDN) 經視覺驗證確認品質不佳 — 12 家抽樣中只有 3 家 (25%) 為真實店家照片,5 家 (41%) 完全抓錯店 (含抓到中國簡體字店家「烧肉笑锅」「丰味小火鍋」「弘前屋」「見點睇」「鳥事 BIRD」),4 家不確定。**全 96 家已清空 `shop.photos: []` + 移除卡片 `card-photo-thumb`**,加 `<div class="photo-disclaimer">` 透明聲明。後續若要重啟圖片功能,需改來源 (店家 IG/FB 官方帳號或商家自行上傳的高品質圖)。
 
+**2026-06-15 二次確認** (本 commit 後):
+- v2 留下的 332 個 lh3 URL 全部 = **Google Maps placeholder 灰底圖** (1555 bytes, 全部相同大小, 視覺確認為通用 placeholder 而非店家照)
+- 試 agent-browser 抓新 URL → 結果頁 lh3 命中但店家名匹配失敗 (Maps 自動導向 bug, 例如「莊記」會被解析成「O」開頭的店)
+- 試 camofox 結果頁搜尋 → 同樣命中率極低
+- **結論: Google Maps Place Photo (lh3) 對台灣小型在地店家根本不可靠, HTTP 200 也不代表是真實照片**
+
 ## 2026-06-15 修補紀錄
 - **Hero stat 硬編碼**: `statTotal/24h/Late/Stations` 由 `49/3/49/14` 改為 `--` (JS 動態寫入前不騙人)
 - **v2/ 75MB 不進部署**: 新增 `.vercelignore` 排除 v2/ + 一次性 cjs 腳本 + 開發工具狀態,部署包從 75MB → 540KB
 - **Quick-bar chip** 初始值 `--` → `0`
 - **title/meta** 從「47+ 家」改為「96 家」
 - **圖片全清空 + 透明聲明** (見上)
+- **agent-browser 工具裝好** (vercel-labs/agent-browser v0.27.3, Chrome 149), skill 存到 `software-development/agent-browser/SKILL.md`
 - **`.opencode/` 與 `.swarm/` 已被 `.gitignore` 排除**，看到目錄存在但沒被追蹤是正常的
 
 ## 沒有這些東西
