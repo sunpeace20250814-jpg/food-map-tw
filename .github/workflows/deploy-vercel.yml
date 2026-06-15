@@ -1,25 +1,13 @@
-name: Deploy to Vercel
+﻿name: Deploy to Vercel
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:  # 允許手動觸發
+  workflow_dispatch:
 
 jobs:
-  test:
-    name: 後端測試
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: 跑後端測試
-        run: node scripts/test-functions.js
-
   deploy:
     name: 部署到 Vercel Production
-    needs: test  # 測試過才部署
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +21,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Build (no-op, 純靜態 + Functions)
+      - name: Build (純靜態, no-op)
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}

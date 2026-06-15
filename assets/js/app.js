@@ -151,30 +151,10 @@ function closeSearchSheet() {
 }
 
 // 載入店家資料
+// 載入店家資料 (純前端: 直接用 inline SHOP_DATA_INITIAL)
 async function loadShopData() {
     showSkeleton();
     try {
-        // 優先: 從後端 API 取得
-        try {
-            if (window.KaohsiungAPI) {
-                const shops = await window.KaohsiungAPI.getShops();
-                if (shops && shops.length > 0) {
-                    window.SHOP_DATA.length = 0;
-                    shops.forEach(s => window.SHOP_DATA.push(s));
-                    bindCardClicks();
-                    renderStationChips();
-                    updateFavBadge();
-                    updateHeroStats();
-                    applyFilter();
-                    setTimeout(hideSkeleton, 300);
-                    console.log(`[loadShopData] 從 API 載入 ${shops.length} 家`);
-                    return;
-                }
-            }
-        } catch (apiErr) {
-            console.warn('[loadShopData] API 失敗, 用 inline fallback:', apiErr.message);
-        }
-        // Fallback: 用 inline SHOP_DATA_INITIAL (離線/無後端時)
         const data = window.SHOP_DATA_INITIAL || [];
         data.forEach(s => window.SHOP_DATA.push(s));
         bindCardClicks();
@@ -183,9 +163,9 @@ async function loadShopData() {
         updateHeroStats();
         applyFilter();
         setTimeout(hideSkeleton, 300);
-        console.log(`[loadShopData] 從 inline 載入 ${data.length} 家 (fallback)`);
+        console.log(`[loadShopData] 載入 ${data.length} 家 (inline)`);
     } catch (e) {
-        console.error('Failed to load shop data', e);
+        console.error("Failed to load shop data", e);
         hideSkeleton();
     }
 }
@@ -278,15 +258,22 @@ function rewriteCardHours() {
 // 動態更新 hero stats (避免 hardcode 數字)
 function updateHeroStats() {
     const cards = document.querySelectorAll('.shop-card');
+    const currentCity = window.currentCity || 'kh';
     let n24h = 0, late = 0;
     const stations = new Set();
     cards.forEach(c => {
+        if (c.style.display === 'none') return;  // 跳過被縣市/篩選隱藏的
+        const cardCity = c.dataset.city || 'kh';
+        if (cardCity !== currentCity) return;
         if (c.dataset.late === '1' && c.textContent.indexOf('24 小時') >= 0) n24h++;
         if (c.dataset.late === '1') late++;
         if (c.dataset.station) stations.add(c.dataset.station);
     });
     const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
-    setText('statTotal', cards.length);
+    setText('statTotal', cards.length === 0 ? 0 : Array.from(cards).filter(c => {
+        const cc = c.dataset.city || 'kh';
+        return c.style.display !== 'none' && cc === currentCity;
+    }).length);
     setText('stat24h', n24h);
     setText('statLate', late);
     setText('statStations', stations.size);
@@ -632,12 +619,25 @@ function bindCitySwitcher() {
     });
 }
 
+// 全域縣市狀態 (供 filters.js 讀取)
+window.currentCity = 'kh';
+
 function switchCity(city) {
+    window.currentCity = city;  // 給 updateQuickBarCounts / updateHeroStats 讀
+
+    // 切縣市時,重置所有篩選器,避免舊縣市的選擇影響新縣市
+    if (typeof currentLine !== 'undefined') { currentLine = 'all'; currentLate = 'all'; currentPrice = 'all'; currentType = 'all'; currentMcat = 'all'; currentEnv = 'all'; currentStation = 'all'; currentSearch = ''; }
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
+    // 重設所有 chip active 狀態
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('[data-line-filter="all"], [data-late-filter="all"], [data-price-filter="all"], [data-mcat-filter="all"], [data-env-filter="all"]').forEach(c => c.classList.add('active'));
+
     // 切換顯示店家
     const cards = document.querySelectorAll('.shop-card');
     let visible = 0;
     cards.forEach(c => {
-        const cardCity = c.dataset.city || 'kh';  // 預設高雄
+        const cardCity = c.dataset.city || 'kh';
         if (cardCity === city) {
             c.style.display = '';
             visible++;
@@ -645,14 +645,16 @@ function switchCity(city) {
             c.style.display = 'none';
         }
     });
-    // 同步更新副標題與結果計數
+    // 同步更新副標題
     const sub = document.getElementById('appSub');
     if (sub) {
         const cityName = city === 'kh' ? '高雄' : '台南';
         sub.textContent = `2026 · ${cityName} ${visible} 家精選`;
     }
-    const rc = document.getElementById('resultCount');
-    if (rc) rc.textContent = visible;
+    // 觸發 applyFilter 讓 quick-bar / resultCount / hero stats 全部重算
+    if (typeof applyFilter === 'function') applyFilter();
+    if (typeof updateHeroStats === 'function') updateHeroStats();
+
     showToast(city === 'kh' ? '已切換到高雄' : '已切換到台南(目前籌備中)', 'info');
 }
 

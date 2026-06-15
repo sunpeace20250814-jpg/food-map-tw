@@ -1,10 +1,9 @@
-{
-  "name": "kaohsiung-yeoha-functions",
-  "version": "2.0.0",
-  "description": "Netlify Functions for 高雄宵夜地圖 (with Supabase backend)",
+﻿{
+  "name": "kaohsiung-tainan-yeoha-map",
+  "version": "3.0.0",
+  "description": "高雄+台南捷運/輕軌周邊宵夜互動地圖 (純前端, 無後端)",
   "private": true,
-  "type": "commonjs",
-  "engines": {
-    "node": ">=18"
+  "scripts": {
+    "start": "npx serve ."
   }
 }

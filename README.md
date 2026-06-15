@@ -1,96 +1,64 @@
-# 高雄捷運周邊深夜美食地圖
+﻿# 高雄 + 台南捷運周邊宵夜地圖
 
-> 2026 高雄捷運/輕軌周邊 46 家營業到晚上 10 點後的宵夜名單，互動式網站。
+> 2026 高雄 (46) + 台南 (50) 共 96 家捷運/輕軌周邊宵夜名單，互動式網站。
 
 ## 架構
 
+**純前端靜態網頁，無後端。** 開瀏覽器即可使用，部署到任何靜態託管服務 (Vercel / Netlify / GitHub Pages)。
+
 ```
-前端 (Netlify 靜態託管)  +  後端 (Netlify Functions)  +  資料庫 (Supabase Postgres)
+index.html + assets/{css,js}/
 ```
 
-詳細部署指南見 [`docs/DEPLOY.md`](docs/DEPLOY.md)。
+- 96 張店卡片內嵌在 `index.html` 的 `data-*` 屬性
+- 完整店家資料陣列在 `window.SHOP_DATA_INITIAL` (供 detail sheet 渲染)
+- 篩選邏輯直接讀 DOM 屬性，零網路請求
+- 收藏用 localStorage 持久化
 
 ## 快速啟動
 
-### 純前端 (不需要後端)
-直接用瀏覽器打開 `index.html` 即可，會自動 fallback 用 inline 資料：
-
-```
-start index.html
-```
-
-### 本地端開發 (含後端)
+### 直接用瀏覽器打開
 ```bash
-npm install -g netlify-cli
-netlify dev    # 啟動 http://localhost:8888
+start index.html        # Windows
+open index.html         # macOS
 ```
 
-沒設 `SUPABASE_URL` / `SUPABASE_SERVICE_KEY` 時, Functions 自動用 mock 模式 (從 `backend/supabase/seed-data.sql` 解析 46 家)。
-
-### 跑後端測試
+### 用本地伺服器 (推薦，避免某些瀏覽器的 CORS 限制)
 ```bash
-node scripts/test-functions.js
+npm start               # npx serve .
+# 或
+python -m http.server 8000
 ```
 
 ## 專案結構
 
 ```
 美食遊覽/
-├── index.html                        # 前端主頁
-├── netlify.toml                      # Netlify 路由設定
-├── package.json
-├── .env.example                      # 環境變數範本
-├── assets/                           # 前端資源
-│   ├── css/  js/  data/  img/
-├── netlify/
-│   └── functions/                    # Netlify Functions (後端)
-│       ├── _db.js                    # Supabase REST 抽象層 + mock
-│       ├── _helpers.js               # CORS + JWT 認證
-│       ├── _seed.js                  # 本地 mock 自動灌 46 家
-│       ├── shops.js                  # GET /shops
-│       ├── shops-id.js               # GET /shops/:id
-│       ├── stations.js               # GET /stations
-│       └── favorites.js              # GET/POST/DELETE /favorites
-├── backend/
-│   └── supabase/
-│       ├── schema.sql                # 4 張表 + RLS + 18 站
-│       └── seed-data.sql             # 46 家店 INSERT
-├── scripts/
-│   └── test-functions.js             # 本地端測試腳本
-└── docs/
-    └── DEPLOY.md                     # 完整部署指南
+├── index.html              # 96 張店卡片 + SHOP_DATA_INITIAL + UI
+├── vercel.json             # Vercel 靜態託管設定
+├── package.json            # 僅含 npm start
+├── .github/workflows/
+│   └── deploy-vercel.yml   # CI: push to main → 自動部署 Vercel
+├── assets/
+│   ├── css/                # main / components / filters / mobile / table
+│   └── js/                 # app / filters / sheet / favorites
+└── AGENTS.md               # 給未來 agent 的速查指南
 ```
 
 ## 功能總覽
 
-- 7 維互動篩選 (搜尋/捷運線/營業時段/價位/類型/大類/環境)
+- 7 維互動篩選 (搜尋 / 捷運線 / 營業時段 / 價位 / 類型 / 大類 / 環境)
 - 動態計數 (quick-bar / hero stats 從 DOM 自動算)
-- 收藏功能 (localStorage 為主, 登入後雲端同步)
-- iOS 安全的 sheet (position: fixed 鎖背景滾動)
+- 收藏功能 (localStorage 持久化)
+- iOS 安全的 sheet (`position: fixed` 鎖背景滾動，支援巢狀)
 - XSS-safe (全部用 DOM API + textContent)
-- 響應式 (桌機/平板/手機)
-- ⚠️ 非深夜營業店家自動加警告標籤
-- 已修正 8 家地理標籤錯誤 (衛武營/鹽埕埔/左營 等誤標)
+- 響應式 (桌機 / 平板 / 手機)
+- 縣市切換 (高雄 ↔ 台南)
+- 圖片來源：Google Maps Place Photo CDN (`lh3.googleusercontent.com`)
 
-## 開發者快速指令
+## 月費 = $0
 
-```bash
-# 後端 Functions 測試 (不需要 Supabase)
-node scripts/test-functions.js
-
-# 重新生成 seed-data.sql (從現有 index.html)
-# (沒有現成腳本, 參考 backend/supabase/seed-data.sql 格式手動)
-```
-
-## 月費估算
-
-| 服務 | 免費額度 | 預估用量 | 費用 |
-|------|----------|----------|------|
-| Netlify Functions | 125k req/月 | <1k | **$0** |
-| Netlify Bandwidth | 100GB/月 | <1GB | **$0** |
-| Supabase Postgres | 500MB, 2GB 流量 | <1MB | **$0** |
-| Supabase Auth | 50k MAU | 0 (尚未整合) | **$0** |
-| **總計** | | | **$0/月** |
+無後端、無資料庫、無第三方付費服務。圖片走 Google 免費 CDN。部署 Vercel/Netlify 都在免費額度內。
 
 ## 授權
 

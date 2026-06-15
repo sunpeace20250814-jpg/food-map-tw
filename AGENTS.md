@@ -44,7 +44,14 @@ assets/
 - **iOS 滾動鎖** 用 `lockBodyScroll/unlockBodyScroll` (支援巢狀 sheet, `app.js:29-56`)
 - **店家資料** 改卡片要改兩處 (`index.html` 的 `data-*` + `window.SHOP_DATA_INITIAL` 對應物件) — 這是**唯一**會不一致的地方，沒有其他副本
 - **台南店家 50 筆** (`data-shop-idx="46"`~`"95"`): `data-line="tn-area"` (台南無捷運，用區域代號), `data-station` 為「區域/地標」格式 (例: `中西區/國華街`)
-- **照片來源** ⚠️ 95 張來自 `https://lh3.googleusercontent.com/gps-cs-s/APN...=w###-h###-k-no` (Google Maps Place Photo CDN)。Boo Thai (id 88) 0 張照片。若 Google 改 CDN 格式或砍 URL，所有圖會壞
+- **照片來源** ⚠️ **已停用** (2026-06-15): 95 張來自 `https://lh3.googleusercontent.com/gps-cs-s/APN...=w###-h###-k-no` (Google Maps Place Photo CDN) 經視覺驗證確認品質不佳 — 12 家抽樣中只有 3 家 (25%) 為真實店家照片,5 家 (41%) 完全抓錯店 (含抓到中國簡體字店家「烧肉笑锅」「丰味小火鍋」「弘前屋」「見點睇」「鳥事 BIRD」),4 家不確定。**全 96 家已清空 `shop.photos: []` + 移除卡片 `card-photo-thumb`**,加 `<div class="photo-disclaimer">` 透明聲明。後續若要重啟圖片功能,需改來源 (店家 IG/FB 官方帳號或商家自行上傳的高品質圖)。
+
+## 2026-06-15 修補紀錄
+- **Hero stat 硬編碼**: `statTotal/24h/Late/Stations` 由 `49/3/49/14` 改為 `--` (JS 動態寫入前不騙人)
+- **v2/ 75MB 不進部署**: 新增 `.vercelignore` 排除 v2/ + 一次性 cjs 腳本 + 開發工具狀態,部署包從 75MB → 540KB
+- **Quick-bar chip** 初始值 `--` → `0`
+- **title/meta** 從「47+ 家」改為「96 家」
+- **圖片全清空 + 透明聲明** (見上)
 - **`.opencode/` 與 `.swarm/` 已被 `.gitignore` 排除**，看到目錄存在但沒被追蹤是正常的
 
 ## 沒有這些東西

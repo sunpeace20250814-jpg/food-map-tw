@@ -30,6 +30,24 @@ original_full.html
 # 開發工具狀態
 .opencode/
 .swarm/
-
-# OS
+.omo/
+.vscode/
+.idea/
+*.swp
+.DS_Store
 Thumbs.db
+
+# 一次性 / 實驗性腳本
+debug-photos.cjs
+test_noworneverev.py
+ntl_32780.toml
+新增 文字文件.txt
+v2/ch019_ch066_urls.txt
+audit_photos.cjs
+extract-v1-photos.cjs
+finalize.cjs
+fix-ch-photos.cjs
+fix_duplicates.cjs
+verify-v1-photos.cjs
+verify-v2-photos.mjs
+data/noworneverev_test.json

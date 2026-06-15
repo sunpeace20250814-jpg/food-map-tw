@@ -17,18 +17,21 @@ function applyFilter() {
         const text = card.textContent.toLowerCase();
 
         let show = true;
-        if (currentLine !== 'all' && line !== currentLine) show = false;
-        if (currentPrice !== 'all' && price !== currentPrice) show = false;
-        if (currentType !== 'all' && !type.includes(currentType)) show = false;
-        if (currentMcat !== 'all' && !mcat.includes(currentMcat)) show = false;
-        if (currentEnv !== 'all' && !env.includes(currentEnv)) show = false;
-        if (currentStation !== 'all' && station !== currentStation) show = false;
-        if (currentSearch && !text.includes(currentSearch)) show = false;
+        // 縣市切換隱藏 (優先於其他篩選)
+        const cardCity = card.dataset.city || 'kh';
+        if (window.currentCity && cardCity !== window.currentCity) show = false;
+        if (show && currentLine !== 'all' && line !== currentLine) show = false;
+        if (show && currentPrice !== 'all' && price !== currentPrice) show = false;
+        if (show && currentType !== 'all' && !type.includes(currentType)) show = false;
+        if (show && currentMcat !== 'all' && !mcat.includes(currentMcat)) show = false;
+        if (show && currentEnv !== 'all' && !env.includes(currentEnv)) show = false;
+        if (show && currentStation !== 'all' && station !== currentStation) show = false;
+        if (show && currentSearch && !text.includes(currentSearch)) show = false;
 
-        if (currentLate === '22+' && !late) show = false;
-        if (currentLate === '24h' && !text.includes('24 小時')) show = false;
-        if (currentLate === '22start' && !t22start) show = false;
-        if (currentLate === 'midnight' &&
+        if (show && currentLate === '22+' && !late) show = false;
+        if (show && currentLate === '24h' && !text.includes('24 小時')) show = false;
+        if (show && currentLate === '22start' && !t22start) show = false;
+        if (show && currentLate === 'midnight' &&
             !text.match(/凌晨 0[3-9]/) &&
             !text.match(/凌晨 1/) &&
             !text.match(/凌晨 2[0-9]:[0-9]{2}/)) show = false;
@@ -62,9 +65,14 @@ function applyFilter() {
 
 // 動態更新 quick-bar 計數(避免 hardcode 數字錯誤)
 function updateQuickBarCounts() {
+    // 只算目前「可見 + 屬於當前縣市」的 card
     const cards = document.querySelectorAll('.shop-card');
+    const currentCity = window.currentCity || 'kh';
     let all = 0, n24h = 0, late = 0, hotpot = 0, izakaya = 0, snack = 0, ac = 0;
     cards.forEach(c => {
+        if (c.style.display === 'none') return;  // 已被縣市切換或篩選隱藏
+        const cardCity = c.dataset.city || 'kh';
+        if (cardCity !== currentCity) return;  // 不同縣市略過
         all++;
         if (c.dataset.late === '1' && c.textContent.indexOf('24 小時') >= 0) n24h++;
         if (c.dataset.late === '1') late++;
@@ -80,7 +88,7 @@ function updateQuickBarCounts() {
     setText('.quick-chip[data-quick="22start"]', `未打烊中 ${late}`);
     setText('.quick-chip[data-quick="hotpot"]', `火鍋 ${hotpot}`);
     setText('.quick-chip[data-quick="izakaya"]', `日式 ${izakaya}`);
-    setText('.quick-chip[data-quick="snack"]', `小吃 ${snack}`);
+    setText('.quick-chip[data-quick="snack"]', ` 小吃 ${snack}`);
     setText('.quick-chip[data-quick="ac"]', `有冷氣 ${ac}`);
 }
 
