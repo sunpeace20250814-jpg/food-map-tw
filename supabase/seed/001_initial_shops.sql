@@ -1,4 +1,4 @@
--- 美食遊覽初始店家資料 (v4.15)
+-- 美食遊覽初始店家資料 (v5.3)
 -- 由 scripts/extract_seed.py 自動產生
 
 INSERT INTO shops (
