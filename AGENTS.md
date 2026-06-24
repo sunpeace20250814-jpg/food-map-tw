@@ -12,6 +12,19 @@
 - 結構完整 (縣市切換 / 篩選 / 收藏 / photo-strip / btn-album)
 - 部署包 ~520KB
 
+## 最新狀態 (2026-06-24 commit v5.0 Supabase 整合)
+- 135/164 (82%) 店家有視覺驗證 100% 對應正確店家照片
+- **Supabase 完整方案 A 完成**: 使用者推薦 + 管理員審核上架
+  - supabase/migrations/001_initial_schema.sql (8.9KB, schema + RLS + 觸發器)
+  - supabase/seed/001_initial_shops.sql (155KB, 164 店家 INSERT)
+  - assets/js/supabase/supabase.min.js (199KB, UMD SDK)
+  - assets/js/supabase/supabase-client.js (7.4KB, CRUD API)
+  - assets/js/supabase/supabase-ui.js (16KB, UI 模組)
+  - assets/js/supabase/shop-loader.js (6.4KB, 動態載入)
+- 月費: $0 (Supabase 免費 500MB + 50k 行/月)
+- 圖片加載: 134 OK + 1 修 (京巧手工湯包 403)
+- 地址稽核: 8 家 Maps 即時驗證, 3 家修正 (車路口 313→314 / 田媽媽 三光里→慈安里 / 開元𩵚魠 303→307)
+
 ## 開發指令
 ```bash
 # 本地預覽

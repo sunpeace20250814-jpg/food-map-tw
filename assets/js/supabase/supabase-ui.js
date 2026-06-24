@@ -1,0 +1,388 @@
+// supabase-ui.js - 使用者提交表單 + 管理員後台
+import {
+    isSupabaseEnabled, isAdmin, signIn, signOut, getCurrentUser,
+    submitShop, fetchPendingSubmissions, reviewSubmission,
+    deactivateShop, activateShop, deleteShop
+} from './supabase-client.js';
+
+// ============================================
+// 使用者: 提交表單
+// ============================================
+
+/**
+ * 顯示使用者提交表單 (modal)
+ */
+export function showSubmitShopForm() {
+    if (!isSupabaseEnabled()) {
+        alert('提交功能尚未啟用 (Supabase 未設定), 請聯絡管理員');
+        return;
+    }
+
+    const formHtml = `
+    <div class="submit-form-overlay" id="submitFormOverlay">
+        <div class="submit-form">
+            <button class="submit-form-close" data-action="close-submit">×</button>
+            <h2 class="submit-form-title">📝 推薦新店家</h2>
+            <p class="submit-form-desc">填寫店家資料, 管理員審核通過後會上架到地圖。</p>
+            <form id="submitShopForm" class="submit-form-body">
+                <label>您的 Email <span class="req">*</span>
+                    <input type="email" name="submitter_email" required placeholder="your@email.com" />
+                </label>
+                <label>您的稱呼
+                    <input type="text" name="submitter_name" placeholder="匿名也可" />
+                </label>
+                <label>縣市 <span class="req">*</span>
+                    <select name="city" required>
+                        <option value="">請選擇</option>
+                        <option value="kh">高雄</option>
+                        <option value="tn">台南</option>
+                        <option value="ch">彰化</option>
+                    </select>
+                </label>
+                <label>店名 <span class="req">*</span>
+                    <input type="text" name="name" required placeholder="例: 阿三肉圓" />
+                </label>
+                <label>地址 <span class="req">*</span>
+                    <input type="text" name="addr" required placeholder="例: 500彰化縣彰化市三民路242號" />
+                </label>
+                <label>主分類
+                    <select name="mcat">
+                        <option value="">不指定</option>
+                        <option value="麵粥/中式">麵粥/中式</option>
+                        <option value="火鍋">火鍋</option>
+                        <option value="日式">日式</option>
+                        <option value="小吃">小吃</option>
+                        <option value="燒肉">燒肉</option>
+                        <option value="羊肉爐">羊肉爐</option>
+                        <option value="咖啡">咖啡</option>
+                        <option value="甜品">甜品</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </label>
+                <label>價位
+                    <select name="price_bar">
+                        <option value="">不指定</option>
+                        <option value="$">$ (平價)</option>
+                        <option value="$$">$$ (中等)</option>
+                        <option value="$$$">$$$ (高價)</option>
+                    </select>
+                </label>
+                <label>是否宵夜 (營業到 22:00 後)
+                    <select name="late">
+                        <option value="false">否</option>
+                        <option value="true">是</option>
+                    </select>
+                </label>
+                <label>是否 24hr
+                    <select name="time_24h">
+                        <option value="false">否</option>
+                        <option value="true">是</option>
+                    </select>
+                </label>
+                <label>照片 URL (每行一個, 最多 4 張, 可從 Google Maps 複製)
+                    <textarea name="photos" rows="4" placeholder="https://lh3.googleusercontent.com/..."></textarea>
+                </label>
+                <label>Google Maps 連結
+                    <input type="url" name="gmaps_url" placeholder="https://maps.google.com/..." />
+                </label>
+                <label>備註 (給管理員)
+                    <textarea name="submitter_note" rows="2" placeholder="推薦原因、其他資訊..."></textarea>
+                </label>
+                <div class="submit-form-actions">
+                    <button type="button" class="btn btn-secondary" data-action="close-submit">取消</button>
+                    <button type="submit" class="btn btn-primary">送出審核</button>
+                </div>
+                <div class="submit-form-msg" id="submitFormMsg"></div>
+            </form>
+        </div>
+    </div>
+    `;
+
+    // 移除舊的 (如果有)
+    const old = document.getElementById('submitFormOverlay');
+    if (old) old.remove();
+    document.body.insertAdjacentHTML('beforeend', formHtml);
+
+    // 綁定關閉
+    document.querySelectorAll('[data-action="close-submit"]').forEach(el => {
+        el.addEventListener('click', () => {
+            const ov = document.getElementById('submitFormOverlay');
+            if (ov) ov.remove();
+        });
+    });
+
+    // 綁定提交
+    document.getElementById('submitShopForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const data = {
+            submitter_email: form.submitter_email.value.trim(),
+            submitter_name: form.submitter_name.value.trim(),
+            city: form.city.value,
+            name: form.name.value.trim(),
+            addr: form.addr.value.trim(),
+            mcat: form.mcat.value,
+            price_bar: form.price_bar.value,
+            late: form.late.value === 'true',
+            time_24h: form.time_24h.value === 'true',
+            photos: form.photos.value.split('\n').map(s => s.trim()).filter(s => s),
+            gmaps_url: form.gmaps_url.value.trim(),
+            submitter_note: form.submitter_note.value.trim()
+        };
+
+        const msgEl = document.getElementById('submitFormMsg');
+        msgEl.textContent = '送出中...';
+        msgEl.className = 'submit-form-msg info';
+
+        const result = await submitShop(
+            data,
+            data.submitter_email,
+            data.submitter_name,
+            data.submitter_note
+        );
+
+        if (result.ok) {
+            msgEl.textContent = `✅ 送出成功! 您的提交 ID: ${result.id}, 等待管理員審核。`;
+            msgEl.className = 'submit-form-msg success';
+            setTimeout(() => {
+                const ov = document.getElementById('submitFormOverlay');
+                if (ov) ov.remove();
+            }, 3000);
+        } else {
+            msgEl.textContent = `❌ 送出失敗: ${result.error}`;
+            msgEl.className = 'submit-form-msg error';
+        }
+    });
+}
+
+// ============================================
+// 管理員: 登入 modal
+// ============================================
+
+export function showAdminLogin() {
+    if (!isSupabaseEnabled()) {
+        alert('管理後台尚未啟用 (Supabase 未設定)');
+        return;
+    }
+
+    const html = `
+    <div class="admin-login-overlay" id="adminLoginOverlay">
+        <div class="admin-login">
+            <button class="admin-login-close" data-action="close-login">×</button>
+            <h2>🔐 管理員登入</h2>
+            <form id="adminLoginForm">
+                <label>Email <input type="email" name="email" required /></label>
+                <label>密碼 <input type="password" name="password" required /></label>
+                <div class="admin-login-actions">
+                    <button type="button" class="btn btn-secondary" data-action="close-login">取消</button>
+                    <button type="submit" class="btn btn-primary">登入</button>
+                </div>
+                <div class="admin-login-msg" id="adminLoginMsg"></div>
+            </form>
+        </div>
+    </div>
+    `;
+    const old = document.getElementById('adminLoginOverlay');
+    if (old) old.remove();
+    document.body.insertAdjacentHTML('beforeend', html);
+
+    document.querySelectorAll('[data-action="close-login"]').forEach(el => {
+        el.addEventListener('click', () => {
+            const ov = document.getElementById('adminLoginOverlay');
+            if (ov) ov.remove();
+        });
+    });
+
+    document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const msgEl = document.getElementById('adminLoginMsg');
+        msgEl.textContent = '登入中...';
+
+        const result = await signIn(form.email.value, form.password.value);
+        if (result.ok) {
+            const admin = await isAdmin();
+            if (admin) {
+                msgEl.textContent = '✅ 登入成功! 載入後台...';
+                setTimeout(() => {
+                    document.getElementById('adminLoginOverlay').remove();
+                    showAdminPanel();
+                }, 1000);
+            } else {
+                msgEl.textContent = '⚠ 登入成功但您不是管理員';
+                await signOut();
+            }
+        } else {
+            msgEl.textContent = `❌ 登入失敗: ${result.error}`;
+        }
+    });
+}
+
+// ============================================
+// 管理員: 後台審核面板
+// ============================================
+
+export async function showAdminPanel() {
+    if (!isSupabaseEnabled()) {
+        alert('Supabase 未設定');
+        return;
+    }
+
+    const admin = await isAdmin();
+    if (!admin) {
+        alert('您不是管理員');
+        return;
+    }
+
+    const submissions = await fetchPendingSubmissions();
+
+    const html = `
+    <div class="admin-panel-overlay" id="adminPanelOverlay">
+        <div class="admin-panel">
+            <div class="admin-panel-header">
+                <h2>🛠 管理員後台</h2>
+                <div>
+                    <span class="admin-panel-user" id="adminUserEmail"></span>
+                    <button class="btn btn-secondary" data-action="admin-logout">登出</button>
+                    <button class="btn btn-secondary" data-action="close-admin">關閉</button>
+                </div>
+            </div>
+            <div class="admin-panel-body">
+                <h3>待審核 (${submissions.length})</h3>
+                <div class="admin-panel-list" id="adminSubmissionList">
+                    ${submissions.map(s => renderSubmission(s)).join('')}
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+    const old = document.getElementById('adminPanelOverlay');
+    if (old) old.remove();
+    document.body.insertAdjacentHTML('beforeend', html);
+
+    // 顯示當前用戶 email
+    const user = await getCurrentUser();
+    const emailEl = document.getElementById('adminUserEmail');
+    if (emailEl) emailEl.textContent = user?.email || '';
+
+    // 綁定事件
+    document.querySelectorAll('[data-action="close-admin"]').forEach(el => {
+        el.addEventListener('click', () => {
+            document.getElementById('adminPanelOverlay').remove();
+        });
+    });
+
+    document.querySelectorAll('[data-action="admin-logout"]').forEach(el => {
+        el.addEventListener('click', async () => {
+            await signOut();
+            document.getElementById('adminPanelOverlay').remove();
+        });
+    });
+
+    bindReviewButtons();
+}
+
+function renderSubmission(s) {
+    const photos = s.photos || [];
+    return `
+    <div class="admin-submission" data-id="${s.id}">
+        <div class="admin-submission-head">
+            <h4>${s.name}</h4>
+            <span class="admin-submission-id">#${s.id}</span>
+        </div>
+        <div class="admin-submission-meta">
+            <span>📍 ${s.city.toUpperCase()}</span>
+            <span>🏷 ${s.mcat || '-'}</span>
+            <span>💰 ${s.price_bar || '-'}</span>
+            <span>🕐 宵夜: ${s.late ? '是' : '否'}</span>
+        </div>
+        <div class="admin-submission-addr">${s.addr}</div>
+        ${s.station ? `<div class="admin-submission-station">捷運/區域: ${s.station}</div>` : ''}
+        ${photos.length > 0 ? `<div class="admin-submission-photos">${photos.map(p => `<img src="${p}" alt="" loading="lazy" />`).join('')}</div>` : ''}
+        ${s.gmaps_url ? `<div class="admin-submission-gmaps"><a href="${s.gmaps_url}" target="_blank">🗺 Google Maps</a></div>` : ''}
+        <div class="admin-submission-submitter">👤 ${s.submitter_name || '匿名'} (${s.submitter_email})</div>
+        ${s.submitter_note ? `<div class="admin-submission-note">📝 ${s.submitter_note}</div>` : ''}
+        <div class="admin-submission-time">⏰ 提交: ${new Date(s.created_at).toLocaleString('zh-TW')}</div>
+        <div class="admin-submission-actions">
+            <button class="btn btn-success" data-action="approve" data-id="${s.id}">✅ 通過</button>
+            <button class="btn btn-danger" data-action="reject" data-id="${s.id}">❌ 拒絕</button>
+        </div>
+    </div>
+    `;
+}
+
+function bindReviewButtons() {
+    document.querySelectorAll('[data-action="approve"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = parseInt(btn.dataset.id);
+            const note = prompt('審核備註 (可選):', '') || '';
+            btn.disabled = true;
+            btn.textContent = '處理中...';
+            const r = await reviewSubmission(id, true, note);
+            if (r.ok) {
+                btn.closest('.admin-submission').remove();
+                alert(`✅ 通過! 店家已上架到地圖。`);
+            } else {
+                alert(`❌ 失敗: ${r.error}`);
+                btn.disabled = false;
+                btn.textContent = '✅ 通過';
+            }
+        });
+    });
+
+    document.querySelectorAll('[data-action="reject"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = parseInt(btn.dataset.id);
+            const note = prompt('拒絕原因:', '資料不完整');
+            if (!note) return;
+            btn.disabled = true;
+            btn.textContent = '處理中...';
+            const r = await reviewSubmission(id, false, note);
+            if (r.ok) {
+                btn.closest('.admin-submission').remove();
+                alert(`❌ 已拒絕`);
+            } else {
+                alert(`❌ 失敗: ${r.error}`);
+                btn.disabled = false;
+                btn.textContent = '❌ 拒絕';
+            }
+        });
+    });
+}
+
+// ============================================
+// 入口按鈕
+// ============================================
+
+export function mountEntryButtons() {
+    if (!isSupabaseEnabled()) return;
+
+    // 找到 header, 加「推薦新店家」按鈕
+    const header = document.querySelector('.app-header-actions');
+    if (header && !document.getElementById('submitShopEntryBtn')) {
+        const btn = document.createElement('button');
+        btn.id = 'submitShopEntryBtn';
+        btn.className = 'header-btn';
+        btn.textContent = '📝 推薦店家';
+        btn.addEventListener('click', showSubmitShopForm);
+        header.appendChild(btn);
+    }
+
+    // 「管理員入口」加在 footer
+    const footer = document.querySelector('footer, .app-footer, body');
+    if (footer && !document.getElementById('adminEntryBtn')) {
+        const btn = document.createElement('button');
+        btn.id = 'adminEntryBtn';
+        btn.className = 'admin-entry-btn';
+        btn.textContent = '🔐 管理員';
+        btn.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#333;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;opacity:0.6;z-index:999;';
+        btn.addEventListener('click', async () => {
+            if (await isAdmin()) {
+                showAdminPanel();
+            } else {
+                showAdminLogin();
+            }
+        });
+        document.body.appendChild(btn);
+    }
+}
