@@ -1,4 +1,7 @@
 // supabase-client.js - 美食遊覽 Supabase 客戶端
+// TypeScript types (從 Supabase Cloud 自動生成): supabase gen types typescript --project-id XXX
+// 部署後執行: bash supabase/scripts/gen_types.sh
+// (本檔案使用 JS, 不用 TS, types 僅供參考)
 // 用途: 連接 Supabase 後端, 提供 CRUD + Auth API
 
 // 環境變數 (從 Vercel/本地 env 注入)
