@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#0d0d12">
+    <meta name="theme-color" content="#0a0a0a">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>🌙 2026 宵夜地圖 - 高雄 / 台南 (96 家)</title>
-    <meta name="description" content="2026 高雄 46 家 + 台南 50 家共 96 家精選深夜美食地圖">
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/filters.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/mobile.css">
-    <link rel="stylesheet" href="assets/css/table.css">
+    <meta name="apple-mobile-web-app-status-bar-style" black-translucent">
+    <title>🌙 2026 宵夜地圖 - 164 家精選</title>
+    <meta name="description" content="2026 高雄 46 + 台南 50 + 彰化 68 共 164 家精選深夜美食地圖">
+    <link rel="stylesheet" href="assets/css/app.css">
 </head>
 <body>
 <!-- ========== 圖片來源透明聲明 ========== -->
@@ -25,9 +21,10 @@
     <div class="app-header-inner">
         <div class="app-title">
             <h1 class="app-h1">宵夜地圖</h1>
-            <span class="app-sub" id="appSub">2026 · 高雄 46 家精選</span>
+            <span class="app-sub" id="appSub">2026 · 164 家精選</span>
         </div>
         <div class="app-actions">
+            <button class="icon-btn" id="themeToggle" aria-label="切換主題" title="切換主題 (暗黑/明亮/自動)">🌙</button>
             <button class="icon-btn" id="searchBtn" aria-label="搜尋">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
             </button>
@@ -1755,6 +1752,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 </script>
 <script src="assets/js/app.js"></script>
+<script src="assets/js/theme.js"></script>
 <script src="assets/js/sheet.js"></script>
 <script src="assets/js/favorites.js"></script>
 <script src="assets/js/filters.js"></script>
