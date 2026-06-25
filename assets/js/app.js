@@ -698,8 +698,25 @@ function bindShareButtons() {
                     console.warn('[share] Clipboard 失敗:', clipErr.message);
                 }
             }
-            // 降級 2: prompt
-            window.prompt('複製以下內容:', text);
+            // 降級 2: 用隱藏 textarea + execCommand('copy')
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;';
+                ta.setAttribute('readonly', '');
+                document.body.appendChild(ta);
+                ta.select();
+                const success = document.execCommand && document.execCommand('copy');
+                document.body.removeChild(ta);
+                if (success) {
+                    showToast('已複製到剪貼簿', 'success');
+                } else {
+                    showToast('複製失敗, 請手動選取', 'error');
+                }
+            } catch (e) {
+                console.error('[share] 降級失敗:', e);
+                showToast('複製功能不支援', 'error');
+            }
         } catch (e) {
             console.error('[share] 全部降級失敗:', e);
             // 最後手段: alert

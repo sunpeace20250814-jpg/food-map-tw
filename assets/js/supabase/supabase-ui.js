@@ -5,6 +5,45 @@ import {
     deactivateShop, activateShop, deleteShop
 } from './supabase-client.js';
 
+// Inline prompt 函數 (取代 window.prompt, 避免 Hermes 視窗彈出)
+function inlinePrompt(title, defaultValue = '') {
+    return new Promise((resolve) => {
+        // 移除舊的 modal (如果存在)
+        const existing = document.getElementById('inlinePromptModal');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'inlinePromptModal';
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;padding:16px;';
+        overlay.innerHTML = `
+            <div style="background:var(--bg-card,#1c1c1c);border-radius:12px;padding:24px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+                <h3 style="margin:0 0 12px;font-size:16px;color:var(--text-primary,#f5f5f5);">${title}</h3>
+                <textarea id="inlinePromptInput" style="width:100%;min-height:80px;padding:8px;border:1px solid var(--border-color,#333);border-radius:6px;background:var(--bg-secondary,#262626);color:var(--text-primary,#f5f5f5);font-family:inherit;font-size:14px;box-sizing:border-box;">${defaultValue}</textarea>
+                <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end;">
+                    <button id="inlinePromptCancel" style="padding:8px 16px;border:1px solid var(--border-color,#333);background:transparent;color:var(--text-primary,#f5f5f5);border-radius:6px;cursor:pointer;">取消</button>
+                    <button id="inlinePromptOk" style="padding:8px 16px;border:none;background:var(--accent,#f97316);color:white;border-radius:6px;cursor:pointer;">確定</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        const input = document.getElementById('inlinePromptInput');
+        input.focus();
+        input.select();
+
+        const cleanup = () => overlay.remove();
+        const ok = document.getElementById('inlinePromptOk');
+        const cancel = document.getElementById('inlinePromptCancel');
+        ok.onclick = () => { const v = input.value; cleanup(); resolve(v); };
+        cancel.onclick = () => { cleanup(); resolve(null); };
+        input.onkeydown = (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ok.click(); }
+            if (e.key === 'Escape') { e.preventDefault(); cancel.click(); }
+        };
+        overlay.onclick = (e) => { if (e.target === overlay) cancel.click(); };
+    });
+}
+
 // 從 meta tag 讀取 env (部署後由 Vercel 環境變數注入)
 // 立即同步設到 window (確保 module 載入順序不影響)
 if (typeof document !== 'undefined') {
@@ -335,7 +374,8 @@ function bindReviewButtons() {
     document.querySelectorAll('[data-action="approve"]').forEach(btn => {
         btn.addEventListener('click', async () => {
             const id = parseInt(btn.dataset.id);
-            const note = prompt('審核備註 (可選):', '') || '';
+            // 用 inline modal 不用 window.prompt (避免 Hermes 視窗)
+            const note = await inlinePrompt('審核備註 (取消=跳過):', '') || '';
             btn.disabled = true;
             btn.textContent = '處理中...';
             const r = await reviewSubmission(id, true, note);
@@ -353,7 +393,8 @@ function bindReviewButtons() {
     document.querySelectorAll('[data-action="reject"]').forEach(btn => {
         btn.addEventListener('click', async () => {
             const id = parseInt(btn.dataset.id);
-            const note = prompt('拒絕原因:', '資料不完整');
+            // 用 inline modal 不用 window.prompt
+            const note = await inlinePrompt('拒絕原因 (必填):', '資料不完整');
             if (!note) return;
             btn.disabled = true;
             btn.textContent = '處理中...';
