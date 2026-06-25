@@ -5,6 +5,26 @@ import {
     deactivateShop, activateShop, deleteShop
 } from './supabase-client.js';
 
+// 從 meta tag 讀取 env (部署後由 Vercel 環境變數注入)
+// 立即同步設到 window (確保 module 載入順序不影響)
+if (typeof document !== 'undefined') {
+  if (!window.SUPABASE_URL) {
+    const urlMeta = document.querySelector('meta[name="supabase-url"]');
+    if (urlMeta) window.SUPABASE_URL = urlMeta.content;
+  }
+  if (!window.SUPABASE_ANON_KEY) {
+    const keyMeta = document.querySelector('meta[name="supabase-anon-key"]');
+    if (keyMeta) window.SUPABASE_ANON_KEY = keyMeta.content;
+  }
+  // 暴露到 window.__supabaseUI (給 index.html inline script 觸發 mountEntryButtons)
+  window.__supabaseUI = {
+    mountEntryButtons,
+    showSubmitShopForm,
+    showAdminLogin,
+    showAdminPanel
+  };
+}
+
 // ============================================
 // 使用者: 提交表單
 // ============================================
@@ -355,27 +375,37 @@ function bindReviewButtons() {
 // ============================================
 
 export function mountEntryButtons() {
-    if (!isSupabaseEnabled()) return;
+    if (!isSupabaseEnabled()) {
+        console.log('[supabase-ui] Supabase 未啟用, 不掛載 entry buttons');
+        return;
+    }
 
-    // 找到 header, 加「推薦新店家」按鈕
-    const header = document.querySelector('.app-header-actions');
+    // 找到 header (支援多個 selector)
+    const headerSelectors = ['.app-header-actions', '.app-header-inner', '.app-header', 'header'];
+    let header = null;
+    for (const sel of headerSelectors) {
+        header = document.querySelector(sel);
+        if (header) break;
+    }
+
     if (header && !document.getElementById('submitShopEntryBtn')) {
         const btn = document.createElement('button');
         btn.id = 'submitShopEntryBtn';
         btn.className = 'header-btn';
         btn.textContent = '📝 推薦店家';
+        btn.style.cssText = 'background:#ff6b35;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;margin-left:8px;font-weight:600;';
         btn.addEventListener('click', showSubmitShopForm);
         header.appendChild(btn);
+        console.log('[supabase-ui] 推薦店家按鈕已掛載');
     }
 
-    // 「管理員入口」加在 footer
-    const footer = document.querySelector('footer, .app-footer, body');
-    if (footer && !document.getElementById('adminEntryBtn')) {
+    // 「管理員入口」加在 body (固定右下角)
+    if (!document.getElementById('adminEntryBtn')) {
         const btn = document.createElement('button');
         btn.id = 'adminEntryBtn';
         btn.className = 'admin-entry-btn';
         btn.textContent = '🔐 管理員';
-        btn.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#333;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;opacity:0.6;z-index:999;';
+        btn.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#333;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;opacity:0.7;z-index:9999;font-size:13px;';
         btn.addEventListener('click', async () => {
             if (await isAdmin()) {
                 showAdminPanel();
@@ -384,5 +414,6 @@ export function mountEntryButtons() {
             }
         });
         document.body.appendChild(btn);
+        console.log('[supabase-ui] 管理員按鈕已掛載');
     }
 }

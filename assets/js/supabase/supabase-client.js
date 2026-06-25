@@ -4,20 +4,34 @@
 // (本檔案使用 JS, 不用 TS, types 僅供參考)
 // 用途: 連接 Supabase 後端, 提供 CRUD + Auth API
 
-// 環境變數 (從 Vercel/本地 env 注入)
-const SUPABASE_URL = (typeof window !== 'undefined' && window.SUPABASE_URL) || '';
-const SUPABASE_ANON_KEY = (typeof window !== 'undefined' && window.SUPABASE_ANON_KEY) || '';
+// 環境變數 (從 Vercel/本地 env 注入, 或從 meta tag 讀取)
+// 用函數動態讀取, 不在 module load 時鎖死
+function getSupabaseUrl() {
+    if (typeof window === 'undefined') return '';
+    if (window.SUPABASE_URL) return window.SUPABASE_URL;
+    const m = document.querySelector('meta[name="supabase-url"]');
+    return m ? m.content : '';
+}
+
+function getSupabaseKey() {
+    if (typeof window === 'undefined') return '';
+    if (window.SUPABASE_ANON_KEY) return window.SUPABASE_ANON_KEY;
+    const m = document.querySelector('meta[name="supabase-anon-key"]');
+    return m ? m.content : '';
+}
 
 // 單例 Supabase 客戶端 (用 UMD 全局)
 let _supabase = null;
 
 export function getSupabase() {
-    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    const url = getSupabaseUrl();
+    const key = getSupabaseKey();
+    if (!url || !key) {
         console.warn('[supabase] 環境變數未設定, 將使用本地 SHOP_DATA_INITIAL 靜態資料');
         return null;
     }
     if (!_supabase && typeof window.supabase !== 'undefined') {
-        _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        _supabase = window.supabase.createClient(url, key, {
             auth: {
                 autoRefreshToken: true,
                 persistSession: true,
@@ -30,7 +44,7 @@ export function getSupabase() {
 
 // 檢查環境是否已設定
 export function isSupabaseEnabled() {
-    return !!(SUPABASE_URL && SUPABASE_ANON_KEY);
+    return !!(getSupabaseUrl() && getSupabaseKey());
 }
 
 // ============================================
