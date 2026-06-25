@@ -228,10 +228,12 @@ html, body {
 .shop-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-auto-rows: 1fr;
   gap: 16px;
   padding: 16px 24px 80px;
   max-width: 1280px;
   margin: 0 auto;
+  align-items: stretch;
 }
 
 article.shop-card {
@@ -244,6 +246,8 @@ article.shop-card {
   gap: 10px;
   transition: all 0.2s;
   position: relative;
+  height: 100%;
+  min-height: 360px;
 }
 article.shop-card:hover {
   box-shadow: var(--shadow-hover);
@@ -251,18 +255,22 @@ article.shop-card:hover {
   transform: translateY(-2px);
 }
 
+.shop-card .card-name,
 .shop-card .name {
   font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.3;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.shop-card .meta {
+.shop-card .card-meta-line,
+.shop-card .meta,
+.shop-card .shop-card-meta {
   font-size: 12px;
   color: var(--text-secondary);
   display: flex;
@@ -270,11 +278,16 @@ article.shop-card:hover {
   gap: 4px 8px;
 }
 
-.shop-card .addr {
+.shop-card .card-addr,
+.shop-card .addr,
+.shop-card .shop-card-addr {
   font-size: 12px;
   color: var(--text-muted);
   display: flex;
   gap: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .shop-card .badge {
@@ -286,21 +299,24 @@ article.shop-card:hover {
   border-radius: 6px;
   background: var(--bg-hover);
   color: var(--text-secondary);
+  white-space: nowrap;
 }
 .shop-card .badge.accent {
   background: var(--accent);
   color: white;
 }
 
-.shop-card .actions {
+.shop-card .card-actions {
   display: flex;
   gap: 6px;
-  margin-top: 6px;
+  margin-top: auto;
+  padding-top: 8px;
   flex-wrap: wrap;
 }
 .shop-card .btn-mini {
   flex: 1;
-  padding: 6px 8px;
+  min-width: 70px;
+  padding: 8px 6px;
   border-radius: 6px;
   background: var(--bg-secondary);
   color: var(--text-primary);
@@ -324,15 +340,16 @@ article.shop-card:hover {
 
 /* ===== Photo Strip (簡約橫向縮圖) ===== */
 .card-photo-strip {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 4px;
   border-radius: 8px;
   overflow: hidden;
   background: var(--bg-secondary);
+  aspect-ratio: 4 / 1;
+  min-height: 80px;
 }
 .card-photo-thumb {
-  flex: 1 1 0;
-  min-width: 0;
   aspect-ratio: 1;
   overflow: hidden;
   cursor: pointer;
@@ -343,33 +360,104 @@ article.shop-card:hover {
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s;
+  display: block;
 }
 .card-photo-thumb:hover img {
   transform: scale(1.05);
 }
 .card-photo-thumb.more {
   position: relative;
-}
-.card-photo-thumb.more::after {
-  content: attr(data-count);
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--bg-hover);
+  color: var(--text-primary);
   font-weight: 700;
   font-size: 16px;
 }
 
+/* ===== Card Top (name + fav) ===== */
+.card-top {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.card-title-block {
+  flex: 1;
+  min-width: 0;
+}
+.card-right {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+.card-fav {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.card-fav:hover {
+  background: var(--accent);
+  color: white;
+}
+.card-fav.active {
+  background: var(--accent);
+  color: white;
+}
+.card-rating {
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+.card-rating .star {
+  color: #fbbf24;
+}
+
+/* ===== Album Button (統一) ===== */
+.btn-album,
+.shop-card .btn-album {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+.btn-album:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
 /* ===== Modal (簡約 overlay) ===== */
-.modal-overlay {
+.modal-overlay,
+.submit-form-overlay,
+.album-modal {
   position: fixed;
   inset: 0;
   z-index: 1000;
   background: rgba(0,0,0,0.6);
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   padding: 16px;
@@ -381,7 +469,9 @@ article.shop-card:hover {
   to { opacity: 1; }
 }
 
-.modal-content {
+.modal-content,
+.submit-form,
+.album-modal-content {
   background: var(--bg-card);
   border-radius: 16px;
   border: 1px solid var(--border-color);
