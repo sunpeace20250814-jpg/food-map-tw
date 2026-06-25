@@ -719,8 +719,8 @@ function bindShareButtons() {
             }
         } catch (e) {
             console.error('[share] 全部降級失敗:', e);
-            // 最後手段: alert
-            alert(text);
+            // 不用 alert (避免 Hermes 視窗) 改用 toast
+            showToast('分享失敗, 請手動複製', 'error');
         }
     });
 }
