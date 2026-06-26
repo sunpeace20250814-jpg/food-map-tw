@@ -15,16 +15,38 @@ function inlinePrompt(title, defaultValue = '') {
         const overlay = document.createElement('div');
         overlay.id = 'inlinePromptModal';
         overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;padding:16px;';
-        overlay.innerHTML = `
-            <div style="background:var(--bg-card,#1c1c1c);border-radius:12px;padding:24px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
-                <h3 style="margin:0 0 12px;font-size:16px;color:var(--text-primary,#f5f5f5);">${title}</h3>
-                <textarea id="inlinePromptInput" style="width:100%;min-height:80px;padding:8px;border:1px solid var(--border-color,#333);border-radius:6px;background:var(--bg-secondary,#262626);color:var(--text-primary,#f5f5f5);font-family:inherit;font-size:14px;box-sizing:border-box;">${defaultValue}</textarea>
-                <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end;">
-                    <button id="inlinePromptCancel" style="padding:8px 16px;border:1px solid var(--border-color,#333);background:transparent;color:var(--text-primary,#f5f5f5);border-radius:6px;cursor:pointer;">取消</button>
-                    <button id="inlinePromptOk" style="padding:8px 16px;border:none;background:var(--accent,#f97316);color:white;border-radius:6px;cursor:pointer;">確定</button>
-                </div>
-            </div>
-        `;
+
+        const modal = document.createElement('div');
+        modal.style.cssText = 'background:var(--bg-card,#1c1c1c);border-radius:12px;padding:24px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);';
+
+        const h3 = document.createElement('h3');
+        h3.style.cssText = 'margin:0 0 12px;font-size:16px;color:var(--text-primary,#f5f5f5);';
+        h3.textContent = title;
+        modal.appendChild(h3);
+
+        const textarea = document.createElement('textarea');
+        textarea.id = 'inlinePromptInput';
+        textarea.style.cssText = 'width:100%;min-height:80px;padding:8px;border:1px solid var(--border-color,#333);border-radius:6px;background:var(--bg-secondary,#262626);color:var(--text-primary,#f5f5f5);font-family:inherit;font-size:14px;box-sizing:border-box;';
+        textarea.value = defaultValue;
+        modal.appendChild(textarea);
+
+        const btnRow = document.createElement('div');
+        btnRow.style.cssText = 'display:flex;gap:8px;margin-top:16px;justify-content:flex-end;';
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.id = 'inlinePromptCancel';
+        cancelBtn.style.cssText = 'padding:8px 16px;border:1px solid var(--border-color,#333);background:transparent;color:var(--text-primary,#f5f5f5);border-radius:6px;cursor:pointer;';
+        cancelBtn.textContent = '取消';
+        btnRow.appendChild(cancelBtn);
+
+        const okBtn = document.createElement('button');
+        okBtn.id = 'inlinePromptOk';
+        okBtn.style.cssText = 'padding:8px 16px;border:none;background:var(--accent,#f97316);color:white;border-radius:6px;cursor:pointer;';
+        okBtn.textContent = '確定';
+        btnRow.appendChild(okBtn);
+
+        modal.appendChild(btnRow);
+        overlay.appendChild(modal);
         document.body.appendChild(overlay);
 
         const input = document.getElementById('inlinePromptInput');
@@ -417,7 +439,6 @@ function bindReviewButtons() {
 
 export function mountEntryButtons() {
     if (!isSupabaseEnabled()) {
-        console.log('[supabase-ui] Supabase 未啟用, 不掛載 entry buttons');
         return;
     }
 
@@ -437,7 +458,6 @@ export function mountEntryButtons() {
         btn.style.cssText = 'background:#ff6b35;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;margin-left:8px;font-weight:600;';
         btn.addEventListener('click', showSubmitShopForm);
         header.appendChild(btn);
-        console.log('[supabase-ui] 推薦店家按鈕已掛載');
     }
 
     // 「管理員入口」加在 body (固定右下角)
@@ -455,6 +475,5 @@ export function mountEntryButtons() {
             }
         });
         document.body.appendChild(btn);
-        console.log('[supabase-ui] 管理員按鈕已掛載');
     }
 }

@@ -449,20 +449,26 @@ article.shop-card:hover {
   border-color: var(--accent);
 }
 
-/* ===== Modal (簡約 overlay) ===== */
+/* ===== Modal (簡約 overlay) - 預設隱藏, JS 加 .show 顯示 ===== */
 .modal-overlay,
 .submit-form-overlay,
-.album-modal {
+.album-modal,
+.album-viewer {
   position: fixed;
   inset: 0;
   z-index: 1000;
   background: rgba(0,0,0,0.6);
-  display: flex !important;
+  display: none !important;
   align-items: center;
   justify-content: center;
   padding: 16px;
   backdrop-filter: blur(4px);
-  animation: fadeIn 0.2s;
+}
+.modal-overlay.show,
+.submit-form-overlay.show,
+.album-modal.show,
+.album-viewer.show {
+  display: flex !important;
 }
 @keyframes fadeIn {
   from { opacity: 0; }

@@ -17,7 +17,7 @@ function saveLocalFavorites(favs) {
     try {
         localStorage.setItem(FAV_KEY, JSON.stringify(favs));
     } catch (e) {
-        console.error("Failed to save favorites", e);
+        // localStorage 寫入失敗 (quota / privacy mode), 靜默忽略
     }
 }
 

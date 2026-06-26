@@ -10,15 +10,12 @@ export async function loadShops() {
     if (isSupabaseEnabled()) {
         const supabaseShops = await fetchAllShops();
         if (supabaseShops && supabaseShops.length > 0) {
-            console.log(`[shop-loader] 從 Supabase 載入 ${supabaseShops.length} 家`);
             return normalizeSupabaseShops(supabaseShops);
         }
-        console.log('[shop-loader] Supabase 無資料, 使用靜態 SHOP_DATA_INITIAL');
     }
 
     // 2. Fallback 靜態資料
     if (window.SHOP_DATA_INITIAL && Array.isArray(window.SHOP_DATA_INITIAL)) {
-        console.log(`[shop-loader] 從 SHOP_DATA_INITIAL 載入 ${window.SHOP_DATA_INITIAL.length} 家`);
         return window.SHOP_DATA_INITIAL;
     }
 
@@ -82,17 +79,21 @@ export async function renderShopCards() {
     }
 
     const shops = await loadShops();
-    console.log(`[shop-loader] 準備渲染 ${shops.length} 家`);
 
-    // 渲染 card (與現有 article 結構相同, 確保 filters.js / sheet.js 能用)
-    listEl.innerHTML = shops.map((s, idx) => renderCard(s, idx)).join('');
+    // 清空 listEl (用 DOM API, 避免 innerHTML)
+    while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
+
+    // 渲染 card (用 DOM API 安全建立, 無 XSS 風險)
+    shops.forEach((s, idx) => {
+        listEl.appendChild(renderCard(s, idx));
+    });
 
     // 觸發事件: 通知其他模組資料已更新
     window.dispatchEvent(new CustomEvent('shops-loaded', { detail: { count: shops.length } }));
 }
 
 /**
- * 渲染單個 shop card
+ * 渲染單個 shop card (DOM API 版本, 完全避免 innerHTML / XSS)
  */
 function renderCard(s, idx) {
     const hasPhotos = s.photos && s.photos.length > 0;
@@ -102,60 +103,138 @@ function renderCard(s, idx) {
     const is24h = s.time_24h ? '1' : '0';
     const isNonLate = s.non_late ? '1' : '0';
 
-    return `
-    <article class="shop-card"
-        data-late="${isLate}"
-        data-line="${s.line || 'none'}"
-        data-price="${s.price_bar || '$'}"
-        data-station="${s.station || ''}"
-        data-mcat="${s.mcat || ''}"
-        data-env="${s.env || ''}"
-        data-22start="${is22Start}"
-        data-24h="${is24h}"
-        data-non-late="${isNonLate}"
-        data-city="${s.city || 'kh'}"
-        data-shop-idx="${s.id || idx}">
-        <div class="card-top">
-            <div class="card-title-block">
-                <h3 class="card-name">${escapeHtml(s.name)}</h3>
-                <div class="card-meta-line">
-                    <span>${escapeHtml(s.mcat || '')}</span>
-                    <span class="dot"></span>
-                    <span>${escapeHtml(s.cat_sub || '')}</span>
-                </div>
-            </div>
-            <div class="card-right">
-                <button class="card-fav" aria-label="收藏">♡</button>
-                ${s.rating ? `<div class="card-rating"><span class="star">★</span><span class="num">${s.rating}</span></div>` : ''}
-            </div>
-        </div>
-        ${s.env_badges && s.env_badges.length > 0 ? `<div class="card-info-row"><span class="tag">${s.env_badges.join(' · ')}</span></div>` : ''}
-        <div class="card-addr" title="${escapeAttr(s.addr)}">${escapeHtml(s.addr)}</div>
-        ${hasPhotos ? `
-        <div class="card-photo-strip">
-            <div class="card-photo-thumb" data-shop-idx="${s.id || idx}" data-action="album"><img src="${photoUrl}" alt="" loading="lazy" /></div>
-            <div class="card-photo-thumb" data-shop-idx="${s.id || idx}" data-action="album"><img src="${photoUrl}&w112" alt="" loading="lazy" /></div>
-            <div class="card-photo-thumb" data-shop-idx="${s.id || idx}" data-action="album"><img src="${photoUrl}&w112" alt="" loading="lazy" /></div>
-        </div>
-        <button class="btn-album" data-shop-idx="${s.id || idx}" data-action="album">看完整相簿 · ${s.photos.length} 張</button>
-        ` : ''}
-        <div class="card-actions">
-            <button class="btn btn-primary" data-shop-idx="${s.id || idx}" data-action="detail">詳細</button>
-            <button class="btn btn-share" data-action="share" type="button" aria-label="分享">↗ 分享</button>
-            <a class="btn btn-map" href="${escapeAttr(s.gmaps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name)}`)}" target="_blank" rel="noopener">地圖 ↗</a>
-        </div>
-    </article>
-    `;
-}
+    const article = document.createElement('article');
+    article.className = 'shop-card';
+    article.dataset.late = isLate;
+    article.dataset.line = s.line || 'none';
+    article.dataset.price = s.price_bar || '$';
+    article.dataset.station = s.station || '';
+    article.dataset.mcat = s.mcat || '';
+    article.dataset.env = s.env || '';
+    article.dataset['22start'] = is22Start;
+    article.dataset['24h'] = is24h;
+    article.dataset['nonLate'] = isNonLate;
+    article.dataset.city = s.city || 'kh';
+    article.dataset.shopIdx = String(s.id || idx);
 
-function escapeHtml(str) {
-    if (!str) return '';
-    return String(str).replace(/[&<>"']/g, c => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-    }[c]));
-}
+    // card-top
+    const cardTop = document.createElement('div');
+    cardTop.className = 'card-top';
 
-function escapeAttr(str) {
-    if (!str) return '';
-    return String(str).replace(/"/g, '&quot;');
+    const titleBlock = document.createElement('div');
+    titleBlock.className = 'card-title-block';
+
+    const h3 = document.createElement('h3');
+    h3.className = 'card-name';
+    h3.textContent = s.name || '';
+    titleBlock.appendChild(h3);
+
+    const metaLine = document.createElement('div');
+    metaLine.className = 'card-meta-line';
+    const mcatSpan = document.createElement('span');
+    mcatSpan.textContent = s.mcat || '';
+    metaLine.appendChild(mcatSpan);
+    const dot1 = document.createElement('span');
+    dot1.className = 'dot';
+    metaLine.appendChild(dot1);
+    const catSubSpan = document.createElement('span');
+    catSubSpan.textContent = s.cat_sub || '';
+    metaLine.appendChild(catSubSpan);
+    titleBlock.appendChild(metaLine);
+
+    cardTop.appendChild(titleBlock);
+
+    const cardRight = document.createElement('div');
+    cardRight.className = 'card-right';
+    const favBtn = document.createElement('button');
+    favBtn.className = 'card-fav';
+    favBtn.setAttribute('aria-label', '收藏');
+    favBtn.textContent = '♡';
+    cardRight.appendChild(favBtn);
+    if (s.rating) {
+        const ratingDiv = document.createElement('div');
+        ratingDiv.className = 'card-rating';
+        const star = document.createElement('span');
+        star.className = 'star';
+        star.textContent = '★';
+        const num = document.createElement('span');
+        num.className = 'num';
+        num.textContent = String(s.rating);
+        ratingDiv.appendChild(star);
+        ratingDiv.appendChild(num);
+        cardRight.appendChild(ratingDiv);
+    }
+    cardTop.appendChild(cardRight);
+    article.appendChild(cardTop);
+
+    // env badges
+    if (s.env_badges && s.env_badges.length > 0) {
+        const infoRow = document.createElement('div');
+        infoRow.className = 'card-info-row';
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.textContent = s.env_badges.join(' · ');
+        infoRow.appendChild(tag);
+        article.appendChild(infoRow);
+    }
+
+    // addr
+    const addrDiv = document.createElement('div');
+    addrDiv.className = 'card-addr';
+    addrDiv.title = s.addr || '';
+    addrDiv.textContent = s.addr || '';
+    article.appendChild(addrDiv);
+
+    // photos
+    if (hasPhotos) {
+        const strip = document.createElement('div');
+        strip.className = 'card-photo-strip';
+        [photoUrl, `${photoUrl}&w112`, `${photoUrl}&w112`].forEach((url) => {
+            const thumb = document.createElement('div');
+            thumb.className = 'card-photo-thumb';
+            thumb.dataset.shopIdx = String(s.id || idx);
+            thumb.dataset.action = 'album';
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = '';
+            img.loading = 'lazy';
+            thumb.appendChild(img);
+            strip.appendChild(thumb);
+        });
+        article.appendChild(strip);
+
+        const albumBtn = document.createElement('button');
+        albumBtn.className = 'btn-album';
+        albumBtn.dataset.shopIdx = String(s.id || idx);
+        albumBtn.dataset.action = 'album';
+        albumBtn.textContent = `看完整相簿 · ${s.photos.length} 張`;
+        article.appendChild(albumBtn);
+    }
+
+    // actions
+    const actions = document.createElement('div');
+    actions.className = 'card-actions';
+    const detailBtn = document.createElement('button');
+    detailBtn.className = 'btn btn-primary';
+    detailBtn.dataset.shopIdx = String(s.id || idx);
+    detailBtn.dataset.action = 'detail';
+    detailBtn.textContent = '詳細';
+    actions.appendChild(detailBtn);
+    const shareBtn = document.createElement('button');
+    shareBtn.className = 'btn btn-share';
+    shareBtn.dataset.action = 'share';
+    shareBtn.type = 'button';
+    shareBtn.setAttribute('aria-label', '分享');
+    shareBtn.textContent = '↗ 分享';
+    actions.appendChild(shareBtn);
+    const mapLink = document.createElement('a');
+    mapLink.className = 'btn btn-map';
+    mapLink.href = s.gmaps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name || '')}`;
+    mapLink.target = '_blank';
+    mapLink.rel = 'noopener';
+    mapLink.textContent = '地圖 ↗';
+    actions.appendChild(mapLink);
+    article.appendChild(actions);
+
+    return article;
 }

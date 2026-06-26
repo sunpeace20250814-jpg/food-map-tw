@@ -163,9 +163,7 @@ async function loadShopData() {
         updateHeroStats();
         applyFilter();
         setTimeout(hideSkeleton, 300);
-        console.log(`[loadShopData] 載入 ${data.length} 家 (inline)`);
     } catch (e) {
-        console.error("Failed to load shop data", e);
         hideSkeleton();
     }
 }
@@ -645,17 +643,20 @@ function switchCity(city) {
             c.style.display = 'none';
         }
     });
-    // 同步更新副標題
     const sub = document.getElementById('appSub');
     if (sub) {
-        const cityName = city === 'kh' ? '高雄' : '台南';
+        const cityName = { kh: '高雄', tn: '台南', ch: '彰化' }[city] || '高雄';
         sub.textContent = `2026 · ${cityName} ${visible} 家精選`;
     }
-    // 觸發 applyFilter 讓 quick-bar / resultCount / hero stats 全部重算
     if (typeof applyFilter === 'function') applyFilter();
     if (typeof updateHeroStats === 'function') updateHeroStats();
 
-    showToast(city === 'kh' ? '已切換到高雄' : '已切換到台南(目前籌備中)', 'info');
+    const toastMsg = {
+        kh: '已切換到高雄',
+        tn: '已切換到台南',
+        ch: '已切換到彰化'
+    }[city] || '已切換城市';
+    showToast(toastMsg, 'info');
 }
 
 // 分享按鈕
@@ -714,11 +715,9 @@ function bindShareButtons() {
                     showToast('複製失敗, 請手動選取', 'error');
                 }
             } catch (e) {
-                console.error('[share] 降級失敗:', e);
                 showToast('複製功能不支援', 'error');
             }
         } catch (e) {
-            console.error('[share] 全部降級失敗:', e);
             // 不用 alert (避免 Hermes 視窗) 改用 toast
             showToast('分享失敗, 請手動複製', 'error');
         }

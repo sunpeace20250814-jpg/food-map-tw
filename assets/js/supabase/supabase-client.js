@@ -66,7 +66,7 @@ export async function fetchAllShops() {
         .order('id', { ascending: true });
 
     if (error) {
-        console.error('[supabase] fetchAllShops error:', error);
+        // fetchAllShops 失敗, 退回 null 讓 loadShops() 用本地 SHOP_DATA_INITIAL
         return null;
     }
     return data || [];
@@ -119,7 +119,6 @@ export async function submitShop(shop, submitterEmail, submitterName = '', submi
         .single();
 
     if (error) {
-        console.error('[supabase] submitShop error:', error);
         return { ok: false, error: error.message };
     }
     return { ok: true, id: data.id };
@@ -195,7 +194,7 @@ export async function fetchPendingSubmissions() {
         .select('*');
 
     if (error) {
-        console.error('[supabase] fetchPendingSubmissions error:', error);
+        // 取得待審核列表失敗, 退回空陣列
         return [];
     }
     return data || [];
@@ -226,7 +225,6 @@ export async function reviewSubmission(submissionId, approve, reviewNote = '') {
         .eq('id', submissionId);
 
     if (error) {
-        console.error('[supabase] reviewSubmission error:', error);
         return { ok: false, error: error.message };
     }
     return { ok: true };
