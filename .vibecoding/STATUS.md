@@ -23,15 +23,19 @@
 
 ### 進行中
 
-- 🔄 vibecoding-linear-framework 文檔對齊 (10 個 markdown)
-- 🔄 重新整理 README/PLAN/AGENTS 文檔
+- 🔄 Frontend-Agent (background): 修 P0 (line 658 過時/innerHTML/console/OpenGraph)
+- 🔄 Tester-Agent (background): 寫 Playwright e2e test (5 cases)
+- 🔄 Ops-Agent (background): 監控 v5.13 部署狀態
+- 🔄 vibecoding-linear-framework 文檔對齊 (10 個 markdown 完成 9/10)
+- 🔄 PRD.md + FLOWS.md + FRONTEND_HANDOFF.md + PROJECT_FRAME.md 完成
 
 ### 下一步
 
-- 修 v5.11 部署實際跑狀況 (待 Vercel build 完成)
+- 修 v5.13 部署實際跑狀況 (待 Vercel build 完成)
 - 修 v5.0 ~ v5.10 的 source code 暴露問題 (回頭清 token)
 - 完成 FRONTEND_HANDOFF.md 內容
 - 設定 GATES.md + check.sh
+- 收 Frontend/Tester/Ops 3 個子代理回報 → commit v6.0
 
 ## 當前卡點
 
