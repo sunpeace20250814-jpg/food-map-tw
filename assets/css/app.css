@@ -376,6 +376,41 @@ article.shop-card:hover {
   font-size: 16px;
 }
 
+/* img-broken: lh3 失效時 emoji 占位 */
+.card-photo-thumb.img-broken {
+  background: var(--bg-hover, #2a2a2a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+/* card-photo-placeholder: 完全無圖店家 */
+.card-photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  aspect-ratio: 4 / 1;
+  background: var(--bg-hover, #2a2a2a);
+  border-radius: 8px;
+  margin: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.card-photo-placeholder:hover {
+  background: var(--bg-active, #333);
+}
+.placeholder-emoji {
+  font-size: 48px;
+  line-height: 1;
+}
+.placeholder-label {
+  font-size: 12px;
+  color: var(--text-secondary, #aaa);
+}
+
 /* ===== Card Top (name + fav) ===== */
 .card-top {
   display: flex;

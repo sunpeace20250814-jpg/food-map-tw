@@ -198,6 +198,12 @@ function renderCard(s, idx) {
             img.src = url;
             img.alt = '';
             img.loading = 'lazy';
+            img.onerror = () => {
+                // lh3 失效 → 替換成 emoji 占位
+                thumb.classList.add('img-broken');
+                img.remove();
+                thumb.textContent = s.emoji || '🍜';
+            };
             thumb.appendChild(img);
             strip.appendChild(thumb);
         });
@@ -209,6 +215,21 @@ function renderCard(s, idx) {
         albumBtn.dataset.action = 'album';
         albumBtn.textContent = `看完整相簿 · ${s.photos.length} 張`;
         article.appendChild(albumBtn);
+    } else {
+        // 無圖店家: 顯示 emoji 占位卡
+        const placeholder = document.createElement('div');
+        placeholder.className = 'card-photo-placeholder';
+        placeholder.dataset.shopIdx = String(s.id || idx);
+        placeholder.dataset.action = 'detail';
+        const emojiSpan = document.createElement('span');
+        emojiSpan.className = 'placeholder-emoji';
+        emojiSpan.textContent = s.emoji || '🍜';
+        placeholder.appendChild(emojiSpan);
+        const placeholderLabel = document.createElement('span');
+        placeholderLabel.className = 'placeholder-label';
+        placeholderLabel.textContent = '暫無照片 · 點我看詳情';
+        placeholder.appendChild(placeholderLabel);
+        article.appendChild(placeholder);
     }
 
     // actions
