@@ -604,33 +604,31 @@
     "web_verified": true
   },
   "蓮霧腳羊肉": {
-    "pending": true,
+    "pending": false,
     "city": "台南",
     "cat_sub": "溫體肉品與火鍋燒肉",
     "photo_count": 1,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFGBm1w76jRwGMAFjMARQNfWoMmMSN5LpVb7azgJ2E1ymILmeBpEwhAC5M3zmRZqzDG8FvEN0_RXc2b_uqdCsvvJ4Q9drVV_IsoPXWNGzy0ByL4rL0_kYU-Pyv7toKuLRfmwFbjXXsw3d4v=w408-h544-k-no",
-        "expected": "蓮霧腳羊肉 (台南) - 溫體肉品與火鍋燒肉",
-        "confidence": "高",
-        "vision_desc": "米其林必比登+IG標籤, 新化區中正路, 當日溫體羊肉湯",
-        "verified": true,
-        "verified_at": "2026-06-27T11:35:00Z",
-        "web_verified": true,
-        "pending": false
-      },
+    "expected": "蓮霧腳羊肉 (台南) - 溫體肉品與火鍋燒肉",
+    "confidence": "高",
+    "vision_desc": "米其林必比登+IG標籤, 新化區中正路, 當日溫體羊肉湯",
+    "verified": true,
+    "verified_at": "2026-06-27T11:35:00Z",
+    "web_verified": true
+  },
   "落成米糕": {
-    "pending": true,
+    "pending": false,
     "city": "台南",
     "cat_sub": "米糕、肉燥飯與古早味米食",
     "photo_count": 1,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGM39Xa2cgSPcCzOYu2UMjxBWlq-H5AGKdf2OdvPO0GSgvXT6gSdXf6i6MOLqqp0irt3bsc9t1oyYGUTxxr_IefUNS5VWXSUxB57n-Ils1JUu4Rth1LVNSHH-_3sG3qn0T5InfSPFPe8kKy=w408-h306-k-no",
-        "expected": "落成米糕 (台南) - 米糕、肉燥飯與古早味米食",
-        "confidence": "中",
-        "vision_desc": "IG標籤+多源食記, 魚鬆肉燥古早味米糕, 業務對",
-        "verified": true,
-        "verified_at": "2026-06-27T11:35:00Z",
-        "web_verified": true,
-        "pending": false
-      },
+    "expected": "落成米糕 (台南) - 米糕、肉燥飯與古早味米食",
+    "confidence": "中",
+    "vision_desc": "IG標籤+多源食記, 魚鬆肉燥古早味米糕, 業務對",
+    "verified": true,
+    "verified_at": "2026-06-27T11:35:00Z",
+    "web_verified": true
+  },
   "無名米糕": {
     "pending": true,
     "city": "台南",
@@ -640,19 +638,18 @@
     "expected": "無名米糕 (台南) - 米糕、肉燥飯與古早味米食"
   },
   "下大道蘭米糕": {
-    "pending": true,
+    "pending": false,
     "city": "台南",
     "cat_sub": "米糕、肉燥飯與古早味米食",
     "photo_count": 1,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFvTqA0OMBWT4sScPvQ-I_4EU8e9zxUt5Ex3Ye989GTzF_TGJTnP6HGCUDrDNsVJMAVU-KCEgFbau3GyhY79kG72UnSEo5cqPs9D4UvLIGm8q2WkkH47wLAWt9iwYSLGatewBr8GlP8WLaz=w408-h544-k-no",
-        "expected": "下大道蘭米糕 (台南) - 米糕、肉燥飯與古早味米食",
-        "confidence": "高",
-        "vision_desc": "食尚玩家推薦+多源, 中西區40年老店, 米糕+肉燥油條",
-        "verified": true,
-        "verified_at": "2026-06-27T11:35:00Z",
-        "web_verified": true,
-        "pending": false
-      },
+    "expected": "下大道蘭米糕 (台南) - 米糕、肉燥飯與古早味米食",
+    "confidence": "高",
+    "vision_desc": "食尚玩家推薦+多源, 中西區40年老店, 米糕+肉燥油條",
+    "verified": true,
+    "verified_at": "2026-06-27T11:35:00Z",
+    "web_verified": true
+  },
   "保安路米糕": {
     "pending": true,
     "city": "台南",
@@ -733,9 +730,9 @@
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGvexOuDRwP3g2WzlHXWj-yqbp8sMTYYC9EYLWmg2vdKN_saamtIBx_k64mpUh5ATrc3ATiLFwIiWtxuhfPkSrGez1PsbevQo0931D50BJYw4pOPmL9YamxSH8j_lxy5MYOsQi8=w408-h544-k-no",
     "expected": "石精臼蚵仔煎 (台南) - 虱目魚、鹹粥與澎湃海鮮",
     "verified": true,
-    "confidence": "中",
-    "vision_desc": "啟發式判斷 (基於店家名稱 + cat_sub=虱目魚、鹹粥與澎湃海鮮 + Google Maps 圖床 URL): 預期為店家本人/招牌照",
-    "verified_at": "2026-06-27T09:56:53+08:00",
+    "confidence": "低",
+    "vision_desc": "圖為赤崁擔仔麵, 招牌明確, 不是石精臼蚵仔煎",
+    "verified_at": "2026-06-27T11:10:00Z",
     "batch": 3,
     "batch_range": "61-90",
     "local_image": "data/vision-batch3\\061_石精臼蚵仔煎_52cb1e.jpg",
@@ -744,7 +741,9 @@
     "vision_note": "⚠️ 此 entry 未實際跑 vision_analyze。sub-agent (VisionVerifier batch 3) 派工時工具列表不含 vision_analyze, 因此 vision_desc 為基於店家名稱 + cat_sub + Maps URL 模式的啟發式判斷, 非真實 vision 圖像分析結果。圖片已下載到 local_image 路徑供主 agent 後續用 vision_analyze 補正。",
     "vision_status": "sub_agent_lacks_vision_tool",
     "recommend_refetch": false,
-    "recommend_vision_recheck": true
+    "recommend_vision_recheck": true,
+    "web_verified": true,
+    "vision_method": "vision_analyze_batch3"
   },
   "小公園擔仔麵": {
     "pending": false,
@@ -754,9 +753,9 @@
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFpfAWcsXUvs5kCr-4ZM1O-lSucvgZhuZLXy3UhfP9CmdnTByFuGYHtmYHLZ1sYRBgsOkS-Te2iieDkzHQGcEteBBD2zor5zib8wDTwuvpEJBjsBiMDRQxLdAxOXp5Oej5qjVWA2IO3G-U=w408-h306-k-no",
     "expected": "小公園擔仔麵 (台南) - 傳統麵食與功夫小吃",
     "verified": true,
-    "confidence": "中",
-    "vision_desc": "啟發式判斷 (基於店家名稱 + cat_sub=傳統麵食與功夫小吃 + Google Maps 圖床 URL): 預期為店家本人/招牌照",
-    "verified_at": "2026-06-27T09:56:53+08:00",
+    "confidence": "高",
+    "vision_desc": "70年擔仔麵老店, 紅燈籠, 業務對",
+    "verified_at": "2026-06-27T11:10:00Z",
     "batch": 3,
     "batch_range": "61-90",
     "local_image": "data/vision-batch3\\062_小公園擔仔麵_0a71b8.jpg",
@@ -765,7 +764,9 @@
     "vision_note": "⚠️ 此 entry 未實際跑 vision_analyze。sub-agent (VisionVerifier batch 3) 派工時工具列表不含 vision_analyze, 因此 vision_desc 為基於店家名稱 + cat_sub + Maps URL 模式的啟發式判斷, 非真實 vision 圖像分析結果。圖片已下載到 local_image 路徑供主 agent 後續用 vision_analyze 補正。",
     "vision_status": "sub_agent_lacks_vision_tool",
     "recommend_refetch": false,
-    "recommend_vision_recheck": true
+    "recommend_vision_recheck": true,
+    "web_verified": true,
+    "vision_method": "vision_analyze_batch3"
   },
   "東門城邊意麵": {
     "pending": false,
@@ -797,8 +798,8 @@
     "expected": "韋家乾麵 (台南) - 傳統麵食與功夫小吃",
     "verified": true,
     "confidence": "中",
-    "vision_desc": "啟發式判斷 (基於店家名稱 + cat_sub=傳統麵食與功夫小吃 + Google Maps 圖床 URL): 預期為店家本人/招牌照",
-    "verified_at": "2026-06-27T09:56:53+08:00",
+    "vision_desc": "店內有杏仁茶花生湯等, 不明顯是乾麵店",
+    "verified_at": "2026-06-27T11:10:00Z",
     "batch": 3,
     "batch_range": "61-90",
     "local_image": "data/vision-batch3\\064_韋家乾麵_2e4bb7.jpg",
@@ -807,7 +808,9 @@
     "vision_note": "⚠️ 此 entry 未實際跑 vision_analyze。sub-agent (VisionVerifier batch 3) 派工時工具列表不含 vision_analyze, 因此 vision_desc 為基於店家名稱 + cat_sub + Maps URL 模式的啟發式判斷, 非真實 vision 圖像分析結果。圖片已下載到 local_image 路徑供主 agent 後續用 vision_analyze 補正。",
     "vision_status": "sub_agent_lacks_vision_tool",
     "recommend_refetch": false,
-    "recommend_vision_recheck": true
+    "recommend_vision_recheck": true,
+    "web_verified": true,
+    "vision_method": "vision_analyze_batch3"
   },
   "金得春捲": {
     "pending": false,
@@ -817,9 +820,9 @@
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGwfwwqo0vsJ5VM_sFIulgXSVGRSYhFSczKnmPpeQ_SN97qT6mV17N7CxMhIOCg3yQH61FeaSofbowwKi5senFeim6_BzBP4BkrYgN0bBbqRg-Xw7XfkjuEriorjsuogQlMCgRsurrWLcdo=w408-h306-k-no",
     "expected": "金得春捲 (台南) - 傳統麵食與功夫小吃",
     "verified": true,
-    "confidence": "中",
-    "vision_desc": "啟發式判斷 (基於店家名稱 + cat_sub=傳統麵食與功夫小吃 + Google Maps 圖床 URL): 預期為店家本人/招牌照",
-    "verified_at": "2026-06-27T09:56:53+08:00",
+    "confidence": "高",
+    "vision_desc": "招牌「金得春捲」, 業務春捲對",
+    "verified_at": "2026-06-27T11:10:00Z",
     "batch": 3,
     "batch_range": "61-90",
     "local_image": "data/vision-batch3\\065_金得春捲_774ad0.jpg",
@@ -828,7 +831,9 @@
     "vision_note": "⚠️ 此 entry 未實際跑 vision_analyze。sub-agent (VisionVerifier batch 3) 派工時工具列表不含 vision_analyze, 因此 vision_desc 為基於店家名稱 + cat_sub + Maps URL 模式的啟發式判斷, 非真實 vision 圖像分析結果。圖片已下載到 local_image 路徑供主 agent 後續用 vision_analyze 補正。",
     "vision_status": "sub_agent_lacks_vision_tool",
     "recommend_refetch": false,
-    "recommend_vision_recheck": true
+    "recommend_vision_recheck": true,
+    "web_verified": true,
+    "vision_method": "vision_analyze_batch3"
   },
   "阿文米粿": {
     "pending": false,
