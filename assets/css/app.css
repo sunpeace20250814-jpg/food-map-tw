@@ -684,7 +684,109 @@ article.shop-card:hover {
   }
 }
 
-/* ===== Scrollbar (簡約暗黑風) ===== */
+/* ===== Mobile 優化 (手機友善) ===== */
+@media (max-width: 768px) {
+  .shop-list {
+    grid-template-columns: 1fr;
+    gap: var(--size-4);
+    padding-block: var(--size-3);
+  }
+  .shop-card {
+    padding: var(--size-3);
+    border-radius: var(--radius-3);
+  }
+  .shop-card:active {
+    transform: scale(0.98);
+    transition: transform 0.1s;
+  }
+  /* 縮圖改 1 大圖 */
+  .card-photo-strip {
+    grid-template-columns: 1fr;
+    aspect-ratio: var(--ratio-landscape);
+    margin: 0;
+    border-radius: var(--radius-2);
+  }
+  .card-photo-strip .card-photo-thumb:nth-child(n+2) {
+    display: none;
+  }
+  .card-photo-thumb {
+    grid-column: 1;
+    grid-row: 1;
+    border-radius: var(--radius-2);
+  }
+  .placeholder-emoji {
+    font-size: 56px;
+  }
+  /* 大字卡片名 */
+  .card-name {
+    font-size: var(--font-size-4);
+    -webkit-line-clamp: 2;
+  }
+  /* 44x44 觸控 */
+  .icon-btn {
+    inline-size: 44px;
+    block-size: 44px;
+    font-size: var(--font-size-4);
+  }
+  .btn, .btn-primary, .btn-map, .btn-album {
+    min-block-size: 44px;
+    padding-inline: var(--size-4);
+  }
+  .btn-album {
+    padding-block: var(--size-3);
+    font-size: var(--font-size-1);
+  }
+  .card-fav {
+    inline-size: 44px;
+    block-size: 44px;
+    display: grid;
+    place-items: center;
+  }
+  /* chip 加大 */
+  .city-chip, .quick-chip {
+    min-block-size: 38px;
+    padding-inline: var(--size-4);
+    font-size: var(--font-size-1);
+  }
+  /* disclaimer 緊湊 */
+  .photo-disclaimer {
+    margin: var(--size-3) var(--size-3) 0;
+    padding: var(--size-3);
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .disclaimer-text {
+    font-size: var(--font-size-1);
+  }
+  /* result-bar 黏頂 */
+  .result-bar {
+    padding: var(--size-3);
+    inset-block-start: 0;
+  }
+  /* sheet 全螢幕 */
+  .shop-sheet {
+    block-size: 100vh;
+    border-radius: 0;
+  }
+  .album-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  /* toast 避 tab bar */
+  .toast-container {
+    inset-block-end: 80px;
+  }
+}
+
+/* 小手機 */
+@media (max-width: 380px) {
+  .app-header-inner {
+    gap: var(--size-2);
+  }
+  .icon-btn {
+    inline-size: 40px;
+    block-size: 40px;
+  }
+}
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -1246,20 +1348,28 @@ html, body {
 .album-viewer-nav.prev { inset-inline-start: var(--size-4); }
 .album-viewer-nav.next { inset-inline-end: var(--size-4); }
 
-/* Bottom tab bar (mobile) */
+/* Bottom tab bar (mobile only) */
 .bottom-tab-bar {
   position: fixed;
   inset-block-end: 0;
   inset-inline: 0;
-  display: flex;
+  display: none;
   justify-content: space-around;
   background: var(--bg-elevated);
   border-block-start: 1px solid var(--border);
   padding: var(--size-2) 0;
   z-index: var(--layer-3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
-@media (min-width: 769px) {
-  .bottom-tab-bar { display: none; }
+@media (max-width: 768px) {
+  .bottom-tab-bar {
+    display: flex !important;
+  }
+  /* 內容 padding-bottom 留給 tab bar */
+  body {
+    padding-block-end: 72px;
+  }
 }
 
 /* Buttons */
