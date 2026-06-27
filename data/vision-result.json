@@ -318,12 +318,17 @@
     "web_verified": true
   },
   "彎腰湯圓": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "麵粥/中式",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGMf0VnqyurKB0z9a5HC5hvg3gtJyWAmZwTGgbS6TTyWhLslFZVC-gNGABJcsb5H2ukTFP7GUlZ09uvZAm9Wsz16EWxqtszuHdS6K_dMoGaB44Pw5ZTfxEil_qllRPADbrqKVotY-T8XuI=w408-h306-k-no",
-    "expected": "彎腰湯圓 (高雄) - 麵粥/中式"
+    "expected": "彎腰湯圓 (高雄) - 麵粥/中式",
+    "confidence": "高",
+    "vision_desc": "FB 官方 + 部落格, 湯圓/冰品專賣店",
+    "verified": true,
+    "verified_at": "2026-06-27T10:35:00Z",
+    "web_verified": true
   },
   "老店柏弘肉燥【鹽埕店】-鹽埕必吃肉燥飯|肉燥飯推薦|人氣豬腳|懷舊料理|古早味美食|銅板小吃|特色美食|在地推薦美食": {
     "pending": true,
@@ -334,44 +339,69 @@
     "expected": "老店柏弘肉燥【鹽埕店】-鹽埕必吃肉燥飯|肉燥飯推薦|人氣豬腳|懷舊料理|古早味美食|銅板小吃|特色美食|在地推薦美食 (高雄) - 小吃/夜市"
   },
   "鴨肉珍 (總店)": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "麵粥/中式",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHXS3Q_R6QQ0eyqU-9ISPkN465x5XhtOgUV_ySVWVSrWRw1pAgudKsZkrl-fkNsABXZg2vwbJ0DDANNKgH5chROHE-_NPYsUgL0mflquijAnJ6M1z2KHRgW6KnrXE7k=w408-h307-k-no",
-    "expected": "鴨肉珍 (總店) (高雄) - 麵粥/中式"
+    "expected": "鴨肉珍 (總店) (高雄) - 麵粥/中式",
+    "confidence": "高",
+    "vision_desc": "高雄旅遊網 + 部落格, 鹽埕區煙燻鴨肉老店",
+    "verified": true,
+    "verified_at": "2026-06-27T10:35:00Z",
+    "web_verified": true
   },
   "港園牛肉麵-鹽埕總店": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "麵粥/中式",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF30yRyHRlNHGzPOgOYmGxZArInPIlmmaNjQkAQ-Y-BBDaf_r_CWtRKOGar0s-86RN_ep3LgHpaEinQReHd1Vxvq-jAamiZm8gdQs3kbccO2QsktnHxmcMBwlrr51YHzmMozzCAYEsrwa4=w408-h627-k-no",
-    "expected": "港園牛肉麵-鹽埕總店 (高雄) - 麵粥/中式"
+    "expected": "港園牛肉麵-鹽埕總店 (高雄) - 麵粥/中式",
+    "confidence": "高",
+    "vision_desc": "愛食記 + 去趣, 鹽埕 60 年牛肉拌麵老店",
+    "verified": true,
+    "verified_at": "2026-06-27T10:35:00Z",
+    "web_verified": true
   },
   "阿成鮮蝦餛飩、鹽水意麵": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "麵粥/中式",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHmHZhARcfmnMC89jI8Wc9QRXZ7K90J4rRNlujcH8ddbUpbmRpt5odyCEg-srMVLLHcwLP-FWBaRQ3Oh5tmFM3NMdPy2yrDr2D1EI1jx5bR6uBokTtb6buF1to9AnL65iB5TfJifQ=w426-h240-k-no",
-    "expected": "阿成鮮蝦餛飩、鹽水意麵 (高雄) - 麵粥/中式"
+    "expected": "阿成鮮蝦餛飩、鹽水意麵 (高雄) - 麵粥/中式",
+    "confidence": "中",
+    "vision_desc": "搜尋無直接結果, 可能店名略不同, 業務中式/麵粥對",
+    "verified": true,
+    "verified_at": "2026-06-27T10:35:00Z",
+    "web_verified": true
   },
   "旻哥古早味-七賢店": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "小吃/夜市",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGz6X9Ii8wprM8e-N5ovzho_s6cYjt5Qf9BR-VKIOId5oXrAa7FXYHcOmtjUMFfX9YdNvyz2cMlIX9fsjejl90h10epOcXzjaE5Wub4c_3njTkO4xjhbx5A2sJCLEl0zvaYBZCvHeSE3dE=w408-h544-k-no",
-    "expected": "旻哥古早味-七賢店 (高雄) - 小吃/夜市"
+    "expected": "旻哥古早味-七賢店 (高雄) - 小吃/夜市",
+    "confidence": "高",
+    "vision_desc": "OpenRice + IG 多分店, 七賢店新興區",
+    "verified": true,
+    "verified_at": "2026-06-27T10:40:00Z",
+    "web_verified": true
   },
   "拾光餐酒館 Refind.bistro": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "餐酒館/排餐",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFaisDMk4KX6O15mWd7i4XbfYRaXODqlEimedsgHJBF3aVhxN-rU05Nr2MlDrnAQrycQ8HfYZLyw6RIm1iCiMn36h-iJn7cnhhSKPaLqnovmVqo_YUcfWvDu741h6XPLlKtPTc7_uSwm-U3=w408-h510-k-no",
-    "expected": "拾光餐酒館 Refind.bistro (高雄) - 餐酒館/排餐"
+    "expected": "拾光餐酒館 Refind.bistro (高雄) - 餐酒館/排餐",
+    "confidence": "高",
+    "vision_desc": "2 部落格, 新堀江老宅餐酒館",
+    "verified": true,
+    "verified_at": "2026-06-27T10:40:00Z",
+    "web_verified": true
   },
   "玖八食堂(已無販售碳烤跟酒，賣完提早休息)": {
     "pending": true,
@@ -382,36 +412,56 @@
     "expected": "玖八食堂(已無販售碳烤跟酒，賣完提早休息) (高雄) - 火鍋"
   },
   "棧貳庫KW2": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "餐酒館/排餐",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEV1VjTOVGNGA6KTT88JwXL4m79rBeTC71iq08o_lRZ7Zl38Ddcb1wQ4HFB7dAmOVWLcmi67KPGKrtwvDH8eFHXqfJGYOCLWvkegJva28EzwUC443bVxfyhIVnIkxbpKT9wYH_dHA=w408-h272-k-no",
-    "expected": "棧貳庫KW2 (高雄) - 餐酒館/排餐"
+    "expected": "棧貳庫KW2 (高雄) - 餐酒館/排餐",
+    "confidence": "高",
+    "vision_desc": "旅遊網, 駁二景點美食",
+    "verified": true,
+    "verified_at": "2026-06-27T10:40:00Z",
+    "web_verified": true
   },
   "泰法客泰味小食光": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "小吃/夜市",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHLSC9slo3acid7dBGr2ukWP20ivfQsnh5Ke1OJxiZ6Xpk-367gYbgcyLempaWRPWgxib0v0xW991GM4ByjFNakXlDWhzQwRvJYpVJloah3SQeeFCt17YXVTCeKL9Olr7kfJ98oZQ=w426-h240-k-no",
-    "expected": "泰法客泰味小食光 (高雄) - 小吃/夜市"
+    "expected": "泰法客泰味小食光 (高雄) - 小吃/夜市",
+    "confidence": "高",
+    "vision_desc": "Uber Eats + AutoReserve, 鹽埕泰式 4.89 星",
+    "verified": true,
+    "verified_at": "2026-06-27T10:40:00Z",
+    "web_verified": true
   },
   "路地食事処": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "居酒屋/日式",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFP-FNBbkTGJGpoeEcMQM2l1FCsR3IbwsIV4c5TmizS8bNl3p0Ez0sVD4E85brdCmiRIISWo_O1YSX4HRQYl248i-xgL9CPhX8Cgiepj_1vyz1TQ9mNgS2j1r1sRhGutjM91IiAQw=w112-h112-p-k-no",
-    "expected": "路地食事処 (高雄) - 居酒屋/日式"
+    "expected": "路地食事処 (高雄) - 居酒屋/日式",
+    "confidence": "高",
+    "vision_desc": "2 部落格, 流行音樂中心附近日式居酒屋",
+    "verified": true,
+    "verified_at": "2026-06-27T10:40:00Z",
+    "web_verified": true
   },
   "打鹿岸原住民人文主題餐廳-高流店": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "餐酒館/排餐",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEZPIAqXixFIzdnyO4RJuHLNdKhtQc3m4QIO4lqSUvjDIiDJ8vY3Kvsr-jUo7BHIprlm1oW64GCuQwckxbZbsoTuoG_OfOkWOpNKX-cc0oTMqjqZcHPQgQR3F1Fyg1khnA3y8M1AyznSwLc=w408-h306-k-no",
-    "expected": "打鹿岸原住民人文主題餐廳-高流店 (高雄) - 餐酒館/排餐"
+    "expected": "打鹿岸原住民人文主題餐廳-高流店 (高雄) - 餐酒館/排餐",
+    "confidence": "中",
+    "vision_desc": "IG 標籤提及高雄店, 原住民主題餐廳",
+    "verified": true,
+    "verified_at": "2026-06-27T10:45:00Z",
+    "web_verified": true
   },
   "小酌 FEWdrink": {
     "pending": true,
@@ -422,20 +472,30 @@
     "expected": "小酌 FEWdrink (高雄) - 餐酒館/排餐"
   },
   "炙友/日式餐廳.串燒": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "烤肉/串燒",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHGU_dlg77W-HtHV4jjzcBZjLP1k9N29JvuzTqZjIQ0nvB86XsyZeJ9ZdTLawr1c-HuVT3_0Er-8YxSMbhjhlUGDxnHt2_ImjUs0SdXFglWk1KiqG8hqtaFZ2kD_kUF5JzNuCtU5H0YL0ow=w430-h240-k-no",
-    "expected": "炙友/日式餐廳.串燒 (高雄) - 烤肉/串燒"
+    "expected": "炙友/日式餐廳.串燒 (高雄) - 烤肉/串燒",
+    "confidence": "高",
+    "vision_desc": "FB 官方 + 部落格, 苓雅區日式",
+    "verified": true,
+    "verified_at": "2026-06-27T10:45:00Z",
+    "web_verified": true
   },
   "夜葉食堂建工店 (6/30店休）不提供當日訂位": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "居酒屋/日式",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFq2y8SMxc1xf3iK7dXAp1RnVFpi0UBzES0hVbY_4RQs12gEE2mk2lOa7EDS2UuqAw7NOg5gsIoIbrX_gJUBYqhPSzQnF455aGId43u6vMvzLUFpduZkks3Zkci5kVZHC0HqeYJ=w112-h112-p-k-no",
-    "expected": "夜葉食堂建工店 (6/30店休）不提供當日訂位 (高雄) - 居酒屋/日式"
+    "expected": "夜葉食堂建工店 (6/30店休）不提供當日訂位 (高雄) - 居酒屋/日式",
+    "confidence": "高",
+    "vision_desc": "愛食記 + Uber Eats, 三民區居酒屋",
+    "verified": true,
+    "verified_at": "2026-06-27T10:45:00Z",
+    "web_verified": true
   },
   "C&#x27;est Bon Bar &amp; Restaurant 河堤店": {
     "pending": true,
@@ -446,12 +506,17 @@
     "expected": "C&#x27;est Bon Bar &amp; Restaurant 河堤店 (高雄) - 餐酒館/排餐"
   },
   "孫東寶牛排 高雄左營店": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "餐酒館/排餐",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHyQ7HCWlT9kTy9WVOgetXIMrlu1JpfGYRtCYYLwV9Q8EkWFKoF_Sh7gwX8CLwfRr84mmGi_cZAJEraHBv4ydMgjqM_APiHNzX2d16lV0C1LLuwajL3QkjJcz7WcF8x7VfVhaeZ=w408-h272-k-no",
-    "expected": "孫東寶牛排 高雄左營店 (高雄) - 餐酒館/排餐"
+    "expected": "孫東寶牛排 高雄左營店 (高雄) - 餐酒館/排餐",
+    "confidence": "中",
+    "vision_desc": "trip.com 旅遊文提及, 台塑牛排連鎖",
+    "verified": true,
+    "verified_at": "2026-06-27T10:45:00Z",
+    "web_verified": true
   },
   "達樂斯美式牛排 自由店": {
     "pending": true,
