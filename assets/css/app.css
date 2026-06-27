@@ -1287,19 +1287,33 @@ html, body {
 }
 .album-close,
 .album-viewer-close {
-  font-size: var(--font-size-4);
+  position: fixed !important;
+  inset-block-start: var(--size-3);
+  inset-inline-end: var(--size-3);
+  z-index: 10;
+  font-size: var(--font-size-5);
   color: var(--text);
-  background: var(--surface);
+  background: var(--bg-elevated);
+  border: 2px solid var(--border);
   border-radius: var(--radius-round);
-  inline-size: 2.5rem;
-  block-size: 2.5rem;
+  inline-size: 3rem;
+  block-size: 3rem;
   display: grid;
   place-items: center;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  cursor: pointer;
+  box-shadow: var(--shadow-4);
 }
 .album-close:hover,
 .album-viewer-close:hover {
   background: var(--accent);
+  color: var(--color-16);
+  border-color: var(--accent);
+  transform: scale(1.1);
+}
+.album-close:active,
+.album-viewer-close:active {
+  transform: scale(0.95);
 }
 .album-counter {
   position: absolute;
@@ -1920,4 +1934,24 @@ html, body {
   border-radius: var(--radius-round);
   display: grid;
   place-items: center;
+}
+
+/* Album viewer 圖片 */
+#albumViewerImg {
+  max-inline-size: 100%;
+  max-block-size: 80vh;
+  object-fit: contain;
+  margin: auto;
+}
+
+/* Album modal 圖片 grid */
+.album-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-5);
+  background: rgb(0 0 0 / 0.92);
+  display: none;
+  flex-direction: column;
+  padding: var(--size-5);
+  backdrop-filter: blur(8px);
 }
