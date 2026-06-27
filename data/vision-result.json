@@ -271,12 +271,17 @@
     "web_verified": true
   },
   "Ruelle Bar &amp; Dining 巷子餐與酒": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "餐酒館/排餐",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE7ABtFTcNKUhM5q5Jk9ZA_4w52xZ360ucJ8aGY0MZmWeeS24oIu6zlVfB1WxZDkuOC345LRfWs87ChHUEA_2pJfX0__RntQWEHalZXukZwV53El3P95qLDo8EA8aM_d_8i7Nc3=w408-h544-k-no",
-    "expected": "Ruelle Bar &amp; Dining 巷子餐與酒 (高雄) - 餐酒館/排餐"
+    "expected": "Ruelle Bar &amp; Dining 巷子餐與酒 (高雄) - 餐酒館/排餐",
+    "confidence": "中",
+    "vision_desc": "inline訂位+IG提及, 隱藏巷弄浪漫餐酒館, 業務餐酒館對",
+    "verified": true,
+    "verified_at": "2026-06-27T11:30:00Z",
+    "web_verified": true
   },
   "高雄市六合國際觀光夜市": {
     "pending": false,
@@ -404,12 +409,17 @@
     "web_verified": true
   },
   "玖八食堂(已無販售碳烤跟酒，賣完提早休息)": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "火鍋",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHffTP0Lrn5TBUEiZa0nPke9JZqxTpF-Er9FplAwYpfUsfqE-4GxS78vB_53RNQka9cHjLMVydOPVNjs85558_N6UZl3Zuax9HjVQc9Tndw9NQqbMC2C0bIxjoeM1EJjTA03lYBAagpXErm=w408-h544-k-no",
-    "expected": "玖八食堂(已無販售碳烤跟酒，賣完提早休息) (高雄) - 火鍋"
+    "expected": "玖八食堂(已無販售碳烤跟酒，賣完提早休息) (高雄) - 火鍋",
+    "confidence": "高",
+    "vision_desc": "食尚玩家+ifoodie+hoolee+WalkerLand, 苓雅區蜂巢鍋火鍋宵夜",
+    "verified": true,
+    "verified_at": "2026-06-27T11:30:00Z",
+    "web_verified": true
   },
   "棧貳庫KW2": {
     "pending": false,
@@ -464,12 +474,17 @@
     "web_verified": true
   },
   "小酌 FEWdrink": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "餐酒館/排餐",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF8MX1UO6xwK6GfyNT92EJZxtRoPlcez-tUMZ45kMVs_GwCwfvztigv8w5xFf_IEHA2VSH3aMYZp7I01G2SFkDx4D2L8NxpYi9wJwDZ1zMwEsk1fcOncGXfhm0Jdj_U-wHUVMJZ=w408-h271-k-no",
-    "expected": "小酌 FEWdrink (高雄) - 餐酒館/排餐"
+    "expected": "小酌 FEWdrink (高雄) - 餐酒館/排餐",
+    "confidence": "高",
+    "vision_desc": "hoolee+WalkerLand+ifoodie+TripAdvisor, 巷弄低調餐酒館精釀啤酒",
+    "verified": true,
+    "verified_at": "2026-06-27T11:30:00Z",
+    "web_verified": true
   },
   "炙友/日式餐廳.串燒": {
     "pending": false,
@@ -498,12 +513,17 @@
     "web_verified": true
   },
   "C&#x27;est Bon Bar &amp; Restaurant 河堤店": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "餐酒館/排餐",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEZRLCnZHjesTm2wiKTAZB6EjNSE6gLpTAA05YKFkgKBBa9Wr4wQQtUe9KDzyvJdCvw8tgZq05UM7TKoHnQdm6MtYTjXhYa0xyfdUNoqi3LVYNywr8aJhn8dQw5j8jKevWqakW_PUl_wjbo=w408-h271-k-no",
-    "expected": "C&#x27;est Bon Bar &amp; Restaurant 河堤店 (高雄) - 餐酒館/排餐"
+    "expected": "C&#x27;est Bon Bar &amp; Restaurant 河堤店 (高雄) - 餐酒館/排餐",
+    "confidence": "高",
+    "vision_desc": "inline訂位+多部落格, 三民區質感餐酒館, 法文店名對",
+    "verified": true,
+    "verified_at": "2026-06-27T11:30:00Z",
+    "web_verified": true
   },
   "孫東寶牛排 高雄左營店": {
     "pending": false,
@@ -519,44 +539,69 @@
     "web_verified": true
   },
   "達樂斯美式牛排 自由店": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "餐酒館/排餐",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF8GfyCv_tYvP_s-EZyV6aOdo3kAjCKC3aJ8WXOTggR-SX_3EmZskTZYGF6XSgXj7jb_o5CnM23MB8jZTS5fz6VQnvhYIdUhopLatu3MQWjX2bKOXdskM8N7mFyhdJKYOgOOl-uoDHW01Aw=w408-h306-k-no",
-    "expected": "達樂斯美式牛排 自由店 (高雄) - 餐酒館/排餐"
+    "expected": "達樂斯美式牛排 自由店 (高雄) - 餐酒館/排餐",
+    "confidence": "中",
+    "vision_desc": "PTT+部落格+TikTok, 左營區自由路平價牛排, 自助吧豐富",
+    "verified": true,
+    "verified_at": "2026-06-27T11:30:00Z",
+    "web_verified": true
   },
   "西堤牛排 高雄富國店": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "餐酒館/排餐",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFuWHO9haUbB77Q0tPd9JGdtPdFAwkP-8eVlPeyISYBhAW68FPRVA5IkFhZfaIT7vL4pft28tV6HL4zDltWQe9rMygwklp6hA9JHPWKXmyLzMiA9Fzf8cFgTLFR4VnLhdtkHIs=w408-h305-k-no",
-    "expected": "西堤牛排 高雄富國店 (高雄) - 餐酒館/排餐"
+    "expected": "西堤牛排 高雄富國店 (高雄) - 餐酒館/排餐",
+    "confidence": "高",
+    "vision_desc": "OpenTable+inline+WalkerLand, 左營區富國路, 王品連鎖牛排",
+    "verified": true,
+    "verified_at": "2026-06-27T11:30:00Z",
+    "web_verified": true
   },
   "紅嘴巴麻辣乾鍋下午5:00-12:00最後收客到11:00。6/6公休": {
-    "pending": true,
+    "pending": false,
     "city": "高雄",
     "cat_sub": "火鍋",
     "photo_count": 8,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHcFLzAs4jTZCaBO7Zg606dhRaE5ipWmmge6ipgpEoH0wj5bXLMzu7MAaa3bhKqFeg2veVUPaf76DLjqxH60GNHEwbDzxTJjgc0dpO-zIzszS9bkezAlzFnwQodPHytXirii8QDckWMR6EW=w408-h306-k-no",
-    "expected": "紅嘴巴麻辣乾鍋下午5:00-12:00最後收客到11:00。6/6公休 (高雄) - 火鍋"
+    "expected": "紅嘴巴麻辣乾鍋下午5:00-12:00最後收客到11:00。6/6公休 (高雄) - 火鍋",
+    "confidence": "中",
+    "vision_desc": "TikTok多源, 苓雅區興中一路巷弄麻辣乾鍋, 業務麻辣鍋對",
+    "verified": true,
+    "verified_at": "2026-06-27T11:30:00Z",
+    "web_verified": true
   },
   "西羅殿牛肉湯": {
-    "pending": true,
+    "pending": false,
     "city": "台南",
     "cat_sub": "溫體肉品與火鍋燒肉",
     "photo_count": 1,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHEbgOtabqr2WCm3Gw0Dj1dwhp7z9P4IHjHdjHYU8BBPoDApXnurLmrA8Omwh3aCxux2hgvzP2ki85J5zLyU7A6RARCwNE6ruL8LdIp0lI_C3JL7pUS3Moii5IZq7-6Fpzic5tU=w425-h240-k-no",
-    "expected": "西羅殿牛肉湯 (台南) - 溫體肉品與火鍋燒肉"
+    "expected": "西羅殿牛肉湯 (台南) - 溫體肉品與火鍋燒肉",
+    "confidence": "高",
+    "vision_desc": "IG官方+部落格+TikTok, 中西區公園路, 牛肉湯老店",
+    "verified": true,
+    "verified_at": "2026-06-27T11:30:00Z",
+    "web_verified": true
   },
   "阿安牛肉湯": {
-    "pending": true,
+    "pending": false,
     "city": "台南",
     "cat_sub": "溫體肉品與火鍋燒肉",
     "photo_count": 1,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFv2dKx_9tXx1sNYjnql8HM_o3F6Qpk7e_Ltl_FH25gPPE48qU6t8qHY-uAQp1nDaltsmOHDOBCU-9cpK8VKIJLDBrNz1y_gdYI8QtTl_u9bFwjlpseT6aRREye7eEcBs44uGrycLSxzs52=w408-h306-k-no",
-    "expected": "阿安牛肉湯 (台南) - 溫體肉品與火鍋燒肉"
+    "expected": "阿安牛肉湯 (台南) - 溫體肉品與火鍋燒肉",
+    "confidence": "高",
+    "vision_desc": "ifoodie+ETtoday+多源, 北區中華北路, 24hr溫體牛肉湯",
+    "verified": true,
+    "verified_at": "2026-06-27T11:30:00Z",
+    "web_verified": true
   },
   "蓮霧腳羊肉": {
     "pending": true,
@@ -564,16 +609,28 @@
     "cat_sub": "溫體肉品與火鍋燒肉",
     "photo_count": 1,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFGBm1w76jRwGMAFjMARQNfWoMmMSN5LpVb7azgJ2E1ymILmeBpEwhAC5M3zmRZqzDG8FvEN0_RXc2b_uqdCsvvJ4Q9drVV_IsoPXWNGzy0ByL4rL0_kYU-Pyv7toKuLRfmwFbjXXsw3d4v=w408-h544-k-no",
-    "expected": "蓮霧腳羊肉 (台南) - 溫體肉品與火鍋燒肉"
-  },
+        "expected": "蓮霧腳羊肉 (台南) - 溫體肉品與火鍋燒肉",
+        "confidence": "高",
+        "vision_desc": "米其林必比登+IG標籤, 新化區中正路, 當日溫體羊肉湯",
+        "verified": true,
+        "verified_at": "2026-06-27T11:35:00Z",
+        "web_verified": true,
+        "pending": false
+      },
   "落成米糕": {
     "pending": true,
     "city": "台南",
     "cat_sub": "米糕、肉燥飯與古早味米食",
     "photo_count": 1,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGM39Xa2cgSPcCzOYu2UMjxBWlq-H5AGKdf2OdvPO0GSgvXT6gSdXf6i6MOLqqp0irt3bsc9t1oyYGUTxxr_IefUNS5VWXSUxB57n-Ils1JUu4Rth1LVNSHH-_3sG3qn0T5InfSPFPe8kKy=w408-h306-k-no",
-    "expected": "落成米糕 (台南) - 米糕、肉燥飯與古早味米食"
-  },
+        "expected": "落成米糕 (台南) - 米糕、肉燥飯與古早味米食",
+        "confidence": "中",
+        "vision_desc": "IG標籤+多源食記, 魚鬆肉燥古早味米糕, 業務對",
+        "verified": true,
+        "verified_at": "2026-06-27T11:35:00Z",
+        "web_verified": true,
+        "pending": false
+      },
   "無名米糕": {
     "pending": true,
     "city": "台南",
@@ -588,8 +645,14 @@
     "cat_sub": "米糕、肉燥飯與古早味米食",
     "photo_count": 1,
     "first_photo": "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFvTqA0OMBWT4sScPvQ-I_4EU8e9zxUt5Ex3Ye989GTzF_TGJTnP6HGCUDrDNsVJMAVU-KCEgFbau3GyhY79kG72UnSEo5cqPs9D4UvLIGm8q2WkkH47wLAWt9iwYSLGatewBr8GlP8WLaz=w408-h544-k-no",
-    "expected": "下大道蘭米糕 (台南) - 米糕、肉燥飯與古早味米食"
-  },
+        "expected": "下大道蘭米糕 (台南) - 米糕、肉燥飯與古早味米食",
+        "confidence": "高",
+        "vision_desc": "食尚玩家推薦+多源, 中西區40年老店, 米糕+肉燥油條",
+        "verified": true,
+        "verified_at": "2026-06-27T11:35:00Z",
+        "web_verified": true,
+        "pending": false
+      },
   "保安路米糕": {
     "pending": true,
     "city": "台南",
