@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 const BOOTSTRAP_FILE = 'assets/js/supabase/supabase-bootstrap.js';
+const INDEX_FILE = 'index.html';
 
 // 只信任長度正確的 key (避免 sandbox env 污染)
 // sb_publishable_... = 46 chars
@@ -24,7 +25,7 @@ if (KEY.length !== 46 || !KEY.startsWith('sb_publishable_')) {
     process.exit(1);
 }
 
-const content = `// supabase-bootstrap.js - AUTO-INJECTED by build-inject.js
+const bootstrap = `// supabase-bootstrap.js - AUTO-INJECTED by build-inject.js
 // Build time: ${new Date().toISOString()}
 // Source: Vercel env SUPABASE_URL + SUPABASE_ANON_KEY
 
@@ -34,5 +35,21 @@ const content = `// supabase-bootstrap.js - AUTO-INJECTED by build-inject.js
 })();
 `;
 
-fs.writeFileSync(path.join(__dirname, BOOTSTRAP_FILE), content);
+fs.writeFileSync(path.join(__dirname, BOOTSTRAP_FILE), bootstrap);
 console.log(`[build-inject] OK: ${BOOTSTRAP_FILE} updated (URL length: ${URL.length}, KEY length: ${KEY.length})`);
+
+// Inject anon key 到 index.html meta tag (placeholder)
+let html = fs.readFileSync(path.join(__dirname, INDEX_FILE), 'utf-8');
+const ANON_PLACEHOLDER = '<meta name="supabase-anon-key" content="__SUPABASE_ANON_KEY__" />';
+const ANON_META = `<meta name="supabase-anon-key" content="${KEY}" />`;
+if (html.includes(ANON_PLACEHOLDER)) {
+    html = html.replace(ANON_PLACEHOLDER, ANON_META);
+} else if (!html.includes(ANON_META)) {
+    // 沒 placeholder 也沒 meta → 加在 supabase-url 後
+    html = html.replace(
+        '<meta name="supabase-url" content="' + URL + '" />',
+        '<meta name="supabase-url" content="' + URL + '" />\n<meta name="supabase-anon-key" content="' + KEY + '" />'
+    );
+}
+fs.writeFileSync(path.join(__dirname, INDEX_FILE), html);
+console.log(`[build-inject] OK: ${INDEX_FILE} meta tags updated`);
