@@ -1068,3 +1068,82 @@ html, body {
         scroll-behavior: auto !important;
     }
 }
+
+/* ===== v6.14 加強: 視覺差異更大, 截圖也能看到 ===== */
+
+/* 卡片邊框 (常駐, 讓卡片有層次感) */
+.shop-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+/* 卡片加漸變背景 (從透明到深) */
+.shop-card {
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(0, 0, 0, 0.1) 100%);
+}
+
+/* 標題漸變文字 (從淺到深) */
+.app-h1 {
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* 按鈕陰影 */
+.btn-primary {
+  box-shadow: 0 4px 14px rgba(247, 115, 22, 0.3);
+}
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(247, 115, 22, 0.4);
+}
+
+/* 過濾器 chip 圓角 */
+.city-chip, .filter-chip {
+  border-radius: 999px;
+  padding: 8px 16px;
+}
+
+/* 圖片 strip 加圓角 + 邊框 */
+.card-photo-strip {
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 12px;
+}
+
+/* 縮圖 hover 浮起 */
+.card-photo-thumb {
+  border-radius: 6px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card-photo-thumb:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  position: relative;
+}
+
+/* 收藏按鈕 hover */
+.card-fav:hover {
+  transform: scale(1.2) rotate(72deg);
+  color: #ef4444;
+}
+
+/* 評分星星 閃爍 */
+.card-rating .star {
+  animation: starTwinkle 2s ease-in-out infinite;
+}
+@keyframes starTwinkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.9); }
+}
+
+/* Footer 風格 */
+.app-footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color, #2a2a2a);
+}
