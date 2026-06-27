@@ -1,0 +1,2 @@
+city,name,addr,cat_main,cat_sub,station,price_bar,env,time_24h,late,rating,lat,lng,gmaps_query,confidence,source
+tp,範例牛肉麵店,100台北市中正區重慶南路一段122號,小吃,牛肉麵,台北車站,$,,false,true,4.2(50),25.0478,121.5170,範例牛肉麵店 台北,高,Google Maps

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "title": "美食遊覽店家資料 schema",
+  "description": "新增縣市店家資料時,遵循此 schema. CSV 轉 JSON 也要對齊.",
+  "type": "object",
+  "properties": {
+    "city": {
+      "type": "string",
+      "enum": ["kh", "tn", "ch", "tp", "tc", "ks", "ty", "hl", "km", "pt"],
+      "description": "縣市代碼 (2 字母 lowercase)"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 50,
+      "description": "店名 (Google Maps 上的官方名稱)"
+    },
+    "addr": {
+      "type": "string",
+      "pattern": "^[0-9]{3,6}",
+      "description": "完整地址 (含郵遞區號)"
+    },
+    "cat_main": {
+      "type": "string",
+      "enum": ["麵粥/中式", "小吃", "日式", "韓式", "美式", "火鍋", "燒肉/串燒", "居酒屋", "酒吧", "甜點/飲料", "其他"],
+      "description": "主分類"
+    },
+    "cat_sub": {
+      "type": "string",
+      "description": "子分類 (例: 海產粥, 鹽酥雞, 牛肉麵)"
+    },
+    "station": {
+      "type": "string",
+      "description": "捷運/車站/區域名 (例: R11 高雄車站)"
+    },
+    "price_bar": {
+      "type": "string",
+      "enum": ["$", "$$", "$$$", "$$$$"],
+      "description": "價位"
+    },
+    "env": {
+      "type": "string",
+      "enum": ["ac", "ind", "ac,ind", ""],
+      "description": "環境 (ac=冷氣, ind=室內, ac,ind=兩者)"
+    },
+    "time_24h": { "type": "boolean" },
+    "late": { "type": "boolean", "description": "深夜開 (>22 點)" },
+    "rating": { "type": "string", "description": "Google 評分 (例: 4.5(120))" },
+    "lat": { "type": "number", "minimum": 18, "maximum": 26 },
+    "lng": { "type": "number", "minimum": 118, "maximum": 122 },
+    "gmaps_url": {
+      "type": "string",
+      "pattern": "^https://www\\.google\\.com/maps/search/\\?api=1&query=",
+      "description": "Google Maps 搜尋 URL (query 必須含店名前 4 字 + 城市名)"
+    },
+    "photos": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^https://lh3\\.googleusercontent\\.com/" },
+      "minItems": 0,
+      "maxItems": 4,
+      "description": "Google Maps 圖片 URL (lh3), 0 表示無圖"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["高", "中", "低", "未驗證"],
+      "description": "資料可信度"
+    },
+    "source": {
+      "type": "string",
+      "description": "資料來源 (例: Google Maps, IG @xxx, FB xxx)"
+    }
+  },
+  "required": ["city", "name", "addr", "cat_main", "gmaps_url"]
+}
