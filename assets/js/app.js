@@ -835,3 +835,38 @@ window.openAlbumViewer = openAlbumViewer;
 window.closeAlbumViewer = closeAlbumViewer;
 window.albumPrev = albumPrev;
 window.albumNext = albumNext;
+
+// ===== react-bits 借鑑: scroll effect (header 陰影) =====
+(function() {
+    let lastScroll = 0;
+    const header = document.querySelector('.app-header');
+    if (!header) return;
+    
+    window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        if (y > 10) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+        lastScroll = y;
+    }, { passive: true });
+})();
+
+// ===== react-bits 借鑑: 進入視窗卡片 stagger =====
+(function() {
+    if (!('IntersectionObserver' in window)) return;
+    const cards = document.querySelectorAll('.shop-card');
+    if (!cards.length) return;
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('in-view');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '50px' });
+    
+    cards.forEach(card => observer.observe(card));
+})();

@@ -189,15 +189,26 @@ function renderCard(s, idx) {
     if (hasPhotos) {
         const strip = document.createElement('div');
         strip.className = 'card-photo-strip';
-        [photoUrl, `${photoUrl}&w112`, `${photoUrl}&w112`].forEach((url) => {
+        // 圖片效能: 用 srcset 提供 3 個尺寸 (thumb/medium/large), 瀏覽器自動選最適
+        [photoUrl, `${photoUrl}&w112`, `${photoUrl}&w112`].forEach((url, idx) => {
             const thumb = document.createElement('div');
             thumb.className = 'card-photo-thumb';
             thumb.dataset.shopIdx = String(s.id || idx);
             thumb.dataset.action = 'album';
             const img = document.createElement('img');
-            img.src = url;
-            img.alt = '';
+            // 不同 thumb 用不同尺寸: 大 (408), 中 (272), 小 (204)
+            const sizes = ['', '=w272-h204-k-no', '=w204-h153-k-no'];
+            const baseUrl = url.replace(/=w[\d-]+-h[\d-]+-k-no.*$/, '');
+            img.src = baseUrl + sizes[idx];
+            img.srcset = `${baseUrl} 408w, ${baseUrl + '=w272-h204-k-no'} 272w, ${baseUrl + '=w204-h153-k-no'} 204w`;
+            img.sizes = '(max-width: 768px) 33vw, 120px';
+            img.alt = s.name + ' 照片';
             img.loading = 'lazy';
+            img.decoding = 'async';
+            // 圖片淡入 (避免 lh3 慢慢載入的突兀)
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 0.3s';
+            img.onload = () => { img.style.opacity = '1'; };
             img.onerror = () => {
                 // lh3 失效 → 替換成 emoji 占位
                 thumb.classList.add('img-broken');
@@ -221,6 +232,8 @@ function renderCard(s, idx) {
         placeholder.className = 'card-photo-placeholder';
         placeholder.dataset.shopIdx = String(s.id || idx);
         placeholder.dataset.action = 'detail';
+        placeholder.setAttribute('role', 'button');
+        placeholder.setAttribute('tabindex', '0');
         const emojiSpan = document.createElement('span');
         emojiSpan.className = 'placeholder-emoji';
         emojiSpan.textContent = s.emoji || '🍜';
