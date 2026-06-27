@@ -1,469 +1,1149 @@
 /* ============================================
-   美食遊覽 v7.0 - 極簡現代簡約風
-   設計系統: Open Props (29KB CSS variables)
+   美食遊覽 - 簡約暗黑風 CSS
+   框架: TailwindCSS CDN + daisyUI (暗黑主題)
    ============================================ */
 
-/* ===== Open Props 已在 open-props.css 載入 ===== */
+/* TailwindCSS + daisyUI */
+@import url("https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css");
 
-/* ===== Reset (極簡) ===== */
-*, *::before, *::after {
-  box-sizing: border-box;
+/* ===== 主題變數 (CSS custom properties) ===== */
+:root {
+  /* Light 主題 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-card: #ffffff;
+  --bg-hover: #f3f4f6;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --border-color: #e5e7eb;
+  --accent: #f97316;
+  --accent-hover: #ea580c;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,0.12);
+  --gradient-bg: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
 }
+
+[data-theme="dark"] {
+  /* Dark 主題 */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #171717;
+  --bg-card: #1c1c1c;
+  --bg-hover: #262626;
+  --text-primary: #f5f5f5;
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
+  --border-color: #262626;
+  --accent: #fb923c;
+  --accent-hover: #f97316;
+  --shadow: 0 1px 3px rgba(0,0,0,0.5);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,0.6);
+  --gradient-bg: linear-gradient(180deg, #0a0a0a 0%, #171717 100%);
+}
+
+/* ===== Base ===== */
 * {
+  box-sizing: border-box;
   margin: 0;
-}
-html {
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
-body {
-  font-family: var(--font-system-ui);
-  font-size: var(--font-size-2);
-  line-height: var(--font-lineheight-3);
-  color: var(--color-1);
-  background: var(--color-16);
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  transition: background-color 0.3s var(--ease-3), color 0.3s var(--ease-3);
-}
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
-}
-button {
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  background: none;
-  border: none;
   padding: 0;
 }
 
-/* ===== 主題色 (Open Props palette hue 25 = 暖橘) ===== */
-:root {
-  --palette-hue: 25;
-  --palette-chroma: 0.2;
-  --accent: oklch(72% 0.2 var(--palette-hue));
-  --accent-hover: oklch(78% 0.22 var(--palette-hue));
-  --bg: var(--color-16);
-  --bg-elevated: var(--color-15);
-  --surface: var(--color-14);
-  --text: var(--color-1);
-  --text-muted: var(--color-7);
-  --border: var(--color-12);
+html, body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s;
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: var(--color-1);
-    --bg-elevated: var(--color-2);
-    --surface: var(--color-3);
-    --text: var(--color-16);
-    --text-muted: var(--color-9);
-    --border: var(--color-5);
-  }
-}
-
-/* ===== Layout (現代簡約) ===== */
-.container {
-  max-inline-size: 1280px;
-  margin-inline: auto;
-  padding-inline: var(--size-5);
-}
-
+/* ===== Header (簡約 sticky bar) ===== */
 .app-header {
   position: sticky;
-  inset-block-start: 0;
-  z-index: var(--layer-3);
-  background: var(--bg-elevated);
-  border-block-end: 1px solid var(--border);
-  backdrop-filter: blur(20px);
+  top: 0;
+  z-index: 100;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s;
 }
 
 .app-header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 14px 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--size-5);
-  padding-block: var(--size-4);
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
-.app-title {
+.app-header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   display: flex;
   align-items: center;
-  gap: var(--size-3);
+  gap: 8px;
 }
 
-.app-h1 {
-  font-size: var(--font-size-fluid-2);
-  font-weight: var(--font-weight-7);
-  letter-spacing: var(--font-letterspacing-0);
-  background: linear-gradient(135deg, var(--accent), oklch(70% 0.25 50));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.app-header h1 .logo-emoji {
+  font-size: 22px;
 }
 
-.app-sub {
-  font-size: var(--font-size-1);
-  color: var(--text-muted);
-}
-
-.app-actions {
+.app-header-actions {
   display: flex;
-  gap: var(--size-2);
+  gap: 8px;
+  margin-left: auto;
+  align-items: center;
 }
 
-.icon-btn {
-  display: inline-flex;
+/* 主題切換按鈕 */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  display: flex;
   align-items: center;
   justify-content: center;
-  inline-size: 2.5rem;
-  block-size: 2.5rem;
-  border-radius: var(--radius-round);
-  font-size: var(--font-size-3);
-  background: var(--surface);
-  transition: transform 0.2s var(--ease-3), background 0.2s var(--ease-3);
+  font-size: 16px;
+  transition: all 0.2s;
 }
-.icon-btn:hover {
-  transform: scale(1.1);
+.theme-toggle:hover {
   background: var(--accent);
-  color: var(--color-16);
+  color: white;
+  border-color: var(--accent);
 }
 
-/* ===== Filter bar (簡約 pill) ===== */
+/* ===== Search (簡約 input) ===== */
+.search-input {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: var(--text-primary);
+  font-size: 14px;
+  width: 100%;
+  max-width: 320px;
+  transition: all 0.2s;
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--bg-primary);
+}
+
+/* ===== City Tabs (chip style) ===== */
+.city-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px 24px 8px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.city-chip {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+.city-chip:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.city-chip.active {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border-color: var(--text-primary);
+}
+
+/* ===== Filter Chips (簡約, 數字附在後) ===== */
 .filter-bar {
   display: flex;
+  gap: 8px;
+  padding: 8px 24px;
   flex-wrap: wrap;
-  gap: var(--size-2);
-  padding-block: var(--size-4);
-  position: sticky;
-  inset-block-start: 4rem;
-  z-index: var(--layer-2);
-  background: var(--bg);
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--size-1);
-  padding-inline: var(--size-4);
-  padding-block: var(--size-2);
-  border-radius: var(--radius-round);
-  background: var(--surface);
-  color: var(--text);
-  font-size: var(--font-size-1);
-  font-weight: var(--font-weight-5);
-  transition: all 0.2s var(--ease-3);
-  border: 1px solid transparent;
+.filter-chip {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s;
 }
-.chip:hover {
-  border-color: var(--accent);
-  transform: translateY(-1px);
+.filter-chip:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
-.chip.active {
+.filter-chip.active {
   background: var(--accent);
-  color: var(--color-16);
-  font-weight: var(--font-weight-6);
-}
-
-/* ===== Card (簡約 + 互動) ===== */
-.shop-card {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: var(--size-3);
-  padding: var(--size-4);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-3);
-  box-shadow: var(--shadow-2);
-  transition: transform 0.25s var(--ease-3),
-              box-shadow 0.25s var(--ease-3),
-              border-color 0.25s var(--ease-3);
-  animation: var(--animation-fade-in) var(--ease-3);
-}
-.shop-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-5);
+  color: white;
   border-color: var(--accent);
 }
-
-.card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--size-3);
+.filter-chip .count {
+  font-weight: 400;
+  opacity: 0.7;
+  margin-left: 4px;
 }
 
-.card-title-block { flex: 1; min-inline-size: 0; }
+/* ===== Results counter ===== */
+.result-bar {
+  padding: 16px 24px 8px;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.result-count {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.result-count strong {
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
+  margin-right: 4px;
+}
 
-.card-name {
-  font-size: var(--font-size-3);
-  font-weight: var(--font-weight-6);
-  line-height: var(--font-lineheight-2);
-  color: var(--text);
-  overflow: hidden;
+/* ===== Shop Card (簡約卡片) ===== */
+.shops-grid,
+.shop-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 16px;
+  padding: 16px 24px 80px;
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+article.shop-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.2s;
+  position: relative;
+  height: 100%;
+  min-height: 360px;
+}
+article.shop-card:hover {
+  box-shadow: var(--shadow-hover);
+  border-color: var(--text-muted);
+  transform: translateY(-2px);
+}
+
+.shop-card .card-name,
+.shop-card .name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.card-meta-line {
+.shop-card .card-meta-line,
+.shop-card .meta,
+.shop-card .shop-card-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
   display: flex;
-  align-items: center;
-  gap: var(--size-2);
-  margin-block-start: var(--size-1);
-  font-size: var(--font-size-1);
-  color: var(--text-muted);
-}
-.dot {
-  inline-size: 3px;
-  block-size: 3px;
-  border-radius: var(--radius-round);
-  background: var(--text-muted);
+  flex-wrap: wrap;
+  gap: 4px 8px;
 }
 
-.card-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--size-1);
-}
-.card-fav {
-  font-size: var(--font-size-4);
+.shop-card .card-addr,
+.shop-card .addr,
+.shop-card .shop-card-addr {
+  font-size: 12px;
   color: var(--text-muted);
-  transition: color 0.2s, transform 0.2s var(--ease-3);
-}
-.card-fav:hover {
-  color: oklch(70% 0.22 25);
-  transform: scale(1.2);
-}
-.card-fav.active {
-  color: oklch(70% 0.22 25);
-}
-.card-rating {
   display: flex;
-  align-items: center;
   gap: 4px;
-  font-size: var(--font-size-0);
-  color: var(--text-muted);
-}
-.card-rating .star { color: var(--accent); }
-
-/* ===== Photo strip (簡約) ===== */
-.card-photo-strip {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--size-1);
-  aspect-ratio: var(--ratio-landscape);
-  border-radius: var(--radius-2);
   overflow: hidden;
-  background: var(--surface);
-}
-.card-photo-thumb {
-  position: relative;
-  overflow: hidden;
-  background: var(--surface);
-  cursor: pointer;
-  transition: transform 0.3s var(--ease-3);
-}
-.card-photo-thumb img {
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
-  transition: transform 0.4s var(--ease-3);
-}
-.card-photo-thumb:hover { transform: scale(1.02); }
-.card-photo-thumb:hover img { transform: scale(1.1); }
-.card-photo-thumb.img-broken {
-  display: grid;
-  place-items: center;
-  font-size: var(--font-size-7);
-  background: linear-gradient(135deg, var(--surface), var(--bg));
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.card-photo-placeholder {
-  display: grid;
-  place-items: center;
-  gap: var(--size-2);
-  aspect-ratio: var(--ratio-landscape);
-  background: linear-gradient(135deg, var(--surface), var(--bg));
-  border-radius: var(--radius-2);
-  cursor: pointer;
-  transition: background 0.3s;
+.shop-card .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
-.card-photo-placeholder:hover {
-  background: linear-gradient(135deg, var(--bg-elevated), var(--surface));
+.shop-card .badge.accent {
+  background: var(--accent);
+  color: white;
 }
-.placeholder-emoji { font-size: var(--font-size-8); }
-.placeholder-label { font-size: var(--font-size-0); color: var(--text-muted); }
 
-/* ===== Actions (簡約按鈕) ===== */
-.card-actions {
+.shop-card .card-actions {
   display: flex;
-  gap: var(--size-2);
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 8px;
   flex-wrap: wrap;
 }
-.btn {
+.shop-card .btn-mini {
+  flex: 1;
+  min-width: 70px;
+  padding: 8px 6px;
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s;
+  text-align: center;
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--size-1);
-  padding: var(--size-2) var(--size-4);
-  border-radius: var(--radius-2);
-  font-size: var(--font-size-1);
-  font-weight: var(--font-weight-5);
-  background: var(--surface);
-  color: var(--text);
-  transition: all 0.2s var(--ease-3);
-  border: 1px solid transparent;
-  text-decoration: none;
+  gap: 4px;
 }
-.btn:hover {
-  border-color: var(--accent);
-  background: var(--bg-elevated);
-}
-.btn-primary {
+.shop-card .btn-mini:hover {
   background: var(--accent);
-  color: var(--color-16);
-}
-.btn-primary:hover {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-3);
-}
-.btn-album {
-  inline-size: 100%;
-  justify-content: center;
-  padding-block: var(--size-2);
-  font-size: var(--font-size-0);
+  color: white;
+  border-color: var(--accent);
 }
 
-/* ===== Shop grid (modern responsive) ===== */
-.shop-list {
+/* ===== Photo Strip (簡約橫向縮圖) ===== */
+.card-photo-strip {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-  gap: var(--size-5);
-  padding-block: var(--size-5);
-  padding-block-end: var(--size-13);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  aspect-ratio: 4 / 1;
+  min-height: 80px;
+}
+.card-photo-thumb {
+  aspect-ratio: 1;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+.card-photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+  display: block;
+}
+.card-photo-thumb:hover img {
+  transform: scale(1.05);
+}
+.card-photo-thumb.more {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 16px;
 }
 
-@media (min-width: 768px) {
-  .shop-list {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (min-width: 1024px) {
-  .shop-list {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* img-broken: lh3 失效時 emoji 占位 */
+.card-photo-thumb.img-broken {
+  background: var(--bg-hover, #2a2a2a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
 }
 
-/* ===== Modal (簡約) ===== */
+/* card-photo-placeholder: 完全無圖店家 */
+.card-photo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  aspect-ratio: 4 / 1;
+  background: var(--bg-hover, #2a2a2a);
+  border-radius: 8px;
+  margin: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.card-photo-placeholder:hover {
+  background: var(--bg-active, #333);
+}
+.placeholder-emoji {
+  font-size: 48px;
+  line-height: 1;
+}
+.placeholder-label {
+  font-size: 12px;
+  color: var(--text-secondary, #aaa);
+}
+
+/* ===== Card Top (name + fav) ===== */
+.card-top {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.card-title-block {
+  flex: 1;
+  min-width: 0;
+}
+.card-right {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+.card-fav {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--bg-hover);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.card-fav:hover {
+  background: var(--accent);
+  color: white;
+}
+.card-fav.active {
+  background: var(--accent);
+  color: white;
+}
+.card-rating {
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+.card-rating .star {
+  color: #fbbf24;
+}
+
+/* ===== Album Button (統一) ===== */
+.btn-album,
+.shop-card .btn-album {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+.btn-album:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+/* ===== Modal (簡約 overlay) - 預設隱藏, JS 加 .show 顯示 ===== */
 .modal-overlay,
 .submit-form-overlay,
 .album-modal,
 .album-viewer {
   position: fixed;
   inset: 0;
-  z-index: var(--layer-5);
-  background: rgb(0 0 0 / 0.7);
-  display: none;
+  z-index: 1000;
+  background: rgba(0,0,0,0.6);
+  display: none !important;
   align-items: center;
   justify-content: center;
-  padding: var(--size-4);
-  backdrop-filter: blur(8px);
-  animation: var(--animation-fade-in);
+  padding: 16px;
+  backdrop-filter: blur(4px);
 }
 .modal-overlay.show,
 .submit-form-overlay.show,
 .album-modal.show,
 .album-viewer.show {
-  display: flex;
+  display: flex !important;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* ===== Toast (簡約) ===== */
-.toast-container {
+.modal-content,
+.submit-form,
+.album-modal-content {
+  background: var(--bg-card);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: slideUp 0.3s;
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.modal-desc {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 14px;
+  margin-top: 4px;
+  font-family: inherit;
+}
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.modal-submit {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s;
+}
+.modal-submit:hover {
+  background: var(--accent-hover);
+}
+.modal-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Admin Entry (簡約固定按鈕) ===== */
+.admin-entry-btn {
   position: fixed;
-  inset-block-end: var(--size-5);
-  inset-inline-end: var(--size-5);
-  z-index: var(--layer-5);
+  bottom: 20px;
+  right: 20px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 999;
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
+}
+.admin-entry-btn:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+/* ===== Header Entry Button (📝) ===== */
+.header-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.header-btn:hover {
+  background: var(--accent-hover);
+}
+
+/* ===== My Favs Button ===== */
+.favs-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ===== Hidden ===== */
+.hidden {
+  display: none !important;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .app-header-inner {
+    padding: 12px 16px;
+  }
+  .city-tabs,
+  .filter-bar,
+  .result-bar,
+  .shops-grid {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .shops-grid {
+    grid-template-columns: 1fr;
+  }
+  .shop-card .actions {
+    flex-wrap: wrap;
+  }
+}
+
+/* ===== Scrollbar (簡約暗黑風) ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ===== Header layout (existing class names) ===== */
+.app-title {
   display: flex;
   flex-direction: column;
-  gap: var(--size-2);
+  gap: 2px;
 }
-.toast {
-  padding: var(--size-3) var(--size-5);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-3);
-  box-shadow: var(--shadow-4);
-  animation: var(--animation-slide-in-right);
-  min-inline-size: 240px;
+.app-h1 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
-.toast.success { border-color: oklch(70% 0.2 145); }
-.toast.error { border-color: oklch(70% 0.2 25); }
-
-/* ===== Hero / Quick bar ===== */
-.hero-stats {
+.app-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.app-actions {
   display: flex;
-  gap: var(--size-5);
-  padding-block: var(--size-4);
+  gap: 6px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+  font-size: 16px;
+  padding: 0;
+}
+.icon-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+/* ===== Quick Bar (chips) ===== */
+.city-bar {
+  display: flex;
+  gap: 8px;
+  padding: 8px 24px 0;
+  max-width: 1280px;
+  margin: 0 auto;
   flex-wrap: wrap;
 }
-.hero-stat {
+.quick-bar {
   display: flex;
-  flex-direction: column;
-  gap: var(--size-1);
+  gap: 6px;
+  padding: 8px 24px 16px;
+  max-width: 1280px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-color);
 }
-.hero-stat-value {
-  font-size: var(--font-size-fluid-1);
-  font-weight: var(--font-weight-7);
-  background: linear-gradient(135deg, var(--accent), oklch(70% 0.25 50));
+
+/* ===== Main content ===== */
+main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px;
+}
+
+/* ===== Tooltip ===== */
+.tooltip {
+  position: absolute;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  white-space: nowrap;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* ===== react-bits 借鑑: 動畫 + 互動增強 ===== */
+
+/* 1. 卡片 hover lift (Stagger card) */
+.shop-card {
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1),
+              box-shadow 0.25s cubic-bezier(0.2, 0, 0, 1),
+              border-color 0.25s ease;
+  will-change: transform;
+}
+.shop-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4),
+              0 0 0 1px var(--accent);
+  border-color: var(--accent);
+}
+.shop-card:active {
+  transform: translateY(-2px) scale(0.99);
+}
+
+/* 2. 縮圖 hover zoom */
+.card-photo-thumb {
+  overflow: hidden;
+  position: relative;
+}
+.card-photo-thumb img {
+  transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+}
+.card-photo-thumb:hover img {
+  transform: scale(1.08);
+}
+.card-photo-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.4));
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.card-photo-thumb:hover::after {
+  opacity: 1;
+}
+
+/* 3. Filter chip 動畫 */
+.city-chip, .filter-chip {
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  position: relative;
+  overflow: hidden;
+}
+.city-chip::before, .filter-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: translateY(100%);
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
+  z-index: -1;
+}
+.city-chip:hover, .filter-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.city-chip:active, .filter-chip:active {
+  transform: translateY(0);
+}
+
+/* 4. 卡片進場動畫 (Stagger) */
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.shop-card {
+  animation: cardFadeIn 0.4s cubic-bezier(0.2, 0, 0, 1) backwards;
+}
+.shop-card:nth-child(1) { animation-delay: 0.02s; }
+.shop-card:nth-child(2) { animation-delay: 0.04s; }
+.shop-card:nth-child(3) { animation-delay: 0.06s; }
+.shop-card:nth-child(4) { animation-delay: 0.08s; }
+.shop-card:nth-child(5) { animation-delay: 0.10s; }
+.shop-card:nth-child(6) { animation-delay: 0.12s; }
+.shop-card:nth-child(7) { animation-delay: 0.14s; }
+.shop-card:nth-child(8) { animation-delay: 0.16s; }
+.shop-card:nth-child(9) { animation-delay: 0.18s; }
+.shop-card:nth-child(n+10) { animation-delay: 0.2s; }
+
+/* 5. 主題切換平滑過渡 */
+html, body {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* 6. 按鈕 ripple 效果 */
+.btn, .btn-primary, .btn-share, .btn-map, .btn-album,
+.icon-btn, .city-chip, .filter-chip {
+  position: relative;
+  overflow: hidden;
+}
+.btn::after, .btn-primary::after, .btn-share::after, .btn-map::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.btn:active::after, .btn-primary:active::after,
+.btn-share:active::after, .btn-map:active::after {
+  opacity: 1;
+}
+
+/* 7. 標題漸變 */
+.app-h1 {
+  background: linear-gradient(135deg, var(--accent), #ff6b35);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  display: inline-block;
+  transition: filter 0.3s;
 }
-.hero-stat-label {
-  font-size: var(--font-size-0);
-  color: var(--text-muted);
-}
-
-.quick-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--size-2);
+.app-h1:hover {
+  filter: brightness(1.1);
 }
 
-/* ===== Footer (簡約) ===== */
-.app-footer {
-  padding-block: var(--size-7);
-  border-block-start: 1px solid var(--border);
-  background: var(--bg-elevated);
-  color: var(--text-muted);
-  font-size: var(--font-size-0);
+/* 8. 數字計數動畫 (CSS only) */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-stats > div, .quick-bar button {
+  animation: countUp 0.5s ease backwards;
 }
 
-/* ===== Accessibility ===== */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+/* 9. Loading skeleton pulse */
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
-.sr-only {
+.skeleton, .loading {
+  background: linear-gradient(90deg,
+    var(--bg-hover, #2a2a2a) 0%,
+    var(--bg-active, #333) 50%,
+    var(--bg-hover, #2a2a2a) 100%);
+  background-size: 200% 100%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* 10. Toast slide-in */
+@keyframes toastSlide {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.toast {
+  animation: toastSlide 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* 11. 滾動條美化 */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary, #1c1c1c); }
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover { background: #ff6b35; }
+
+/* 12. 連結下劃線動畫 */
+.card-name {
+  position: relative;
+  display: inline-block;
+}
+.card-name::after {
+  content: '';
   position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+.shop-card:hover .card-name::after {
+  width: 100%;
 }
 
+/* 13. Filter chip 選中狀態 */
+.city-chip.active, .filter-chip.active {
+  box-shadow: 0 0 0 2px var(--accent),
+              0 4px 12px rgba(247, 115, 22, 0.3);
+}
+
+/* 14. Modal fade-in */
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.modal-overlay.show,
+.submit-form-overlay.show,
+.album-modal.show,
+.album-viewer.show {
+  animation: modalFadeIn 0.25s ease;
+}
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-overlay.show > *,
+.submit-form-overlay.show > *,
+.album-modal.show > *,
+.album-viewer.show > * {
+  animation: modalSlideUp 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* 15. 光澤效果 (Sheen on hover) */
+@keyframes sheen {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+.icon-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(120deg,
+    transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+.icon-btn:hover::before {
+  animation: sheen 0.8s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ===== 圖片淡入 + 載入狀態 ===== */
+.card-photo-thumb img {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.card-photo-thumb img[src],
+.card-photo-thumb img.loaded {
+  opacity: 1;
+}
+
+/* ===== Sticky header 與 filter bar ===== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-secondary);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color, #2a2a2a);
+  transition: box-shadow 0.3s;
+}
+.app-header.scrolled {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* Filter bar 在 header 下 */
+.quick-bar {
+  position: sticky;
+  top: 64px;
+  z-index: 99;
+  background: var(--bg-secondary);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color, #2a2a2a);
+  transition: all 0.3s;
+}
+
+/* ===== In-view stagger ===== */
+.shop-card.in-view {
+  animation: cardFadeIn 0.4s cubic-bezier(0.2, 0, 0, 1) backwards;
+}
+
+/* 預設沒 in-view 不顯示動畫 (避免每次 reload 觸發) */
+.shop-card:not(.in-view) {
+  /* 隱藏直到 IntersectionObserver 觸發 */
+}
+
+/* ===== 無障礙: 減少動畫偏好 ===== */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ===== v6.14 加強: 視覺差異更大, 截圖也能看到 ===== */
+
+/* 卡片邊框 (常駐, 讓卡片有層次感) */
+.shop-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+/* 卡片加漸變背景 (從透明到深) */
+.shop-card {
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(0, 0, 0, 0.1) 100%);
+}
+
+/* 標題漸變文字 (從淺到深) */
+.app-h1 {
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 50%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* 按鈕陰影 */
+.btn-primary {
+  box-shadow: 0 4px 14px rgba(247, 115, 22, 0.3);
+}
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(247, 115, 22, 0.4);
+}
+
+/* 過濾器 chip 圓角 */
+.city-chip, .filter-chip {
+  border-radius: 999px;
+  padding: 8px 16px;
+}
+
+/* 圖片 strip 加圓角 + 邊框 */
+.card-photo-strip {
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 12px;
+}
+
+/* 縮圖 hover 浮起 */
+.card-photo-thumb {
+  border-radius: 6px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card-photo-thumb:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+  position: relative;
+}
+
+/* 收藏按鈕 hover */
+.card-fav:hover {
+  transform: scale(1.2) rotate(72deg);
+  color: #ef4444;
+}
+
+/* 評分星星 閃爍 */
+.card-rating .star {
+  animation: starTwinkle 2s ease-in-out infinite;
+}
+@keyframes starTwinkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.9); }
+}
+
+/* Footer 風格 */
+.app-footer {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color, #2a2a2a);
 }
