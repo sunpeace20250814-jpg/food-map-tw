@@ -203,7 +203,6 @@ function renderCard(s, idx) {
             img.srcset = `${baseUrl} 408w, ${baseUrl + '=w272-h204-k-no'} 272w, ${baseUrl + '=w204-h153-k-no'} 204w`;
             img.sizes = '(max-width: 768px) 33vw, 120px';
             img.alt = s.name + ' 照片';
-            img.loading = 'lazy';
             img.decoding = 'async';
             // 圖片淡入 (避免 lh3 慢慢載入的突兀)
             img.style.opacity = '0';
