@@ -10,8 +10,14 @@
 const { test, expect } = require('@playwright/test');
 
 // 共用: 每次測試都用乾淨的 storage,避免主題/收藏殘留影響斷言
-test.beforeEach(async ({ context }) => {
+test.beforeEach(async ({ context, page }) => {
   await context.clearCookies();
+  // 強制不用 HTTP cache
+  await context.route('**/*', (route) => {
+    const headers = { ...route.request().headers(), 'cache-control': 'no-cache' };
+    route.continue({ headers });
+  });
+  await page.goto('/', { waitUntil: 'networkidle' });
   await context.addInitScript(() => {
     try { localStorage.clear(); } catch (_) { /* ignore */ }
   });
