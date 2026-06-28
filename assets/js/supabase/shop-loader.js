@@ -1,273 +1,289 @@
-// shop-loader.js - 動態載入店家資料 (Supabase 優先, fallback 靜態)
-import { isSupabaseEnabled, fetchAllShops } from './supabase-client.js';
-
 /**
- * 載入所有店家 (Supabase 優先, fallback 靜態)
- * @returns {Promise<Array>}
- */
-export async function loadShops() {
-    // 1. 嘗試 Supabase
-    if (isSupabaseEnabled()) {
-        const supabaseShops = await fetchAllShops();
-        if (supabaseShops && supabaseShops.length > 0) {
-            return normalizeSupabaseShops(supabaseShops);
-        }
-    }
-
-    // 2. Fallback 靜態資料
-    if (window.SHOP_DATA_INITIAL && Array.isArray(window.SHOP_DATA_INITIAL)) {
-        return window.SHOP_DATA_INITIAL;
-    }
-
-    return [];
-}
-
-/**
- * 將 Supabase 格式轉為前端 SHOP_DATA 格式
- * Supabase 欄位: id, name, addr, city, mcat, station, line, photos, ...
- * 前端欄位: name, addr, station, line, mcat, photos, city, late, ...
- */
-function normalizeSupabaseShops(supabaseShops) {
-    return supabaseShops.map(s => ({
-        // 必要欄位
-        name: s.name,
-        addr: s.addr,
-        city: s.city,
-        station: s.station || '',
-        line: s.line || '',
-        mcat: s.mcat || '',
-        photos: s.photos || [],
-
-        // 衍生欄位 (對應前端 SHOP_DATA_INITIAL)
-        id: s.id,
-        cat_main: s.mcat || '',
-        cat_sub: s.cat_sub || '',
-        price_bar: s.price_bar || '',
-        env: s.env || '',
-        time_24h: !!s.time_24h,
-        late: !!s.late,
-        "22start": !!s['22start'],
-        non_late: !!s.non_late,
-        rating: s.rating || 0,
-        gmaps_url: s.gmaps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name)}`,
-        source: s.source || 'supabase',
-        confidence: s.confidence || '高',
-        emoji: s.emoji || '🍜',
-        price: s.price_bar || '$',
-        price_emoji: '💰',
-        price_range: '',
-        env_badges: s.env ? s.env.split(',').map(e => e.trim()).filter(e => e).map(e => e === 'ac' ? '🏠室內' : e === 'ind' ? '🏪獨立' : e) : [],
-
-        // 時間戳
-        created_at: s.created_at,
-        updated_at: s.updated_at
-    }));
-}
-
-/**
- * 渲染店家卡片到 DOM
- * 取代原本寫死在 index.html 的 164 個 article
- *
- * 預期 index.html 有 <main id="shopList"></main>
- * 動態生成所有 .shop-card
- */
-export async function renderShopCards() {
-    const listEl = document.getElementById('shopList');
-    if (!listEl) {
-        console.warn('[shop-loader] 找不到 #shopList, 跳過動態渲染');
-        return;
-    }
-
-    const shops = await loadShops();
-
-    // 清空 listEl (用 DOM API, 避免 innerHTML)
-    while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
-
-    // 渲染 card (用 DOM API 安全建立, 無 XSS 風險)
-    shops.forEach((s, idx) => {
-        listEl.appendChild(renderCard(s, idx));
-    });
-
-    // 觸發事件: 通知其他模組資料已更新
-    window.dispatchEvent(new CustomEvent('shops-loaded', { detail: { count: shops.length } }));
-}
-
-/**
- * 渲染單個 shop card (DOM API 版本, 完全避免 innerHTML / XSS)
+ * v8.0 極簡渲染 - 1 大縮圖 + 店名 + 站點 + 營業狀態 + 收藏 + 地圖
  */
 function renderCard(s, idx) {
-    const hasPhotos = s.photos && s.photos.length > 0;
-    const photoUrl = hasPhotos ? s.photos[0] : '';
-    const isLate = s.late ? '1' : '0';
-    const is22Start = s['22start'] ? '1' : '0';
-    const is24h = s.time_24h ? '1' : '0';
-    const isNonLate = s.non_late ? '1' : '0';
-
     const article = document.createElement('article');
     article.className = 'shop-card';
-    article.dataset.late = isLate;
+    article.dataset.shopIdx = String(s.id || idx);
+    article.dataset.city = s.city || 'kh';
+    article.dataset.late = s.late ? '1' : '0';
+    article.dataset.mcat = s.mcat || '';
     article.dataset.line = s.line || 'none';
     article.dataset.price = s.price_bar || '$';
     article.dataset.station = s.station || '';
-    article.dataset.mcat = s.mcat || '';
-    article.dataset.env = s.env || '';
-    article.dataset['22start'] = is22Start;
-    article.dataset['24h'] = is24h;
-    article.dataset['nonLate'] = isNonLate;
-    article.dataset.city = s.city || 'kh';
-    article.dataset.shopIdx = String(s.id || idx);
 
-    // card-top
-    const cardTop = document.createElement('div');
-    cardTop.className = 'card-top';
+    // === 左: 1 大縮圖 ===
+    const hasPhotos = s.photos && s.photos.length > 0;
+    if (hasPhotos) {
+        const strip = document.createElement('div');
+        strip.className = 'card-photo-strip';
+        const inner = document.createElement('div');
+        inner.className = 'card-photo-thumb';
+        inner.dataset.shopIdx = String(s.id || idx);
+        inner.dataset.action = 'album';
+        const img = document.createElement('img');
+        img.alt = s.name + ' 照片';
+        const baseUrl = s.photos[0].replace(/=w[\d-]+-h[\d-]+-k-no.*$/, '');
+        img.src = baseUrl + '=w408-h306-k-no';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.onerror = () => {
+            inner.classList.add('img-broken');
+            inner.textContent = s.emoji || '🍜';
+            img.remove();
+        };
+        inner.appendChild(img);
+        strip.appendChild(inner);
+        article.appendChild(strip);
+    } else {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'card-photo-placeholder';
+        placeholder.dataset.shopIdx = String(s.id || idx);
+        const emoji = document.createElement('span');
+        emoji.className = 'placeholder-emoji';
+        emoji.textContent = s.emoji || '🍜';
+        placeholder.appendChild(emoji);
+        const label = document.createElement('span');
+        label.className = 'placeholder-label';
+        label.textContent = '暫無照片';
+        placeholder.appendChild(label);
+        article.appendChild(placeholder);
+    }
 
-    const titleBlock = document.createElement('div');
-    titleBlock.className = 'card-title-block';
+    // === 右: 內容 ===
+    const body = document.createElement('div');
+    body.className = 'card-body';
 
     const h3 = document.createElement('h3');
     h3.className = 'card-name';
     h3.textContent = s.name || '';
-    titleBlock.appendChild(h3);
+    body.appendChild(h3);
 
-    const metaLine = document.createElement('div');
-    metaLine.className = 'card-meta-line';
-    const mcatSpan = document.createElement('span');
-    mcatSpan.textContent = s.mcat || '';
-    metaLine.appendChild(mcatSpan);
-    const dot1 = document.createElement('span');
-    dot1.className = 'dot';
-    metaLine.appendChild(dot1);
-    const catSubSpan = document.createElement('span');
-    catSubSpan.textContent = s.cat_sub || '';
-    metaLine.appendChild(catSubSpan);
-    titleBlock.appendChild(metaLine);
+    const meta = document.createElement('div');
+    meta.className = 'card-meta';
+    if (s.cat_sub || s.mcat) {
+        const cat = document.createElement('span');
+        cat.textContent = s.cat_sub || s.mcat;
+        meta.appendChild(cat);
+    }
+    if (s.station) {
+        const dot = document.createElement('span');
+        dot.className = 'dot';
+        meta.appendChild(dot);
+        const st = document.createElement('span');
+        st.textContent = s.station;
+        st.style.overflow = 'hidden';
+        st.style.textOverflow = 'ellipsis';
+        st.style.whiteSpace = 'nowrap';
+        meta.appendChild(st);
+    }
+    body.appendChild(meta);
 
-    cardTop.appendChild(titleBlock);
+    const info = document.createElement('div');
+    info.className = 'card-info';
+    const status = computeStatus(s);
+    const statusEl = document.createElement('span');
+    statusEl.className = 'card-status ' + status.cls;
+    statusEl.textContent = status.label;
+    info.appendChild(statusEl);
 
-    const cardRight = document.createElement('div');
-    cardRight.className = 'card-right';
-    const favBtn = document.createElement('button');
-    favBtn.className = 'card-fav';
-    favBtn.setAttribute('aria-label', '收藏');
-    favBtn.textContent = '♡';
-    cardRight.appendChild(favBtn);
     if (s.rating) {
-        const ratingDiv = document.createElement('div');
-        ratingDiv.className = 'card-rating';
+        const r = document.createElement('span');
+        r.className = 'card-rating';
         const star = document.createElement('span');
         star.className = 'star';
         star.textContent = '★';
         const num = document.createElement('span');
-        num.className = 'num';
-        num.textContent = String(s.rating);
-        ratingDiv.appendChild(star);
-        ratingDiv.appendChild(num);
-        cardRight.appendChild(ratingDiv);
-    }
-    cardTop.appendChild(cardRight);
-    article.appendChild(cardTop);
-
-    // env badges
-    if (s.env_badges && s.env_badges.length > 0) {
-        const infoRow = document.createElement('div');
-        infoRow.className = 'card-info-row';
-        const tag = document.createElement('span');
-        tag.className = 'tag';
-        tag.textContent = s.env_badges.join(' · ');
-        infoRow.appendChild(tag);
-        article.appendChild(infoRow);
+        const rt = typeof s.rating === 'number' ? s.rating.toFixed(1) : String(s.rating).split('(')[0];
+        num.textContent = rt;
+        r.appendChild(star);
+        r.appendChild(num);
+        info.appendChild(r);
     }
 
-    // addr
-    const addrDiv = document.createElement('div');
-    addrDiv.className = 'card-addr';
-    addrDiv.title = s.addr || '';
-    addrDiv.textContent = s.addr || '';
-    article.appendChild(addrDiv);
+    body.appendChild(info);
+    article.appendChild(body);
 
-    // photos
-    if (hasPhotos) {
-        const strip = document.createElement('div');
-        strip.className = 'card-photo-strip';
-        // 圖片效能: 用 srcset 提供 3 個尺寸 (thumb/medium/large), 瀏覽器自動選最適
-        [photoUrl, `${photoUrl}&w112`, `${photoUrl}&w112`].forEach((url, idx) => {
-            const thumb = document.createElement('div');
-            thumb.className = 'card-photo-thumb';
-            thumb.dataset.shopIdx = String(s.id || idx);
-            thumb.dataset.action = 'album';
-            const img = document.createElement('img');
-            // 不同 thumb 用不同尺寸: 大 (408), 中 (272), 小 (204)
-            const sizes = ['', '=w272-h204-k-no', '=w204-h153-k-no'];
-            const baseUrl = url.replace(/=w[\d-]+-h[\d-]+-k-no.*$/, '');
-            img.src = baseUrl + sizes[idx];
-            img.srcset = `${baseUrl} 408w, ${baseUrl + '=w272-h204-k-no'} 272w, ${baseUrl + '=w204-h153-k-no'} 204w`;
-            img.sizes = '(max-width: 768px) 33vw, 120px';
-            img.alt = s.name + ' 照片';
-            img.decoding = 'async';
-            // 圖片淡入 (避免 lh3 慢慢載入的突兀)
-            img.style.opacity = '0';
-            img.style.transition = 'opacity 0.3s';
-            img.onload = () => { img.style.opacity = '1'; };
-            img.onerror = () => {
-                // lh3 失效 → 替換成 emoji 占位
-                thumb.classList.add('img-broken');
-                img.remove();
-                thumb.textContent = s.emoji || '🍜';
-            };
-            thumb.appendChild(img);
-            strip.appendChild(thumb);
-        });
-        article.appendChild(strip);
-
-        const albumBtn = document.createElement('button');
-        albumBtn.className = 'btn-album';
-        albumBtn.dataset.shopIdx = String(s.id || idx);
-        albumBtn.dataset.action = 'album';
-        albumBtn.textContent = `看完整相簿 · ${s.photos.length} 張`;
-        article.appendChild(albumBtn);
-    } else {
-        // 無圖店家: 顯示 emoji 占位卡
-        const placeholder = document.createElement('div');
-        placeholder.className = 'card-photo-placeholder';
-        placeholder.dataset.shopIdx = String(s.id || idx);
-        placeholder.dataset.action = 'detail';
-        placeholder.setAttribute('role', 'button');
-        placeholder.setAttribute('tabindex', '0');
-        const emojiSpan = document.createElement('span');
-        emojiSpan.className = 'placeholder-emoji';
-        emojiSpan.textContent = s.emoji || '🍜';
-        placeholder.appendChild(emojiSpan);
-        const placeholderLabel = document.createElement('span');
-        placeholderLabel.className = 'placeholder-label';
-        placeholderLabel.textContent = '暫無照片 · 點我看詳情';
-        placeholder.appendChild(placeholderLabel);
-        article.appendChild(placeholder);
-    }
-
-    // actions
-    const actions = document.createElement('div');
-    actions.className = 'card-actions';
-    const detailBtn = document.createElement('button');
-    detailBtn.className = 'btn btn-primary';
-    detailBtn.dataset.shopIdx = String(s.id || idx);
-    detailBtn.dataset.action = 'detail';
-    detailBtn.textContent = '詳細';
-    actions.appendChild(detailBtn);
-    const shareBtn = document.createElement('button');
-    shareBtn.className = 'btn btn-share';
-    shareBtn.dataset.action = 'share';
-    shareBtn.type = 'button';
-    shareBtn.setAttribute('aria-label', '分享');
-    shareBtn.textContent = '↗ 分享';
-    actions.appendChild(shareBtn);
-    const mapLink = document.createElement('a');
-    mapLink.className = 'btn btn-map';
-    mapLink.href = s.gmaps_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name || '')}`;
-    mapLink.target = '_blank';
-    mapLink.rel = 'noopener';
-    mapLink.textContent = '地圖 ↗';
-    actions.appendChild(mapLink);
-    article.appendChild(actions);
+    // 點擊卡片打開 sheet
+    article.addEventListener('click', (e) => {
+        if (e.target.closest('.card-photo-thumb')) {
+            openAlbum(s.id || idx);
+        } else {
+            showShopSheet(s);
+        }
+    });
 
     return article;
 }
+
+function computeStatus(s) {
+    if (s.time_24h || s.time_24h === 'true' || s.time_24h === true) {
+        return { cls: 'open', label: '24hr' };
+    }
+    const t = s.time || '';
+    if (t.includes('休息')) return { cls: 'closed', label: '休息' };
+    if (t.includes('營業至')) return { cls: 'open', label: t.replace('營業：營業至 ', '至 ') };
+    if (t.includes('下次開門')) return { cls: 'closed', label: t.replace('營業：下次開門 ', '開門 ') };
+    return { cls: 'open', label: '營業中' };
+}
+
+/**
+ * 顯示店家詳細 sheet
+ */
+function showShopSheet(s) {
+    const old = document.getElementById('shopSheet');
+    if (old) old.remove();
+    const oldOverlay = document.getElementById('shopSheetOverlay');
+    if (oldOverlay) oldOverlay.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'shopSheetOverlay';
+    overlay.className = 'sheet-overlay';
+    overlay.onclick = closeShopSheet;
+
+    const sheet = document.createElement('div');
+    sheet.id = 'shopSheet';
+    sheet.className = 'sheet';
+
+    const heroUrl = (s.photos && s.photos[0]) ? s.photos[0].replace(/=w[\d-]+-h[\d-]+-k-no.*$/, '') + '=w800-h450-k-no' : '';
+    let heroHTML = '';
+    if (heroUrl) {
+        heroHTML = '<div class="sheet-hero"><img src="' + heroUrl + '" alt="' + escapeHtml(s.name) + ' 封面" loading="lazy"></div>';
+    }
+
+    const ratingStr = s.rating ? (typeof s.rating === 'number' ? s.rating.toFixed(1) : String(s.rating).split('(')[0]) : '';
+    sheet.innerHTML =
+        '<div class="sheet-handle-row"><div class="sheet-handle"></div></div>' +
+        '<button class="sheet-close" onclick="closeShopSheet()" aria-label="關閉">✕</button>' +
+        heroHTML +
+        '<div class="sheet-content">' +
+            '<div class="sheet-title">' + escapeHtml(s.name || '') + '</div>' +
+            '<div class="sheet-meta">' +
+                (s.mcat ? '<span class="sheet-meta-item">' + escapeHtml(s.mcat) + '</span>' : '') +
+                (s.station ? '<span class="sheet-meta-item">📍 ' + escapeHtml(s.station) + '</span>' : '') +
+                (ratingStr ? '<span class="sheet-meta-item">★ ' + ratingStr + '</span>' : '') +
+                (s.price_bar ? '<span class="sheet-meta-item">' + escapeHtml(s.price_bar) + '</span>' : '') +
+            '</div>' +
+            '<div class="sheet-section">' +
+                '<div class="sheet-section-title">地址</div>' +
+                '<div>' + escapeHtml(s.addr || s.address || '') + '</div>' +
+            '</div>' +
+            (s.time ? '<div class="sheet-section"><div class="sheet-section-title">營業時間</div><div>' + escapeHtml(s.time) + '</div></div>' : '') +
+            '<div class="sheet-actions">' +
+                '<a href="' + escapeAttr(s.gmaps_url || '#') + '" target="_blank" rel="noopener" class="sheet-btn">📍 開啟地圖</a>' +
+                '<button class="sheet-btn secondary" data-share-name="' + escapeAttr(s.name) + '" data-share-url="' + escapeAttr(s.gmaps_url || '') + '">↗ 分享</button>' +
+            '</div>' +
+        '</div>';
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(sheet);
+    requestAnimationFrame(() => {
+        overlay.classList.add('show');
+        sheet.classList.add('show');
+    });
+    document.body.style.overflow = 'hidden';
+
+    // 綁定分享按鈕
+    const shareBtn = sheet.querySelector('[data-share-name]');
+    if (shareBtn) {
+        shareBtn.onclick = () => {
+            const name = shareBtn.dataset.shareName;
+            const url = shareBtn.dataset.shareUrl;
+            const text = name + (url ? ' - ' + url : '');
+            if (navigator.share) {
+                navigator.share({ title: name, text: text, url: window.location.href }).catch(() => {});
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => showToast('已複製')).catch(() => showToast('無法複製'));
+            } else {
+                showToast('無法複製');
+            }
+        };
+    }
+}
+
+function closeShopSheet() {
+    const sheet = document.getElementById('shopSheet');
+    const overlay = document.getElementById('shopSheetOverlay');
+    if (sheet) sheet.classList.remove('show');
+    if (overlay) overlay.classList.remove('show');
+    document.body.style.overflow = '';
+    setTimeout(() => {
+        if (sheet) sheet.remove();
+        if (overlay) overlay.remove();
+    }, 300);
+}
+
+function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s) {
+    return String(s == null ? '' : s).replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+}
+
+function showToast(msg) {
+    let c = document.querySelector('.toast-container');
+    if (!c) {
+        c = document.createElement('div');
+        c.className = 'toast-container';
+        document.body.appendChild(c);
+    }
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    c.appendChild(t);
+    setTimeout(() => t.remove(), 2000);
+}
+
+/**
+ * 主 init: 接管 SHOP_DATA 渲染
+ */
+function initShopLoader() {
+    if (!window.SHOP_DATA || !window.SHOP_DATA.length) return;
+    const listEl = document.getElementById('shopList');
+    if (!listEl) return;
+    // 清空
+    listEl.innerHTML = '';
+    // 渲染全部
+    window.SHOP_DATA.forEach((s, idx) => {
+        const card = renderCard(s, idx);
+        listEl.appendChild(card);
+    });
+    console.log('[v8] Rendered', window.SHOP_DATA.length, 'shops');
+}
+
+// 等待 DOM ready + Supabase bootstrap
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initShopLoader, 100));
+} else {
+    setTimeout(initShopLoader, 100);
+}
+
+// 也監聽 SHOP_DATA 更新 (從 Supabase 載入完成後)
+window.addEventListener('shops-updated', initShopLoader);
+window.addEventListener('shop-data-ready', initShopLoader);
+
+// FAB 返回頂部
+(function setupFab() {
+    let fab;
+    function ensure() {
+        if (fab) return fab;
+        fab = document.createElement('button');
+        fab.className = 'fab';
+        fab.setAttribute('aria-label', '返回頂部');
+        fab.textContent = '↑';
+        fab.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.body.appendChild(fab);
+        return fab;
+    }
+    let lastShow = false;
+    window.addEventListener('scroll', () => {
+        const show = window.scrollY > 400;
+        if (show !== lastShow) {
+            ensure().classList.toggle('show', show);
+            lastShow = show;
+        }
+    }, { passive: true });
+})();
+
+// 暴露到 window 給 inline onclick 用
+window.closeShopSheet = closeShopSheet;
