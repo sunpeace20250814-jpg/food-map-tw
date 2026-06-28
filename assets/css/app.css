@@ -17,7 +17,7 @@
   /* 文字 */
   --text: #e0f0ff;
   --text-2: #8aa0c0;
-  --text-muted: #506080;
+  --text-muted: #7080a0;
 
   /* 主色霓虹 */
   --cyan: #00f0ff;
@@ -164,7 +164,7 @@ a { color: inherit; text-decoration: none; }
 .icon-btn {
   width: 40px;
   height: 40px;
-  border-radius: 8px;
+  border-radius: 4px;
   background: var(--glass);
   border: 1px solid var(--border);
   display: grid;
@@ -477,7 +477,7 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   gap: 4px;
   padding: 2px 8px;
-  border-radius: 2px;
+  border-radius: 4px;
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
