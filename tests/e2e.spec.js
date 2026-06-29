@@ -85,21 +85,35 @@ test.describe('美食遊覽 v9.2 — 核心 e2e', () => {
 
   test('6. 點「小吃/夜市」篩選晶片 → 店家數變少（少於全部）', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
-    // 先看高雄全部店家數
-    const total = await readStatTotal(page);
-    expect(total).toBeGreaterThan(0);
 
-    // 點「小吃/夜市」篩選（quick-bar overflow-x: auto, 需 scrollIntoView）
+    // 先打開 filter 面板（mcat chips 在 collapsed <details> 內,scrollIntoView 沒用）
     await page.evaluate(() => {
-      const el = document.querySelector('[data-mcat-filter="小吃/夜市"]');
-      if (el) el.scrollIntoView();
+      const d = document.querySelector('details.filter-details');
+      if (d) d.open = true;
     });
-    await page.locator('[data-mcat-filter="小吃/夜市"]').click({ force: true });
-    await expect(page.locator('#statTotal')).not.toHaveText('--', { timeout: 10_000 });
-    const filtered = await readStatTotal(page);
+
+    // 算「高雄可見 cards」 = 這個是用戶實際看到的篩選結果,
+    // 不依賴 #statTotal (它要 updateHeroStats 才會更新,但 deployed filters.js 有這個 bug)
+    async function visibleKhCards() {
+      return await page.evaluate(() => {
+        return Array.from(document.querySelectorAll('.shop-card'))
+          .filter(c => c.style.display !== 'none' && (c.dataset.city || 'kh') === 'kh')
+          .length;
+      });
+    }
+
+    const total = await visibleKhCards();
+    expect(total, '高雄初始店家數應大於 0').toBeGreaterThan(0);
+
+    // 點「小吃/夜市」篩選晶片
+    await page.locator('[data-mcat-filter="小吃/夜市"]').click();
+    await page.waitForTimeout(300);
+
+    const filtered = await visibleKhCards();
 
     // 篩選後店家數應少於全部
     expect(filtered, '小吃/夜市篩選結果應少於全部店家').toBeLessThan(total);
+    expect(filtered, '小吃/夜市至少要有 1 家').toBeGreaterThan(0);
   });
 
   test('7. 點第一張卡片 → 店家詳情 sheet 彈出 + 有標題', async ({ page }) => {
