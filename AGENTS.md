@@ -1,144 +1,152 @@
-﻿# AGENTS.md
+﻿# AGENTS.md — 美食遊覽
 
-> 給未來 agent 的速查指南 — 只列「不讀這份就會踩雷」的點。
+> 給未來 agent 的速查指南。只列「不讀這份就會踩雷」的點。
+
+---
 
 ## 專案一句話
-高雄 (46 家) + 台南 (50 家) + 彰化 (68 家) 宵夜互動地圖，共 164 家。
-**純前端靜態網頁，無後端。**
 
-## 最新狀態 (2026-06-20 commit f25a415 v4.13)
-- **135/164 (82%) 店家有視覺驗證 100% 對應正確店家照片**
-- 29 家純文字卡 (誠實, 12 家 Maps 給錯店已標 `_no_photo: true`)
-- 結構完整 (縣市切換 / 篩選 / 收藏 / photo-strip / btn-album)
-- 部署包 ~520KB
+高雄 (46) + 台南 (50) + 彰化 (68) = **164 家宵夜互動地圖**。
+純前端 SPA + Supabase Cloud（動態店家載入 + 使用者推薦 + 管理員審核）。
 
-## 最新狀態 (2026-06-24 commit v5.0 Supabase 整合)
-- 135/164 (82%) 店家有視覺驗證 100% 對應正確店家照片
-- **Supabase 完整方案 A 完成**: 使用者推薦 + 管理員審核上架
-  - supabase/migrations/001_initial_schema.sql (8.9KB, schema + RLS + 觸發器)
-  - supabase/seed/001_initial_shops.sql (155KB, 164 店家 INSERT)
-  - assets/js/supabase/supabase.min.js (199KB, UMD SDK)
-  - assets/js/supabase/supabase-client.js (7.4KB, CRUD API)
-  - assets/js/supabase/supabase-ui.js (16KB, UI 模組)
-  - assets/js/supabase/shop-loader.js (6.4KB, 動態載入)
-- 月費: $0 (Supabase 免費 500MB + 50k 行/月)
-- 圖片加載: 134 OK + 1 修 (京巧手工湯包 403)
-- 地址稽核: 8 家 Maps 即時驗證, 3 家修正 (車路口 313→314 / 田媽媽 三光里→慈安里 / 開元𩵚魠 303→307)
+---
 
-## 開發指令
-```bash
-# 本地預覽
-npm start                # npx serve .  → http://localhost:3000
-start index.html         # 或直接用瀏覽器打開
+## 最新版本
 
-# 部署 (push to main 自動觸發 Vercel CI)
-git push origin main
-```
+| 項目 | 數值 |
+|---|---|
+| **版本** | **v9.2** (commit `96ee1f1`) |
+| commit date | 2026-06-29 |
+| 店家總數 | 164 |
+| 有驗證照片 | 135 (82%) |
+| 無照片（純文字卡） | 29 |
+| index.html 大小 | 654 KB |
+| 部署 URL | https://food-map-tw-dun.vercel.app |
+| 月費 | $0 (Vercel + Supabase free tier) |
 
-CI 在 `.github/workflows/deploy-vercel.yml` — push main → 自動 `vercel deploy --prod`。
+---
 
-## 架構 — 必讀
-- **單一資料源**：`index.html` 內嵌 164 張 shop-card（含 `data-*` 屬性）+ `window.SHOP_DATA_INITIAL` 完整陣列（供 detail sheet 渲染）
-- **零後端**：沒有 `api/`、沒有 `netlify/functions/`、沒有 `backend/`、沒有 Supabase。`assets/js/api.js` 不存在。
-- **零 `fetch` 請求**：篩選/計數/排序全讀 DOM 屬性。
-- **零 node_modules 開發依賴**：`package.json` 只有 `npm start` 跑 `npx serve`。
+## 技術棧
+
+| 層 | 技術 |
+|---|---|
+| 前端 | Vanilla JS (ES6 module)，無框架 |
+| 樣式 | 純 CSS (Cyberpunk Glassmorphism 霓虹青/紫)v9 |
+| 後端 | Supabase Cloud (Postgres + RLS + Auth) |
+| 部署 | Vercel (GitHub auto-deploy) |
+| Build-time env | `build-inject.js` (inject SUPABASE_URL + ANON_KEY) |
+| 測試 | Playwright (`tests/e2e.spec.js`) |
+
+**禁止**：alert/prompt/confirm、innerHTML（用 `el()` 工具函式）、寫 secret 進 source code、跑 vercel/gh/supabase CLI 互動指令。
+
+---
 
 ## 檔案地圖
+
 ```
-index.html              # 164 卡片 + SHOP_DATA_INITIAL + UI (~2400 行)
-vercel.json             # 純靜態部署 (uses @vercel/static)
-package.json            # 只有 npm start
-assets/
-├── css/                # main / components / filters / mobile / table
-└── js/
-    ├── app.js          # 主程式 (state / 渲染 / 事件) ~821 行
-    ├── filters.js      # 篩選邏輯 (讀 DOM data-* 屬性)
-    ├── sheet.js        # 店家 detail sheet
-    └── favorites.js    # localStorage 收藏 (~150 行)
-.github/workflows/deploy-vercel.yml
+美食遊覽/
+├── index.html              # 1777 行，含 164 張 shop-card + SHOP_DATA_INITIAL
+├── build-inject.js         # Vercel build-time 注入 env
+├── vercel.json             # buildCommand: node build-inject.js
+├── package.json            # 只有 npm start (npx serve)
+├── .github/workflows/deploy-vercel.yml
+├── .env.local              # 已被 .gitignore（勿 commit）
+├── assets/
+│   ├── css/
+│   │   ├── app.css         # 937 行，v9 Cyberpunk Glassmorphism (23KB)
+│   │   └── open-props.css  # 29KB
+│   └── js/
+│       ├── app.js          # 872 行，主程式
+│       ├── theme.js        # 主題切換 (dark/light/auto + localStorage)
+│       ├── filters.js      # 縣市/類型/時段篩選
+│       ├── sheet.js        # 店家詳情 modal
+│       ├── favorites.js    # localStorage 收藏
+│       └── supabase/
+│           ├── supabase.min.js      # 199KB UMD SDK
+│           ├── supabase-client.js   # CRUD API
+│           ├── supabase-ui.js       # 推薦表單 + 管理員審核
+│           ├── shop-loader.js       # 動態載入店家
+│           └── supabase-bootstrap.js # build-inject 產物 (window.SUPABASE_URL 等)
+├── supabase/
+│   ├── migrations/001_initial_schema.sql  # 8.9KB schema + RLS + 觸發器
+│   └── seed/001_initial_shops.sql         # 155KB 164 店家
+├── tests/
+│   ├── e2e.spec.js        # Playwright e2e 測試
+│   └── package.json
+└── data/
+    ├── TASKS.md            # 當前任務追蹤
+    ├── vision-result.json  # 視覺驗證結果
+    └── vision-batch3/      # 視覺驗證圖片
 ```
 
-## 慣例與坑
-- **DOM 必須用 `el()` 工具函式建立** (XSS-safe, `assets/js/app.js:17`) — 禁止 innerHTML
-- **iOS 滾動鎖** 用 `lockBodyScroll/unlockBodyScroll` (支援巢狀 sheet, `app.js:29-56`)
-- **店家資料** 改卡片要改兩處 (`index.html` 的 `data-*` + `window.SHOP_DATA_INITIAL` 對應物件) — 這是**唯一**會不一致的地方，沒有其他副本
-- **台南店家 50 筆** (`data-shop-idx="46"`~`"95"`): `data-line="tn-area"` (台南無捷運，用區域代號), `data-station` 為「區域/地標」格式
-- **彰化店家 68 筆** (`data-shop-idx="96"`~`"163"`): `data-line="tn-area"` (沿用), `data-station` 為「彰化市/鹿港/溪湖」格式
+---
 
-## 圖片系統 (v4.13 最終狀態)
-- **資料流**: SHOP_DATA_INITIAL[idx].photos (1-8 張 lh3 URL) → card-photo-strip (3 thumb + 1 more) → btn-album (完整相簿 modal)
-- **圖源**: Google Maps Place Photo lh3 URL (免費 CDN, 1024x768 or 408x306)
-- **過濾**: 不顯示 < 1KB 縮圖 (vision 看不到), 全部 > 30KB
-- **失敗標記**: `_no_photo: true` 純文字卡
-- **誠實**: 0 假圖被用戶看到 (全部 lh3 視覺 100% 對應正確店家)
+## 架構要點
 
-## 視覺驗證 SOP (穩定模式)
+- **資料源**：`index.html` 內嵌 164 張 shop-card (`data-*` 屬性) + `window.SHOP_DATA_INITIAL` 陣列（detail sheet 渲染用）
+- **Supabase 動態載入**：`shop-loader.js` 從 Supabase 拉店家，index.html 的 inline 資料是 fallback
+- **零 `fetch` 篩選**：縣市/類型/時段篩選全讀 DOM `data-*` 屬性
+- **DOM 工具**：`app.js:17` 的 `el()` 函式，XSS-safe，禁止 innerHTML
+- **iOS 滾動鎖**：`lockBodyScroll/unlockBodyScroll`，支援巢狀 sheet
+
+---
+
+## 開發指令
+
 ```bash
-# 1. agent-browser (Chrome 149) 開 Maps 搜尋
-browser_navigate 'https://www.google.com/maps/search/<店家名>+<縣市>'
+# 本地預覽
+npm start                # npx serve . → http://localhost:3000
 
-# 2. 抓 lh3 大圖 URL
-browser_console 'Array.from(document.querySelectorAll("img[src*=lh3]")).map(i=>i.src).filter(s=>!s.includes("=w32")&&!s.includes("=w48")&&!s.includes("=w80"))[0]'
+# 部署（push main 觸發 Vercel CI 自動 build）
+git push origin main
 
-# 3. 下載
-urllib.request.urlopen(url, headers={'User-Agent': 'Mozilla/5.0'})
-
-# 4. 視覺驗證 (per 圖 1 call)
-vision_analyze '<image_url>' '這是「<店家>」真實照片嗎? 1句。'
-
-# 5. 寫回 SHOP_DATA + 加 photo-strip
-python -c '...'
+# Playwright 測試
+cd tests && npx playwright test
 ```
 
-## 27 commits 完整方案 (v3.1 → v4.13)
-| Commit | 動作 | 結果 |
+---
+
+## Commit 歷史 (v5 → v9)
+
+| Commit | 版本 | 動作 |
 |---|---|---|
-| 1ad9a73 | v3.1 baseline | 96 卡片 0 圖 |
-| 1e112c8 | v3.2 v1 KH 救回 | 26 家 208 張 |
-| 05d7f32 | v3.3 TN 救回 | 21 家 168 張 |
-| eefbf9e | v3.4 INDETERMINATE 重試 | 30 家 |
-| 3626f9e | v3.5 擴大到 164 | + 彰化 68 |
-| 02331f4 | v3.6 收回錯誤 | 只留 KH 45 |
-| 7e2d4c6 | v3.7 TN 4 家 SOP | + 4 |
-| 2bedb6c | v3.8 TN 11 家 SOP | + 11 |
-| 3b1e8e0 | v3.9 TN 6 家 SOP | + 6 |
-| ec21071 | v4.0 TN 11 家 SOP | + 11 |
-| a944cdc | v4.1 TN 48 銀波 | + 1 |
-| 4064c22 | v4.2 CH SOP 通 | + 3 |
-| 3133744 | v4.3 CH 5 車路口 | + 1 |
-| 8790b56 | v4.4 CH 6 王罔 | + 1 |
-| 62bb9f7 | v4.5 CH 8-12 | + 5 |
-| a0e4a3f | v4.6 CH 13 老朱 | + 1 |
-| 109b81e | v4.7 CH 19-20 十二段/不時不食 | + 2 |
-| a05bda6 | v4.8 CH 23-24 黑公雞/阿枝 | + 2 |
-| f9d29a8 | v4.9 CH 28-29 咖啡烟/Page 6 | + 2 |
-| 2db0998 | v4.10 CH 30 Do Nothing | + 1 |
-| fb4d0ff | v4.11 CH 33 木瓜牛乳 | + 1 |
-| 1309836 | v4.12 CH 34-67 (其他 agent) | + 30 |
-| 723c8d8 | v4.12 TN 3 家 (西羅殿/阿安/蓮霧腳) | + 3 |
-| f25a415 | v4.13 TN 4 家 (府城/大丸/時時香/連得堂) | + 4 |
+| 38bc9cf | v5.11 | build-inject.js (build-time env inject) |
+| 44b95cf | v6.14 | UI 視覺差異加大 (圓角/漸變/邊框/星星閃爍) |
+| a046b3e | v6.13 | UI 升級 (借鑑 react-bits 設計) |
+| 7480641 | v6.12 | web 驗證 134/135 (99%) 完成 |
+| ca6ce40 | v7.0 | 重作整套 UI (Open Props 設計系統) |
+| b31514d | v7.0.4 | Mobile 優化 (手機友善) |
+| b1159c7 | v7.0.7 | 補 335 個 img alt + aria-label |
+| ea698d8 | v8.0 | 極簡現代重設計 (1900→350 行 CSS) |
+| 16f2ad5 | v9.0 | 科幻未來風重設計 (Cyberpunk Glassmorphism) |
+| c05c5ce | v9.1 | agent 修補 + 啟動測試 server |
+| 96ee1f1 | v9.2 | UI 邏輯驗證 + 隱藏 v7 殘留 |
 
-## 沒有這些東西
-- ❌ 後端 API (Vercel / Netlify Functions)
-- ❌ 資料庫 (Supabase / KV)
-- ❌ 圖片爬蟲 (Playwright 依賴已移除)
-- ❌ 單元/E2E 測試
-- ❌ `.env.example` / 環境變數
+---
+
+## 圖片系統
+
+- **圖源**：Google Maps Place Photo lh3 URL（免費 CDN，1024×768 或 408×306）
+- **資料流**：`SHOP_DATA_INITIAL[idx].photos` → card-photo-strip（3 縮圖 + +N）→ btn-album（完整相簿 modal）
+- **失敗標記**：`_no_photo: true` → 純文字卡
+- **29 家無照片**：彰化 18 家（Maps auto-routing 抓不到）+ 其他 11 家
+
+---
+
+## 已知坑
+
+- ❌ **lh3 URL 會過期**：Maps auto-routing 變化導致 403，需重新抓圖
+- ❌ **彰化 18 家無照片**：Maps 對小型在地店 auto-routing 失敗，待 IG/FB 救援
+- ❌ **.env.local 在 git 历史**：已加進 .gitignore，但历史 commit 仍有（需要 `git filter-branch` 清理）
+- ❌ **v9.3 任務未完成**：data/TASKS.md 的 5 項任務全部 open
+- ✅ agent-browser 對 Maps 不被擋（Playwright 會被擋）
+- ✅ Maps 搜尋「店名 + 縣市」直接進 place page
+
+---
+
+## 沒有的東西（勿找）
+
+- ❌ 後端 API server（Vercel Functions / Express 等）
+- ❌ 圖片爬蟲腳本（已移除）
+- ❌ `.vibecoding/` 目錄（已刪除，內容整合進本檔）
 - ❌ `docs/`、`reports/`、`scripts/` 目錄
-
-## 月費 = $0
-無後端、無資料庫、無第三方付費服務。圖片走 Google 免費 CDN。部署 Vercel 免費額度內。
-
-## 提交策略
-- 看到 `index.html` 改 50+ 行 → 新增/修改店家卡片
-- 修改店家時：檢查 `data-*` 屬性 + `SHOP_DATA_INITIAL` 對應物件是否一致
-
-## SOP 教訓 (v4.13 後)
-- ✅ agent-browser 0.27.3 對 Maps 不被擋 (Playwright 失敗)
-- ✅ 用 lh3 大圖 (408+ 或 512+ 或 1200+) 跳過縮圖
-- ✅ Maps 搜尋「店名 + 縣市」自動進 place page, 抓 lh3 gallery 圖
-- ✅ 視覺驗證每家 1 vision call (確認招牌 + 業務相符)
-- ❌ Maps 對台灣小型在地店家 auto-routing 嚴重 (5-15% 給錯店)
-- ❌ Wikipedia cover_photo 100% 假 (用 commons 通用食物照, 不能用)
-- ❌ camofox Firefox 缺 binary (失敗)
-- ❌ 6KB 以下 lh3 太小 vision 看不到 (SKIP)

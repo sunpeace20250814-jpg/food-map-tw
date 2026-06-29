@@ -2,7 +2,7 @@
   "name": "food-map-tw-e2e",
   "version": "1.0.0",
   "private": true,
-  "description": "Playwright e2e tests for 美食遊覽 v5.13",
+  "description": "Playwright e2e tests for 美食遊覽 v9.2 (7 個互動點覆蓋)",
   "scripts": {
     "test": "playwright test",
     "test:headed": "playwright test --headed",

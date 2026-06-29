@@ -46,6 +46,9 @@ function applyFilter() {
     // === 更新 quick-bar 計數(動態從卡片 DOM 統計) ===
     updateQuickBarCounts();
 
+    // === 更新 header statTotal 等 (applyFilter 漏了,修補)
+    if (typeof updateHeroStats === 'function') updateHeroStats();
+
     // 空狀態
     const empty = document.getElementById('emptyState');
     const skeleton = document.getElementById('skeletonList');
