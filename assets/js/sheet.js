@@ -118,6 +118,7 @@ function renderSheetContent(shop, shopIdx) {
             img.src = cleanUrl + '=w408-h306-k-no';
             img.alt = shop.name + ' 照片';
             img.loading = 'lazy';
+            img.decoding = 'async';
             img.onerror = () => {
                 thumb.classList.add('img-broken');
                 thumb.textContent = shop.emoji || '🍜';
