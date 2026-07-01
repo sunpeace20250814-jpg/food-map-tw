@@ -104,12 +104,16 @@ function renderCard(s, idx) {
     body.appendChild(info);
     article.appendChild(body);
 
-    // 點擊卡片打開 sheet
+    // 點擊卡片打開 sheet（由 sheet.js 統一處理）
     article.addEventListener('click', (e) => {
         if (e.target.closest('.card-photo-thumb')) {
+            e.stopPropagation();
             openAlbum(s.id || idx);
-        } else {
-            showShopSheet(s);
+            return;
+        }
+        if (typeof window.openShopSheet === 'function') {
+            const targetIdx = (typeof idx === 'number') ? idx : (s.id != null ? s.id : idx);
+            window.openShopSheet(targetIdx);
         }
     });
 
@@ -125,92 +129,6 @@ function computeStatus(s) {
     if (t.includes('營業至')) return { cls: 'open', label: t.replace('營業：營業至 ', '至 ') };
     if (t.includes('下次開門')) return { cls: 'closed', label: t.replace('營業：下次開門 ', '開門 ') };
     return { cls: 'open', label: '營業中' };
-}
-
-/**
- * 顯示店家詳細 sheet
- */
-function showShopSheet(s) {
-    const old = document.getElementById('shopSheet');
-    if (old) old.remove();
-    const oldOverlay = document.getElementById('shopSheetOverlay');
-    if (oldOverlay) oldOverlay.remove();
-
-    const overlay = document.createElement('div');
-    overlay.id = 'shopSheetOverlay';
-    overlay.className = 'sheet-overlay';
-    overlay.onclick = closeShopSheet;
-
-    const sheet = document.createElement('div');
-    sheet.id = 'shopSheet';
-    sheet.className = 'sheet';
-
-    const heroUrl = (s.photos && s.photos[0]) ? s.photos[0].replace(/=w[\d-]+-h[\d-]+-k-no.*$/, '') + '=w800-h450-k-no' : '';
-    let heroHTML = '';
-    if (heroUrl) {
-        heroHTML = '<div class="sheet-hero"><img src="' + heroUrl + '" alt="' + escapeHtml(s.name) + ' 封面" loading="lazy"></div>';
-    }
-
-    const ratingStr = s.rating ? (typeof s.rating === 'number' ? s.rating.toFixed(1) : String(s.rating).split('(')[0]) : '';
-    sheet.innerHTML =
-        '<div class="sheet-handle-row"><div class="sheet-handle"></div></div>' +
-        '<button class="sheet-close" onclick="closeShopSheet()" aria-label="關閉">✕</button>' +
-        heroHTML +
-        '<div class="sheet-content">' +
-            '<div class="sheet-title">' + escapeHtml(s.name || '') + '</div>' +
-            '<div class="sheet-meta">' +
-                (s.mcat ? '<span class="sheet-meta-item">' + escapeHtml(s.mcat) + '</span>' : '') +
-                (s.station ? '<span class="sheet-meta-item">📍 ' + escapeHtml(s.station) + '</span>' : '') +
-                (ratingStr ? '<span class="sheet-meta-item">★ ' + ratingStr + '</span>' : '') +
-                (s.price_bar ? '<span class="sheet-meta-item">' + escapeHtml(s.price_bar) + '</span>' : '') +
-            '</div>' +
-            '<div class="sheet-section">' +
-                '<div class="sheet-section-title">地址</div>' +
-                '<div>' + escapeHtml(s.addr || s.address || '') + '</div>' +
-            '</div>' +
-            (s.time ? '<div class="sheet-section"><div class="sheet-section-title">營業時間</div><div>' + escapeHtml(s.time) + '</div></div>' : '') +
-            '<div class="sheet-actions">' +
-                '<a href="' + escapeAttr(s.gmaps_url || '#') + '" target="_blank" rel="noopener" class="sheet-btn">📍 開啟地圖</a>' +
-                '<button class="sheet-btn secondary" data-share-name="' + escapeAttr(s.name) + '" data-share-url="' + escapeAttr(s.gmaps_url || '') + '">↗ 分享</button>' +
-            '</div>' +
-        '</div>';
-
-    document.body.appendChild(overlay);
-    document.body.appendChild(sheet);
-    requestAnimationFrame(() => {
-        overlay.classList.add('show');
-        sheet.classList.add('show');
-    });
-    document.body.style.overflow = 'hidden';
-
-    // 綁定分享按鈕
-    const shareBtn = sheet.querySelector('[data-share-name]');
-    if (shareBtn) {
-        shareBtn.onclick = () => {
-            const name = shareBtn.dataset.shareName;
-            const url = shareBtn.dataset.shareUrl;
-            const text = name + (url ? ' - ' + url : '');
-            if (navigator.share) {
-                navigator.share({ title: name, text: text, url: window.location.href }).catch(() => {});
-            } else if (navigator.clipboard) {
-                navigator.clipboard.writeText(text).then(() => showToast('已複製')).catch(() => showToast('無法複製'));
-            } else {
-                showToast('無法複製');
-            }
-        };
-    }
-}
-
-function closeShopSheet() {
-    const sheet = document.getElementById('shopSheet');
-    const overlay = document.getElementById('shopSheetOverlay');
-    if (sheet) sheet.classList.remove('show');
-    if (overlay) overlay.classList.remove('show');
-    document.body.style.overflow = '';
-    setTimeout(() => {
-        if (sheet) sheet.remove();
-        if (overlay) overlay.remove();
-    }, 300);
 }
 
 function escapeHtml(s) {
@@ -285,5 +203,4 @@ window.addEventListener('shop-data-ready', initShopLoader);
     }, { passive: true });
 })();
 
-// 暴露到 window 給 inline onclick 用
-window.closeShopSheet = closeShopSheet;
+// sheet.js 為 sheet 渲染的唯一來源；closeShopSheet 由 sheet.js 暴露到 window

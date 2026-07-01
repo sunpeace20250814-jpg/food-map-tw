@@ -51,3 +51,10 @@ fix_duplicates.cjs
 verify-v1-photos.cjs
 verify-v2-photos.mjs
 data/noworneverev_test.json
+
+# Playwright 輸出 (測試套件本身有自己的 .gitignore)
+tests/tests/
+test-output/
+
+# tmp / 鎖定檔
+tmp-server-*.log
