@@ -9,17 +9,20 @@ node_modules/
 *.log
 npm-debug.log*
 
-# 編輯器
+# 編輯器 / OS
 .vscode/
 .idea/
 *.swp
 .DS_Store
+Thumbs.db
 
 # 測試
 .tmp_*.js
 .tmp_*.py
 test-output/
 coverage/
+# Playwright nested output (tests/ 自己的 .gitignore 也擋一份)
+tests/tests/
 
 # 備份
 *.bak
@@ -27,34 +30,10 @@ coverage/
 index.html.bak
 original_full.html
 
-# 開發工具狀態
+# Agent / dev tool state
 .opencode/
 .swarm/
 .omo/
-.vscode/
-.idea/
-*.swp
-.DS_Store
-Thumbs.db
-
-# 一次性 / 實驗性腳本
-debug-photos.cjs
-test_noworneverev.py
-ntl_32780.toml
-新增 文字文件.txt
-v2/ch019_ch066_urls.txt
-audit_photos.cjs
-extract-v1-photos.cjs
-finalize.cjs
-fix-ch-photos.cjs
-fix_duplicates.cjs
-verify-v1-photos.cjs
-verify-v2-photos.mjs
-data/noworneverev_test.json
-
-# Playwright 輸出 (測試套件本身有自己的 .gitignore)
-tests/tests/
-test-output/
 
 # tmp / 鎖定檔
 tmp-server-*.log

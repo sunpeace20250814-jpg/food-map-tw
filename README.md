@@ -50,34 +50,59 @@ bash deploy-all.sh
 ```
 美食遊覽/
 ├── README.md                     (本檔)
-├── deploy-all.sh                 (Linux/Mac 一鍵部署)
-├── deploy-all.ps1                (Windows PowerShell 一鍵部署)
-├── VERCEL_DEPLOY.md              (Vercel 詳細指南)
-├── AGENTS.md                     (給未來 agent)
-├── PLAN.md                       (完整方案記錄)
-├── .env.example                  (Supabase URL/KEY 範例)
-├── index.html                    (單頁應用)
-├── vercel.json                   (純靜態部署)
-├── assets/js/
-│   ├── app.js                    (主程式)
-│   ├── filters.js                 (篩選)
-│   ├── sheet.js                   (店家 detail sheet)
-│   ├── favorites.js               (localStorage 收藏)
-│   └── supabase/
-│       ├── supabase.min.js        (199KB, Supabase SDK)
-│       ├── supabase-client.js     (7.4KB, CRUD API)
-│       ├── supabase-ui.js         (16KB, UI 模組)
-│       └── shop-loader.js         (6.4KB, 動態載入)
-└── supabase/
-    ├── config.toml               (15.5KB, supabase init)
-    ├── DEPLOY.md                 (Supabase 詳細指南)
-    ├── migrations/001_initial_schema.sql    (8.9KB)
-    ├── seed/001_initial_shops.sql           (155KB, 164 店家)
-    └── scripts/
-        ├── deploy_cloud.sh       (只跑 Supabase, 不含 Vercel)
-        ├── deploy_cloud.bat      (Windows 版)
-        ├── get_vercel_token.sh   (Vercel Token + GitHub Secrets)
-        └── gen_types.sh          (生成 TS types)
+├── AGENTS.md                     (給未來 agent 速查)
+├── CHANGELOG.md                  (版本歷史)
+├── SUNPE_DEPLOY.md               (Supabase 部署詳細指南)
+├── VERCEL_DEPLOY.md              (Vercel 部署詳細指南)
+├── deploy-all.sh / .ps1          (一鍵部署: Supabase + Vercel)
+├── deploy-help.sh                (部署說明輸出)
+├── build-inject.js               (Vercel build-time env 注入)
+├── vercel.json                   (純靜態部署 config)
+├── package.json                  (npm start → npx serve .)
+├── .env.example                  (Supabase URL/KEY 範本)
+├── index.html                    (單頁應用, 含 164 張 shop-card)
+├── assets/
+│   ├── css/
+│   │   ├── app.css               (~1100 行, v10.1 Cyberpunk + sheet styles)
+│   │   └── open-props.css        (設計 token 庫)
+│   └── js/
+│       ├── app.js                (主程式: tab / filter / theme glue)
+│       ├── sheet.js              (店家 detail modal, v10.1 唯一 sheet 渲染)
+│       ├── filters.js            (縣市/類型/時段篩選)
+│       ├── favorites.js          (localStorage 收藏)
+│       ├── theme.js              (dark/light/auto 主題切換)
+│       └── supabase/
+│           ├── supabase.min.js       (204KB, Supabase JS SDK, vendored)
+│           ├── supabase-client.js    (CRUD API)
+│           ├── supabase-ui.js        (推薦表單 + 管理員審核 UI)
+│           ├── shop-loader.js        (動態載入店家 + 點擊委派 sheet.js)
+│           └── supabase-bootstrap.js (build-inject 產物)
+├── supabase/
+│   ├── config.toml               (supabase init)
+│   ├── DEPLOY.md                 (Supabase 部署指南)
+│   ├── migrations/001_initial_schema.sql  (3 表 + RLS + 觸發器)
+│   ├── seed/001_initial_shops.sql         (164 店家種子)
+│   └── scripts/
+│       ├── deploy_cloud.sh / .bat        (只跑 Supabase)
+│       ├── get_vercel_token.sh           (Vercel Token + GitHub Secrets)
+│       └── gen_types.sh                  (生成 TS types)
+├── tests/
+│   ├── e2e.spec.js               (Playwright e2e, 6 個互動測試)
+│   ├── hover.spec.js             (hover 互動測試)
+│   ├── mobile.spec.js            (mobile viewport 測試)
+│   ├── full_test.py              (10 點手動 e2e, Python Playwright)
+│   ├── playwright.config.js
+│   └── package.json
+└── data/
+    ├── README.md                 (資料維護工作流)
+    ├── TASKS.md                  (後續 backlog)
+    ├── reviews.json              (顧客評論, v10.1, 目前 `{}`)
+    ├── template-new-city.csv     (新增縣市 CSV 範本)
+    ├── validate.py               (CSV schema + Maps URL auto-fix)
+    ├── vision-verify.py          (vision 取樣驗證)
+    ├── vision-refetch.py         (重抓低信心照片)
+    ├── vision-result.json        (vision 驗證輸出)
+    └── vision-batch3/            (vision 取樣圖, 30 JPG + manifest)
 ```
 
 ---
@@ -121,12 +146,13 @@ bash deploy-all.sh
 
 ---
 
-## 📊 狀態 (2026-06-24 v5.1)
+## 📊 狀態 (2026-07-01 v10.1)
 
+- 高雄 46 + 台南 50 + 彰化 68 = **164 家宵夜**
 - 135/164 (82%) 視覺驗證 100% 對應正確店家照片
-- 3 個地址修正 (稽核 8 家)
-- 31 個 commits 完整方案
-- 部署包 ~520KB (前端) + 200KB (Supabase SDK)
+- Sheet v10.1 完整版：週一~週日、照片縮圖、評論、收藏、訂位
+- 部署包 ~654KB (index.html) + 200KB (Supabase SDK)
+- 部署 URL: https://food-map-tw-dun.vercel.app
 
 ---
 

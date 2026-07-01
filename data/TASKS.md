@@ -11,14 +11,13 @@
 ### 高優先
 - [ ] Playwright 7 點互動測試正式納入 CI (目前 tests/e2e.spec.js 6 點, 缺 album/fab)
 - [ ] vision 30 家取樣 (高雄 10 + 台南 10 + 彰化 10)
-- [ ] 低信心 3 家重抓 lh3 圖 (石精臼蚵仔煎/大丸家/Daisy House)
+- [ ] 低信心 3 家重抓 lh3 圖 (石精臼蚵仔煎/大丸家/Daisy House) → `data/vision-refetch.py`
 
 ### 中優先
 - [ ] reviews.json 內容 (目前 `{}`, 等店家評論資料整理)
-- [ ] 移除 `data/agents/` 兩個 dev script (aesthetic_auditor.py / code_supervisor.py)
-- [ ] 移除 `data/validate.py / vision_run.py / vision-verify.py / vision-refetch.py` (vision 流程已結束)
 
 ### 低優先 (nice-to-have)
 - [ ] 圖片 lazy-load + intersection observer
 - [ ] sheet 開合動畫 (目前 instant)
 - [ ] offline PWA support
+- [ ] **CSS bug**: `.album-modal` / `.album-grid` / `.album-header` / `.album-title` / `.album-close` 在 CSS 沒規則（HTML/JS 都有用），點卡片縮圖開相簿會無樣式。需補 CSS 或刪除整個 album-modal 功能。

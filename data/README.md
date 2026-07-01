@@ -45,11 +45,14 @@ vercel deploy --prod --token $TOK --yes
 ## 檔案結構
 ```
 data/
-├── shops-schema.json    # JSON schema 驗證
+├── shops-schema.json     # JSON schema 驗證
 ├── template-new-city.csv # CSV 範本
-├── validate.py          # 驗證 + 自動修 URL + 合併
-├── vision-verify.py     # 視覺驗證
-└── vision-result.json   # 驗證結果
+├── validate.py           # 驗證 + 自動修 URL + 合併
+├── vision-verify.py      # 視覺驗證 (取樣)
+├── vision-refetch.py     # 重抓低信心店家 lh3 圖
+├── vision-result.json    # 驗證結果
+├── reviews.json          # 顧客評論 (key = 店家名)
+└── vision-batch3/        # batch3 取樣圖 (30 JPG)
 ```
 
 ## 規則

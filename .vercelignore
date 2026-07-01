@@ -20,23 +20,14 @@ v2/node_modules/
 
 # 文件 / 計畫 (不部署)
 docs/
-PLAN.md
 AGENTS.md
-README.md  # 部署不需要
-新增 文字文件.txt
+CHANGELOG.md
+README.md
 
-# 一次性 / 實驗性腳本
-audit_photos.cjs
-debug-photos.cjs
-extract-v1-photos.cjs
-finalize.cjs
-fix-ch-photos.cjs
-fix_duplicates.cjs
-verify-v1-photos.cjs
-verify-v2-photos.mjs
-test_noworneverev.py
-ntl_32780.toml
+# data/ 整體不部署 (dev 用), 除了 runtime 需要的 reviews.json
 data/
+data/**
+!data/reviews.json
 
 # 隱藏檔
 .*

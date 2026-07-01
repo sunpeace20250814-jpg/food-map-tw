@@ -2,6 +2,16 @@
 
 最新版本在最上面。
 
+## v10.x (2026-07-01)
+
+| 版本 | 日期 | 類型 | 改動摘要 |
+|---|---|---|---|
+| **v10.1** | 2026-07-01 | feat | sheet 統一渲染（移除 shop-loader.js 重複），完整 sheet 含週一~週日 / 照片縮圖 / 顧客評論 / 收藏 toggle / 線上訂位。Supabase anon key 換新 sb_publishable_* 格式。AGENTS.md 同步更新 |
+| v10.1 | 2026-07-01 | chore | 刪 11 個歷史截圖/垃圾二進位、移除 1 個 legacy tmp_imgs JPG、清理 .gitignore 死 pattern、shop-loader.js dead code 移除 |
+| v10.0 | 2026-06-29 | docs | 文檔整合 + 篩選 bug 修復 |
+| v10.0 | 2026-06-29 | chore | cleanup（刪 .vibecoding/ + v2/ + 修 mobile.spec.js URL） |
+| v10.0 | 2026-06-29 | fix | e2e test 6: visible cards 計數（不依賴 #statTotal） |
+
 ## v9.x (2026-06-29)
 
 | 版本 | 日期 | 類型 | 改動摘要 |

@@ -166,7 +166,7 @@ function initShopLoader() {
         const card = renderCard(s, idx);
         listEl.appendChild(card);
     });
-    if (window.__DEBUG__) console.log('[v8] Rendered', window.SHOP_DATA.length, 'shops');
+    if (window.__DEBUG__) console.log('[v10.1] Rendered', window.SHOP_DATA.length, 'shops');
 }
 
 // 等待 DOM ready + Supabase bootstrap

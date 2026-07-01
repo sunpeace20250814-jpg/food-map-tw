@@ -84,11 +84,15 @@
     │   ├── full_test.py       # 10-point manual e2e (Python Playwright)
     │   └── package.json
     └── data/
+        ├── README.md           # 資料維護工作流
         ├── TASKS.md            # 後續 backlog
         ├── reviews.json        # 顧客評論 (key = 店家名, 目前 `{}`)
+        ├── template-new-city.csv # CSV 範本
+        ├── validate.py         # 新縣市 schema + URL auto-fix
+        ├── vision-verify.py    # vision 取樣驗證
+        ├── vision-refetch.py   # 重抓低信心店家 lh3
         ├── vision-result.json  # 視覺驗證結果
-        ├── vision-batch3/      # 視覺驗證圖片 (30 JPGs, batch3)
-        └── agents/             # 開發期 aesthetic_auditor / code_supervisor (待移除)
+        └── vision-batch3/      # 視覺驗證圖片 (30 JPGs + manifest)
 ```
 
 ---
@@ -156,8 +160,8 @@ cd tests && npx playwright test
 - ❌ **lh3 URL 會過期**：Maps auto-routing 變化導致 403，需重新抓圖
 - ❌ **彰化 18 家無照片**：Maps 對小型在地店 auto-routing 失敗，待 IG/FB 救援
 - ❌ **.env.local 在 git 历史**：已加進 .gitignore，但历史 commit 仍有（需要 `git filter-branch` 清理）
-- ❌ **`tmp_imgs/` 殘留**：歷史圖檔目錄，現在 gitignore 已加強防護，但已 tracked 的需手動清
-- ❌ **`data/agents/` 殘留**：開發期的 aesthetic_auditor / code_supervisor 待移除
+- ❌ **`tmp_imgs/` 殘留**：歷史圖檔目錄，v10.1 已 git rm，但若新加圖檔需注意
+- ❌ **CSS bug**: `.album-modal` 等 class 在 CSS 缺規則（HTML/JS 都有用），點卡片縮圖開相簿會無樣式（v10.1 發現）
 - ✅ agent-browser 對 Maps 不被擋（Playwright 會被擋）
 - ✅ Maps 搜尋「店名 + 縣市」直接進 place page
 - ✅ **build-inject.js 會自動覆寫** `assets/js/supabase/supabase-bootstrap.js` 和 `index.html` 的 Supabase meta tag（每次 deploy / 本地 build 都會重生，不要手改這兩處）
