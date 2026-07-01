@@ -1,13 +1,16 @@
 // @ts-check
-// 美食遊覽 v9.2 — Playwright e2e
+// 美食遊覽 v10.8 — Playwright e2e
 // 目標: https://food-map-tw-dun.vercel.app
 //
-// 7 個測試覆蓋核心 user flows:
+// 10 個測試覆蓋核心 user flows:
 //   1. 首頁可訪問且看到主標題
-//   2-4. 三個城市切換 + 店家數量正確
+//   2-4. 三個城市切換 + visible cards 計數
 //   5. 主題切換 (dark → light)
 //   6. 篩選晶片（點小吃/夜市 → 店家變少）
 //   7. 店家詳情 sheet（點卡片 → sheet 彈出 + 有標題）
+//   8. FAB 滾動出現 + 點擊回頂
+//   9. 收藏 toggle + localStorage 驗證
+//  10. 縮圖 → album modal → 點圖 → viewer
 
 const { test, expect } = require('@playwright/test');
 
@@ -44,7 +47,7 @@ async function switchCityAndCount(page, cityText, cityCode, expected) {
   return n;
 }
 
-test.describe('美食遊覽 v10.x — 核心 e2e', () => {
+test.describe('美食遊覽 v10.x — 核心 e2e (10 tests)', () => {
 
   test('1. 首頁載入 + 看到「宵夜地圖」標題', async ({ page }) => {
     const response = await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -135,5 +138,76 @@ test.describe('美食遊覽 v10.x — 核心 e2e', () => {
     const title = page.locator('#shopSheet .sheet-title');
     await expect(title).toBeVisible({ timeout: 5_000 });
     await expect(title).not.toHaveText('');
+  });
+
+  test('8. FAB 滾動後出現 → 點擊回頂', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    // 初始 FAB 不該有 .show
+    const fab = page.locator('.fab');
+    await expect(fab).toBeAttached();
+    await expect(fab).not.toHaveClass(/show/);
+
+    // 滾動 500px → FAB 應出現
+    await page.evaluate(() => window.scrollTo(0, 500));
+    await page.waitForTimeout(300);
+    await expect(fab).toHaveClass(/show/, { timeout: 3_000 });
+
+    // 點 FAB → 應回頂
+    await fab.click();
+    await page.waitForTimeout(500);
+    const y = await page.evaluate(() => window.scrollY);
+    expect(y, 'FAB 點擊後 scrollY 應為 0').toBeLessThan(50);
+  });
+
+  test('9. 收藏 toggle → localStorage 更新', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    // 等第一張卡片
+    const firstCard = page.locator('.shop-card').first();
+    await expect(firstCard).toBeVisible({ timeout: 10_000 });
+
+    // 點開 sheet
+    await firstCard.click();
+    await expect(page.locator('#shopSheet')).toHaveClass(/show/, { timeout: 10_000 });
+
+    // 找收藏按鈕
+    const favBtn = page.locator('[data-action="toggle-fav"]').first();
+    await expect(favBtn).toBeAttached();
+    const initialLabel = await favBtn.textContent();
+
+    // 點 toggle
+    await favBtn.click();
+    await page.waitForTimeout(200);
+    const newLabel = await favBtn.textContent();
+    expect(initialLabel, '收藏後 label 應變').not.toBe(newLabel);
+
+    // 驗證 localStorage
+    const favs = await page.evaluate(() => localStorage.getItem('favorites_v1'));
+    expect(favs, 'localStorage 應有 favorites key').not.toBeNull();
+    const arr = JSON.parse(favs);
+    expect(Array.isArray(arr), '應為陣列').toBe(true);
+    expect(arr.length, '收藏數應 ≥ 1').toBeGreaterThanOrEqual(1);
+  });
+
+  test('10. 點縮圖 → album modal 開 → 點圖 → viewer', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' });
+    const firstCard = page.locator('.shop-card').first();
+    await expect(firstCard).toBeVisible({ timeout: 10_000 });
+
+    // 點卡片上的第一個縮圖（如果有）
+    const thumb = firstCard.locator('.card-photo-thumb').first();
+    const hasThumb = await thumb.count() > 0;
+    if (!hasThumb) {
+      test.skip(); // 純文字卡，無 album 可測
+      return;
+    }
+    await thumb.click();
+    // album modal 應開
+    await expect(page.locator('#albumModal')).toHaveClass(/show/, { timeout: 5_000 });
+    // 點第一張 grid 圖
+    const gridImg = page.locator('#albumGrid img').first();
+    await expect(gridImg).toBeVisible({ timeout: 5_000 });
+    await gridImg.click();
+    // viewer 應開
+    await expect(page.locator('#albumViewer')).toHaveClass(/show/, { timeout: 5_000 });
   });
 });
