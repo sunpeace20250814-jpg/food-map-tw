@@ -1,0 +1,27 @@
+{
+    "name": "宵夜地圖",
+    "short_name": "宵夜",
+    "description": "高雄 + 台南 + 彰化 164 家精選深夜美食",
+    "start_url": "./",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#000010",
+    "theme_color": "#000010",
+    "lang": "zh-TW",
+    "icons": [
+        {
+            "src": "assets/img/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "assets/img/favicon-32.png",
+            "sizes": "32x32",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ],
+    "categories": ["food", "lifestyle"]
+}
