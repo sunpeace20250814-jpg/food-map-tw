@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /privacy-policy.html
+Disallow: /terms-of-service.html
+
+Sitemap: https://food-map-tw-dun.vercel.app/sitemap.xml

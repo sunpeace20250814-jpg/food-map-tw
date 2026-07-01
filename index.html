@@ -33,8 +33,27 @@
     <meta name="twitter:title" content="🌙 2026 宵夜地圖 - 164 家精選">
     <meta name="twitter:description" content="高雄 + 台南 + 彰化 164 家宵夜精選">
     <meta name="twitter:image" content="https://food-map-tw-dun.vercel.app/og-image.png">
+
+    <!-- JSON-LD: ItemList of Restaurants for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "2026 宵夜地圖",
+      "description": "高雄 46 + 台南 50 + 彰化 68 共 164 家精選深夜美食",
+      "url": "https://food-map-tw-dun.vercel.app/",
+      "numberOfItems": 164,
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "高雄宵夜", "url": "https://food-map-tw-dun.vercel.app/?city=kh"},
+        {"@type": "ListItem", "position": 2, "name": "台南宵夜", "url": "https://food-map-tw-dun.vercel.app/?city=tn"},
+        {"@type": "ListItem", "position": 3, "name": "彰化宵夜", "url": "https://food-map-tw-dun.vercel.app/?city=ch"}
+      ]
+    }
+    </script>
 </head>
 <body>
+<a href="#shopList" class="skip-link">跳至主要內容</a>
+
 <!-- ========== Header ========== -->
 <!-- ========== Sticky App Header ========== -->
 <header class="app-header" id="appHeader">
