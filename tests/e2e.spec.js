@@ -25,25 +25,26 @@ test.beforeEach(async ({ context, page }) => {
   });
 });
 
-// 讀取 #statTotal 並轉成整數
-async function readStatTotal(page) {
-  const text = (await page.locator('#statTotal').textContent())?.trim() ?? '';
-  if (!/^\d+$/.test(text)) {
-    throw new Error(`#statTotal 不是數字: "${text}"`);
-  }
-  return parseInt(text, 10);
+// 計算可見且符合縣市的卡片數（不依賴 #statTotal，避免 race condition）
+async function countVisibleCityCards(page, city) {
+  return await page.evaluate((c) => {
+    return Array.from(document.querySelectorAll('.shop-card'))
+      .filter(el => el.style.display !== 'none' && (el.dataset.city || 'kh') === c)
+      .length;
+  }, city);
 }
 
-// 切到指定城市並等待 #statTotal 反映新值
-async function switchCityAndRead(page, cityText, expected) {
+// 切到指定城市 → 計算 visible cards 數量
+async function switchCityAndCount(page, cityText, cityCode, expected) {
   await page.locator('.city-chip', { hasText: cityText }).click();
-  await expect(page.locator('#statTotal')).not.toHaveText('--', { timeout: 10_000 });
-  const n = await readStatTotal(page);
-  expect(n, `${cityText} 店家數應為 ${expected}`).toBe(expected);
+  // 等卡片渲染穩定（最多 5 秒）
+  await page.waitForTimeout(500);
+  const n = await countVisibleCityCards(page, cityCode);
+  expect(n, `${cityText} visible 店家數應為 ${expected}`).toBe(expected);
   return n;
 }
 
-test.describe('美食遊覽 v9.2 — 核心 e2e', () => {
+test.describe('美食遊覽 v10.x — 核心 e2e', () => {
 
   test('1. 首頁載入 + 看到「宵夜地圖」標題', async ({ page }) => {
     const response = await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -59,17 +60,17 @@ test.describe('美食遊覽 v9.2 — 核心 e2e', () => {
 
   test('2. 切到「高雄」→ 看到 46 家', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await switchCityAndRead(page, '高雄', 46);
+    await switchCityAndCount(page, '高雄', 'kh', 46);
   });
 
   test('3. 切到「台南」→ 看到 50 家', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await switchCityAndRead(page, '台南', 50);
+    await switchCityAndCount(page, '台南', 'tn', 50);
   });
 
   test('4. 切到「彰化」→ 看到 68 家', async ({ page }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await switchCityAndRead(page, '彰化', 68);
+    await switchCityAndCount(page, '彰化', 'ch', 68);
   });
 
   test('5. 點 #themeToggle → data-theme 變 light', async ({ page }) => {

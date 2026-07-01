@@ -1,4 +1,4 @@
-﻿name: Deploy to Vercel
+﻿name: CI + Deploy to Vercel
 
 on:
   push:
@@ -6,8 +6,38 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 啟動 dev server
+        run: |
+          npm install -g serve
+          serve -l 3000 . &
+          sleep 3
+
+      - name: 安裝 Playwright
+        working-directory: tests
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: 跑 e2e 測試
+        working-directory: tests
+        run: npx playwright test --reporter=list
+
+      - name: 上傳失敗截圖
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: tests/playwright-report/
+
   deploy:
     name: 部署到 Vercel Production
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
