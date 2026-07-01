@@ -24,10 +24,9 @@ AGENTS.md
 CHANGELOG.md
 README.md
 
-# data/ 整體不部署 (dev 用)
-// runtime 需要的 reviews.json 已搬到 assets/data/reviews.json (v10.4)
-data/
-data/**
+# data/ 整體不部署 (dev 用, 限定 repo 根目錄的 data/, 不影響 assets/data/)
+/data/
+/data/**
 
 # 隱藏檔
 .*
