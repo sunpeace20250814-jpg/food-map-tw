@@ -28,7 +28,7 @@
 
 - **Sheet 統一**：移除 `shop-loader.js` 內重複的 sheet 渲染 (~75 行死碼)，由 `sheet.js` 唯一負責
 - **Sheet 完整版**：週一~週日表格、照片縮圖條（含「看完整相簿」按鈕）、顧客評論、收藏 toggle、線上訂位
-- **Reviews 資料**：`data/reviews.json`（目前 `{}` stub，等店家評論整理）
+- **Reviews 資料**：`assets/data/reviews.json`（目前 `{}` stub，等店家評論整理）
 - **Code 清理**：刪除 11 個歷史截圖/垃圾二進位、移除 1 個 legacy `tmp_imgs/*.jpg`、刪除 legacy `.cjs/.mjs` 腳本
 
 ---

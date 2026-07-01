@@ -9,7 +9,9 @@
 
 const SHOP_DATA = window.SHOP_DATA;
 
-// v9.3: 評論資料 (從 data/reviews.json 載入, key = 店名)
+// v10.4: 評論資料 (從 assets/data/reviews.json 載入, key = 店名)
+// 檔案位置搬到 assets/ 是因為 Vercel .vercelignore 不支援 negation,
+// 原本的 data/ 整個被排除導致 reviews.json 404。
 let SHOP_REVIEWS_BY_NAME = {};
 let _reviewsLoaded = false;
 let _reviewsLoading = null;
@@ -17,7 +19,7 @@ let _reviewsLoading = null;
 async function loadReviews() {
     if (_reviewsLoaded) return SHOP_REVIEWS_BY_NAME;
     if (_reviewsLoading) return _reviewsLoading;
-    _reviewsLoading = fetch('data/reviews.json')
+    _reviewsLoading = fetch('assets/data/reviews.json')
         .then(r => r.ok ? r.json() : {})
         .then(data => {
             SHOP_REVIEWS_BY_NAME = data || {};

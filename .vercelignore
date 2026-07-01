@@ -24,10 +24,10 @@ AGENTS.md
 CHANGELOG.md
 README.md
 
-# data/ 整體不部署 (dev 用), 除了 runtime 需要的 reviews.json
+# data/ 整體不部署 (dev 用)
+// runtime 需要的 reviews.json 已搬到 assets/data/reviews.json (v10.4)
 data/
 data/**
-!data/reviews.json
 
 # 隱藏檔
 .*
