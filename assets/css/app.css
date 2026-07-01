@@ -928,10 +928,194 @@ section.empty-state,
 .reset-btn,
 .bottom-tab-bar .filter-details,
 .quick-bar + .result-bar,
-.sheet-backdrop,
-.btn-album,
-.btn-map,
-.btn-share,
-.btn.btn-primary,
-.card-actions,
 .btn:not(.sheet-btn):not(.icon-btn) { display: none !important; }
+
+/* ===== v9.3 Sheet 完整樣式補丁 ===== */
+.sheet-subtitle {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-2);
+  margin-block-end: 16px;
+  letter-spacing: 0.05em;
+}
+
+.sheet-section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cyan);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-block-end: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sheet-section-label::before {
+  content: '> ';
+  opacity: 0.7;
+}
+
+.sheet-section-value {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.sheet-source {
+  font-size: 12px !important;
+  color: var(--text-3) !important;
+  font-family: var(--font-mono);
+}
+
+/* 一週時間 */
+.weekly-hours {
+  display: grid;
+  gap: 4px;
+}
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: var(--bg-2);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  border-left: 2px solid var(--cyan);
+}
+.hours-row.hours-closed {
+  border-left-color: var(--text-muted);
+  opacity: 0.5;
+}
+.hours-day {
+  color: var(--text-2);
+  font-weight: 600;
+  min-width: 60px;
+}
+.hours-time {
+  color: var(--text);
+  text-align: right;
+}
+.hours-row.hours-closed .hours-time {
+  color: var(--text-muted);
+}
+
+/* 評論區 */
+.review-item {
+  background: var(--bg-2);
+  border-left: 2px solid var(--purple);
+  padding: 10px 12px;
+  margin-block-end: 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.review-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block-end: 6px;
+  font-size: 11px;
+}
+.review-author {
+  color: var(--cyan);
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+.review-stars {
+  color: #ffb74d;
+  letter-spacing: 1px;
+}
+.review-text {
+  color: var(--text);
+}
+.review-empty {
+  padding: 16px 12px;
+  text-align: center;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--bg-2);
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+}
+
+/* 環境徽章 */
+.env-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 0.05em;
+}
+
+/* sheet 內的 photo strip 寬度 (覆蓋 card 的 100x100) */
+.card-photo-strip.sheet-photo-strip {
+  width: 100%;
+  height: 120px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  position: relative;
+  background: transparent;
+  border: none;
+  animation: none;
+}
+.card-photo-strip.sheet-photo-strip::before {
+  display: none;
+}
+.card-photo-strip.sheet-photo-strip .card-photo-thumb {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  z-index: 1;
+}
+.card-photo-strip.sheet-photo-strip .card-photo-thumb.more {
+  background: var(--bg-2);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+/* sheet 內的 album / favorite button */
+.sheet-btn-album {
+  margin-block-start: 10px;
+  width: 100%;
+}
+.sheet-btn-fav {
+  background: var(--glass);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.sheet-btn-fav.active {
+  background: linear-gradient(135deg, #ff6b9d, #c44569);
+  color: white;
+  border-color: #ff6b9d;
+}
+
+/* sheet-actions layout: 兩欄 grid 改成可堆疊 */
+.sheet-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-block-start: 16px;
+}
