@@ -15,14 +15,21 @@
 
 | 項目 | 數值 |
 |---|---|
-| **版本** | **v9.2** (commit `96ee1f1`) |
-| commit date | 2026-06-29 |
+| **版本** | **v10.1** (commit `3294da7`) |
+| commit date | 2026-07-01 |
 | 店家總數 | 164 |
 | 有驗證照片 | 135 (82%) |
 | 無照片（純文字卡） | 29 |
-| index.html 大小 | 654 KB |
+| index.html 大小 | ~654 KB |
 | 部署 URL | https://food-map-tw-dun.vercel.app |
 | 月費 | $0 (Vercel + Supabase free tier) |
+
+### v10.1 重點
+
+- **Sheet 統一**：移除 `shop-loader.js` 內重複的 sheet 渲染 (~75 行死碼)，由 `sheet.js` 唯一負責
+- **Sheet 完整版**：週一~週日表格、照片縮圖條（含「看完整相簿」按鈕）、顧客評論、收藏 toggle、線上訂位
+- **Reviews 資料**：`data/reviews.json`（目前 `{}` stub，等店家評論整理）
+- **Code 清理**：刪除 11 個歷史截圖/垃圾二進位、移除 1 個 legacy `tmp_imgs/*.jpg`、刪除 legacy `.cjs/.mjs` 腳本
 
 ---
 
@@ -53,30 +60,35 @@
 ├── .env.local              # 已被 .gitignore（勿 commit）
 ├── assets/
 │   ├── css/
-│   │   ├── app.css         # 937 行，v9 Cyberpunk Glassmorphism (23KB)
-│   │   └── open-props.css  # 29KB
-│   └── js/
-│       ├── app.js          # 872 行，主程式
-│       ├── theme.js        # 主題切換 (dark/light/auto + localStorage)
-│       ├── filters.js      # 縣市/類型/時段篩選
-│       ├── sheet.js        # 店家詳情 modal
-│       ├── favorites.js    # localStorage 收藏
-│       └── supabase/
-│           ├── supabase.min.js      # 199KB UMD SDK
-│           ├── supabase-client.js   # CRUD API
-│           ├── supabase-ui.js       # 推薦表單 + 管理員審核
-│           ├── shop-loader.js       # 動態載入店家
-│           └── supabase-bootstrap.js # build-inject 產物 (window.SUPABASE_URL 等)
-├── supabase/
-│   ├── migrations/001_initial_schema.sql  # 8.9KB schema + RLS + 觸發器
-│   └── seed/001_initial_shops.sql         # 155KB 164 店家
-├── tests/
-│   ├── e2e.spec.js        # Playwright e2e 測試
-│   └── package.json
-└── data/
-    ├── TASKS.md            # 當前任務追蹤
-    ├── vision-result.json  # 視覺驗證結果
-    └── vision-batch3/      # 視覺驗證圖片
+    │   │   ├── app.css         # 1100+ 行，v9 Cyberpunk Glassmorphism + v10.1 sheet styles
+    │   │   └── open-props.css  # 29KB
+    │   └── js/
+    │       ├── app.js          # 872 行，主程式 (filter / tab / theme glue)
+    │       ├── theme.js        # 主題切換 (dark/light/auto + localStorage)
+    │       ├── filters.js      # 縣市/類型/時段篩選
+    │       ├── sheet.js        # 店家詳情 modal (v10.1: 唯一擁有 sheet 渲染)
+    │       ├── favorites.js    # localStorage 收藏
+    │       └── supabase/
+    │           ├── supabase.min.js      # 199KB UMD SDK
+    │           ├── supabase-client.js   # CRUD API
+    │           ├── supabase-ui.js       # 推薦表單 + 管理員審核
+    │           ├── shop-loader.js       # 動態載入店家 (卡片渲染 + 點擊委派給 sheet.js)
+    │           └── supabase-bootstrap.js # build-inject 產物 (window.SUPABASE_URL 等)
+    ├── supabase/
+    │   ├── migrations/001_initial_schema.sql  # schema + RLS + 觸發器
+    │   └── seed/001_initial_shops.sql         # 164 店家
+    ├── tests/
+    │   ├── e2e.spec.js        # Playwright e2e (6 tests)
+    │   ├── mobile.spec.js     # Mobile viewport test
+    │   ├── hover.spec.js      # Hover interaction test
+    │   ├── full_test.py       # 10-point manual e2e (Python Playwright)
+    │   └── package.json
+    └── data/
+        ├── TASKS.md            # 後續 backlog
+        ├── reviews.json        # 顧客評論 (key = 店家名, 目前 `{}`)
+        ├── vision-result.json  # 視覺驗證結果
+        ├── vision-batch3/      # 視覺驗證圖片 (30 JPGs, batch3)
+        └── agents/             # 開發期 aesthetic_auditor / code_supervisor (待移除)
 ```
 
 ---
@@ -88,6 +100,7 @@
 - **零 `fetch` 篩選**：縣市/類型/時段篩選全讀 DOM `data-*` 屬性
 - **DOM 工具**：`app.js:17` 的 `el()` 函式，XSS-safe，禁止 innerHTML
 - **iOS 滾動鎖**：`lockBodyScroll/unlockBodyScroll`，支援巢狀 sheet
+- **Sheet 單一擁有者**：v10.1 起 `sheet.js` 是 sheet 渲染的唯一來源；`shop-loader.js` 只負責卡片點擊委派給 `window.openShopSheet(idx)`
 
 ---
 
@@ -106,7 +119,7 @@ cd tests && npx playwright test
 
 ---
 
-## Commit 歷史 (v5 → v9)
+## Commit 歷史 (v5 → v10)
 
 | Commit | 版本 | 動作 |
 |---|---|---|
@@ -121,6 +134,11 @@ cd tests && npx playwright test
 | 16f2ad5 | v9.0 | 科幻未來風重設計 (Cyberpunk Glassmorphism) |
 | c05c5ce | v9.1 | agent 修補 + 啟動測試 server |
 | 96ee1f1 | v9.2 | UI 邏輯驗證 + 隱藏 v7 殘留 |
+| 147c0ff | v10.0 | 文檔整合 + 篩選 bug 修復 |
+| 7349183 | v10.0 | cleanup (刪 .vibecoding/ + v2/ + 修 mobile.spec.js URL) |
+| 2719a15 | v10.0 | 修 e2e test 6: visible cards 計數 |
+| **3f10411** | **v10.1** | **chore: 刪 junk artifacts + shop-loader.js dedupe** |
+| **3294da7** | **v10.1** | **feat: sheet 完整版 (weekly hours / photo strip / reviews)** |
 
 ---
 
@@ -138,9 +156,11 @@ cd tests && npx playwright test
 - ❌ **lh3 URL 會過期**：Maps auto-routing 變化導致 403，需重新抓圖
 - ❌ **彰化 18 家無照片**：Maps 對小型在地店 auto-routing 失敗，待 IG/FB 救援
 - ❌ **.env.local 在 git 历史**：已加進 .gitignore，但历史 commit 仍有（需要 `git filter-branch` 清理）
-- ❌ **v9.3 任務未完成**：data/TASKS.md 的 5 項任務全部 open
+- ❌ **`tmp_imgs/` 殘留**：歷史圖檔目錄，現在 gitignore 已加強防護，但已 tracked 的需手動清
+- ❌ **`data/agents/` 殘留**：開發期的 aesthetic_auditor / code_supervisor 待移除
 - ✅ agent-browser 對 Maps 不被擋（Playwright 會被擋）
 - ✅ Maps 搜尋「店名 + 縣市」直接進 place page
+- ✅ **build-inject.js 會自動覆寫** `assets/js/supabase/supabase-bootstrap.js` 和 `index.html` 的 Supabase meta tag（每次 deploy / 本地 build 都會重生，不要手改這兩處）
 
 ---
 
