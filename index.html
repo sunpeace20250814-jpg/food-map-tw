@@ -241,7 +241,7 @@
 <div class="search-sheet" id="searchSheet">
     <div class="search-sheet-inner">
         <input type="text" class="search-sheet-input" id="searchSheetInput" placeholder="🔍 搜尋店名、地址、招牌菜...">
-        <button class="search-close" onclick="closeSearchSheet()">取消</button>
+        <button class="search-close" onclick="closeSearchSheet()" aria-label="關閉搜尋">取消</button>
     </div>
 </div>
 
@@ -272,30 +272,30 @@
 
 <!-- ========== 底部 Tab Bar (手機) ========== -->
 <nav class="bottom-tab-bar" id="bottomTabBar">
-    <button class="tab-item active" data-tab="home" onclick="switchTab('home')">
-        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>
-        <span class="tab-label">首頁</span>
+    <button class="tab-item active" data-tab="home" onclick="switchTab('home')" aria-label="首頁">
+        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12 12 3l9 9"/><path d="M5 10v10h14V10"/></svg>
+        <span class="tab-label" aria-hidden="true">首頁</span>
     </button>
-    <button class="tab-item" data-tab="filter" onclick="switchTab('filter')">
-        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
-        <span class="tab-label">篩選</span>
+    <button class="tab-item" data-tab="filter" onclick="switchTab('filter')" aria-label="篩選條件">
+        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        <span class="tab-label" aria-hidden="true">篩選</span>
     </button>
-    <button class="tab-item" data-tab="fav" onclick="switchTab('fav')">
-        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-        <span class="tab-label">最愛</span>
-        <span class="tab-badge" id="favBadge" style="display:none;">0</span>
+    <button class="tab-item" data-tab="fav" onclick="switchTab('fav')" aria-label="我的收藏">
+        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        <span class="tab-label" aria-hidden="true">最愛</span>
+        <span class="tab-badge" id="favBadge" style="display:none;" aria-hidden="true">0</span>
     </button>
-    <button class="tab-item" data-tab="info" onclick="switchTab('info')">
-        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
-        <span class="tab-label">資料</span>
+    <button class="tab-item" data-tab="info" onclick="switchTab('info')" aria-label="資料來源與說明">
+        <svg class="tab-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        <span class="tab-label" aria-hidden="true">資料</span>
     </button>
 </nav>
 
 <!-- ========== 資料聲明 Sheet ========== -->
-<div class="info-sheet" id="infoSheet">
+<div class="info-sheet" id="infoSheet" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
     <div class="info-header">
-        <h2 class="info-title">📚 資料來源與聲明</h2>
-        <button class="info-close" onclick="closeInfoSheet()">✕</button>
+        <h2 class="info-title" id="infoTitle">📚 資料來源與聲明</h2>
+        <button class="info-close" onclick="closeInfoSheet()" aria-label="關閉資料說明">✕</button>
     </div>
     <div class="info-content">
         <h3>整合來源</h3>
@@ -349,17 +349,17 @@ window.SHOP_DATA_INITIAL = [{"emoji":"🍜","name":"莊記海產粥、鹽蒸蝦�
 <div class="album-modal" id="albumModal">
     <div class="album-header">
         <div class="album-title" id="albumTitle">相簿</div>
-        <button class="album-close" onclick="closeAlbum()">✕</button>
+        <button class="album-close" onclick="closeAlbum()" aria-label="關閉相簿">✕</button>
     </div>
     <div class="album-grid" id="albumGrid"></div>
 </div>
 
 <!-- ========== 單張照片檢視器 ========== -->
 <div class="album-viewer" id="albumViewer">
-    <button class="album-viewer-close" onclick="closeAlbumViewer()">✕</button>
-    <button class="album-viewer-nav prev" onclick="albumPrev()">‹</button>
-    <img id="albumViewerImg" src="" alt="" />
-    <button class="album-viewer-nav next" onclick="albumNext()">›</button>
+    <button class="album-viewer-close" onclick="closeAlbumViewer()" aria-label="關閉圖片檢視">✕</button>
+    <button class="album-viewer-nav prev" onclick="albumPrev()" aria-label="上一張">‹</button>
+    <img id="albumViewerImg" src="" alt="店家照片" />
+    <button class="album-viewer-nav next" onclick="albumNext()" aria-label="下一張">›</button>
     <div class="album-counter" id="albumCounter"></div>
 </div>
 
